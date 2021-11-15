@@ -2,6 +2,7 @@ import logo from './logo.svg';
 import './App.css';
 import { BrowserRouter as Router, Routes, Route, NavLink } from 'react-router-dom';
 import Navbar from './components/NavBar/NavBar';
+import Account from './components/Account/Account';
 import Home from './components/HomePage/Home';
 import TopCoins from './components/TopCoins/TopCoins';
 import News from './components/News/News';
@@ -16,6 +17,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/top-coins" element={<TopCoins />} />
           <Route path="/news" element={<News />} />
+          <Route path="/account" element={<Account />} />
           <Route path="*" element={<NotFound  />} />
         </Routes>
       </Router>

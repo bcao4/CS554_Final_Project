@@ -1,6 +1,6 @@
 .navbarComp {
   background-color: rgb(43, 41, 41);
-  width: 300px;
+  width: 250px;
   height: 100vh;
   justify-content: center;
   float:left;
@@ -29,6 +29,11 @@
 	font-weight: bold;
 }
 
+.banner {
+  background-color: rgb(43, 41, 41);
+  height: 50px;
+}
+
 .logo-icon {
   padding: 0.4rem 0.8rem;
 	color: white;
@@ -41,6 +46,20 @@
 .logo-icon:hover {
 	color: white;
   text-decoration: none !important;
+}
+
+.account {
+	color: white;
+  padding-right: 20px;
+  font-size: 1.75em;
+  font-weight: bold;
+  float: right;
+	text-decoration: none !important;
+}
+
+.account:hover {
+	background-color: transparent;
+	color: rgb(202, 195, 195);
 }
 
 span {

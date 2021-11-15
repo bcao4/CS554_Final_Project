@@ -2,6 +2,7 @@ import React from 'react';
 import * as antDesignIcons from 'react-icons/ai';
 import * as bootstrapIcons from 'react-icons/bs';
 import * as ioIcons from 'react-icons/io5';
+import * as mdIcons from 'react-icons/md';
 
 export const NavBarData = [
   {
@@ -19,4 +20,9 @@ export const NavBarData = [
     icon: <ioIcons.IoNewspaperOutline />,
     path: "/news"
   },
+  {
+    title: "Account",
+    icon: <mdIcons.MdOutlineAccountCircle />,
+    path: "/account"
+  }
 ]

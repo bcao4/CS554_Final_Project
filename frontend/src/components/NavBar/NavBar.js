@@ -6,11 +6,14 @@ import './NavBar.css'
 
 const NavBar = () => {
   return (
-    <div className="navbarComp">
+    <>
+    <div className="banner">
       <NavLink className="logo-icon" to='/'>
         <faIcons.FaBitcoin />
         <span>CryptoTracker</span>
       </NavLink>
+    </div>
+    <div className="navbarComp">
       {NavBarData.map((item, key) => {
         return (
           <ul className="navbar-items">
@@ -24,6 +27,7 @@ const NavBar = () => {
         )
       })} 
     </div>
+    </>
   )
 }
 
