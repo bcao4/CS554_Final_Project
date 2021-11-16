@@ -1,6 +1,6 @@
-import logo from './logo.svg';
 import './App.css';
-import { BrowserRouter as Router, Routes, Route, NavLink } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import Navbar from './components/NavBar/NavBar';
 import Account from './components/Account/Account';
 import Home from './components/HomePage/Home';

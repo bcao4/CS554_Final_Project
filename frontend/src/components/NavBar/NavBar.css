@@ -4,6 +4,8 @@
   height: 100vh;
   justify-content: center;
   float:left;
+  position: sticky;
+  top:0;
 }
 
 .navbar-item {
@@ -46,15 +48,6 @@
 .logo-icon:hover {
 	color: white;
   text-decoration: none !important;
-}
-
-.account {
-	color: white;
-  padding-right: 20px;
-  font-size: 1.75em;
-  font-weight: bold;
-  float: right;
-	text-decoration: none !important;
 }
 
 .account:hover {
