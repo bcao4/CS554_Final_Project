@@ -67,7 +67,7 @@ const TopCoins = () => {
   // } else {
     return (
       <>
-        <div className="container">
+        <div className="container-fluid">
           <div className="row">
             {coinData.map((coin, index) => {
               let currentPrice = millify(coin.current_price);
@@ -80,10 +80,10 @@ const TopCoins = () => {
               
               if(coinData.length === index + 1) {
                 return (
-                  <div className="col-xl-3 col-lg-4 col-md-6 col-sm-12 col-xs-12" key={coin.name}>
+                  <div className="col-xl-3 col-lg-4 col-md-6 col-sm-12 col-xs-12 mb-3" key={coin.name}>
                     <div className="card text-center" ref={lastCoinElementRef}>
                       <div className="card-header">
-                        {index + 1}. {coin.name} <img src={coin.image} alt={coin.id} height="18" />
+                          {index + 1}. {coin.name} <img src={coin.image} alt={coin.id} height="45" />
                       </div>
                       <div className="card-body">
                         Current Price: ${currentPrice}   
@@ -108,13 +108,13 @@ const TopCoins = () => {
                 )
               } else {
                 return (
-                  <div className="col-xl-3 col-lg-4 col-md-6 col-sm-12 col-xs-12" key={coin.name}>
-                    <div className="card text-center h-100">
+                  <div className="col-xl-3 col-lg-4 col-md-6 col-sm-12 col-xs-12 mb-3" key={coin.name}>
+                    <div className="card text-center border-dark h-100">
                       <div className="card-header h-100">
-                        {index + 1}. {coin.name} <img src={coin.image} alt={coin.id} height="18" />
+                        {index + 1}. {coin.name} <img id="top-coin-img" src={coin.image} alt={coin.id} height="45" />
                       </div>
                       <div className="card-body">
-                        Current Price: ${currentPrice}   
+                        Current Price: ${coin.current_price}   
                         <br/>
                         <br/>
                         Market Cap: ${marketCap}

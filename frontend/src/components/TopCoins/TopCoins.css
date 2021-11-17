@@ -1,3 +1,18 @@
-#coin-image {
-  margin-left: 13px;
+#top-coin-img {
+  float: right ;
 }
+
+.card {
+  margin-top: 10px;
+}
+
+.card-body {
+	background-color: rgb(43, 41, 41);
+	color: white;
+}
+
+.card-header {
+  font-size: 30px;
+  font-weight: bold;
+}
+
