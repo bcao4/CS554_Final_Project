@@ -4,15 +4,19 @@
 
 .card {
   margin-top: 10px;
+  border-radius: 15px;
 }
 
 .card-body {
 	background-color: rgb(43, 41, 41);
 	color: white;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+  border-color: rgb(43, 41, 41);
 }
 
 .card-header {
-  font-size: 30px;
+  font-size: 24px;
   font-weight: bold;
 }
 
