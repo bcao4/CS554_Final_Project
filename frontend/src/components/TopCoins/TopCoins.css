@@ -1,0 +1,43 @@
+#top-coin-img {
+  float: right ;
+}
+
+.card {
+  margin-top: 10px;
+  border-radius: 15px;
+}
+
+.card-body {
+	background-color: rgb(43, 41, 41);
+	color: white;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+  border-color: rgb(43, 41, 41);
+}
+
+.card-header {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.white-text {
+	color: white;
+}
+
+.coin-name {
+  text-transform: capitalize;
+}
+
+.coin-info-title h1 {
+  display: inline;
+  vertical-align: middle; 
+  padding-left: 10px;
+}
+
+.chart-container {
+  position: relative;
+  margin-left: auto;
+  top: 20px;
+  width: 80vw;
+}
+

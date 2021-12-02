@@ -1,23 +1,28 @@
-import logo from './logo.svg';
 import './App.css';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import Navbar from './components/NavBar/NavBar';
+import Account from './components/Account/Account';
+import Home from './components/HomePage/Home';
+import TopCoins from './components/TopCoins/TopCoins';
+import CoinInfo from './components/TopCoins/CoinInfo';
+import News from './components/News/News';
+import NotFound from './components/NotFound';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <Router>
+        <Navbar />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/top-coins" element={<TopCoins />} />
+          <Route path="/coin/:id" element={<CoinInfo />} />
+          <Route path="/news" element={<News />} />
+          <Route path="/account" element={<Account />} />
+          <Route path="*" element={<NotFound  />} />
+        </Routes>
+      </Router>
     </div>
   );
 }
