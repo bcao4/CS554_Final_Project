@@ -20,3 +20,17 @@
   font-weight: bold;
 }
 
+.white-text {
+	color: white;
+}
+
+.coin-name {
+  text-transform: capitalize;
+}
+
+.coin-info-title h1 {
+  display: inline;
+  vertical-align: middle; 
+  padding-left: 10px;
+}
+
