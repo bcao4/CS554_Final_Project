@@ -1,8 +1,9 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { Link } from "react-router-dom";
+import { Typography } from "@mui/material";
 import millify from "millify";
 import "./TopCoins.css";
-import { getCoinPage } from "../../api/api";
+import { getCoinPage } from "../../api/";
 
 // Followed pagination tutorial: https://www.youtube.com/watch?v=NZKUirTtxcg&t=1218s
 
@@ -39,12 +40,13 @@ const TopCoins = () => {
     async function fetchData() {
       try {
         let perPage = 40; // TODO: allow user to change results per page?
-        const data = await getCoinPage(pageNum, perPage); // TODO: try catch, show retry button to retry request if network error
-        if (!data) {
-          // TODO: handle network error
-          return;
+        let data;
+        try {
+          data = await getCoinPage(pageNum, perPage);
+        } catch (e) {
+          console.error(e);
+          return; // TODO: tell user there was a network error
         }
-        console.log(data);
         setCoinData((prevCoins) => [...prevCoins, ...data]);
         if (data.length < 40) {
           setNextPageStatus(false);
@@ -84,7 +86,7 @@ const TopCoins = () => {
                 ? coin.symbol.toUpperCase()
                 : "No symbol";
               let currentPrice = coin.market_data.current_price.usd
-                ? millify(coin.market_data.current_price.usd)
+                ? millify(coin.market_data.current_price.usd, { precision: 4 })
                 : "Not available";
               let marketCap = coin.market_data.market_cap.usd
                 ? millify(coin.market_data.market_cap.usd)
@@ -108,28 +110,35 @@ const TopCoins = () => {
                 >
                   <div className="card text-center" ref={lastCoinElementRef}>
                     <div className="card-header">
-                      {index + 1}. {coin.name}{" "}
-                      <img src={coin.image.thumb} alt={coin.id} height="45" />
+                      {index + 1}. {coin.name}
+                      <img
+                        style={{ marginLeft: 6 }}
+                        src={coin.image.thumb}
+                        alt={coin.id}
+                        height="45"
+                      />
                     </div>
                     <div className="card-body">
-                      Symbol: {coinSymbol}
-                      <br />
-                      <br />
-                      Current Price: ${currentPrice}
-                      <br />
-                      <br />
-                      Market Cap: ${marketCap}
-                      <br />
-                      <br />
-                      24h High: ${dayHigh}
-                      <br />
-                      <br />
-                      24h Low: ${dayLow}
-                      <br />
-                      <br />
-                      24h Change: {priceChange}%
-                      <br />
-                      <br />
+                      <div className="card-text-contents">
+                        <Typography className="card-text-item">
+                          Symbol: {coinSymbol}
+                        </Typography>
+                        <Typography className="card-text-item">
+                          Current Price: ${currentPrice}
+                        </Typography>
+                        <Typography className="card-text-item">
+                          Market Cap: ${marketCap}
+                        </Typography>
+                        <Typography className="card-text-item">
+                          24h High: ${dayHigh}
+                        </Typography>
+                        <Typography className="card-text-item">
+                          24h Low: ${dayLow}
+                        </Typography>
+                        <Typography className="card-text-item">
+                          24h Change: {priceChange}%
+                        </Typography>
+                      </div>
                       <Link to={`/coin/${coin.id}`} className="btn btn-primary">
                         More Info
                       </Link>
@@ -143,6 +152,5 @@ const TopCoins = () => {
     </>
   );
 };
-//};
 
 export default TopCoins;

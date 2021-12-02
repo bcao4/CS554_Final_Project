@@ -1,5 +1,5 @@
 #top-coin-img {
-  float: right ;
+  float: right;
 }
 
 .card {
@@ -8,11 +8,22 @@
 }
 
 .card-body {
-	background-color: rgb(43, 41, 41);
-	color: white;
+  background-color: rgb(43, 41, 41);
+  color: white;
   border-bottom-left-radius: 10px;
   border-bottom-right-radius: 10px;
   border-color: rgb(43, 41, 41);
+}
+
+.card-text-contents {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.card-text-item {
+  margin-bottom: 6px !important;
 }
 
 .card-header {
@@ -21,7 +32,7 @@
 }
 
 .white-text {
-	color: white;
+  color: white;
 }
 
 .coin-name {
@@ -30,7 +41,7 @@
 
 .coin-info-title h1 {
   display: inline;
-  vertical-align: middle; 
+  vertical-align: middle;
   padding-left: 10px;
 }
 
@@ -40,4 +51,3 @@
   top: 20px;
   width: 80vw;
 }
-
