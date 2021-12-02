@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import { Typography } from "@mui/material";
 import { Line } from "react-chartjs-2";
 import { removeHtmlTags, timeToDaysAndHours } from "../../utils";
 import { getCoinInfo, getChartData } from "../../api";
@@ -83,59 +84,56 @@ const CoinInfo = () => {
     ? coinData.market_data.current_price.usd
     : "no rank available";
 
-  if (loading || chartLoading) {
-    return (
-      <div className="white-text">
-        <h2>Loading....</h2>
-      </div>
-    );
-  } else {
-    return (
-      <div>
-        <br />
-        <div className="white-text text-center">
-          <img src={coinData.image.small} alt={coinData.id} />
-          <h1 className="coin-name">{coinData.id}</h1>
-          <br />
-          <br />
-          <h3>Market Cap Rank: {coinRank}</h3>
-          <br />
-          <h3>Current Price: ${price !== null ? price : coinPrice}</h3>
-          <br />
-          <br />
-          {removeHtmlTags(coinDescription)}
-          <br />
-          <br />
-          Website: <a href={coinWebsite}> {coinWebsite} </a>
+  return (
+    <>
+      {loading || chartLoading ? (
+        <div className="white-text">
+          <h2>Loading....</h2>
         </div>
-        {chartData !== undefined && (
-          <div className="chart-container">
-            <Line
-              data={{
-                labels: chartData.map((time) => {
-                  return timeToDaysAndHours(time[0]);
-                }),
-                datasets: [
-                  {
-                    data: chartData.map((price) => price[1]),
-                    label: "Price in USD",
-                    borderColor: " #fb5462",
-                  },
-                ],
-              }}
-              options={{
-                elements: {
-                  point: {
-                    radius: 1,
-                  },
-                },
-              }}
-            />
+      ) : (
+        <div>
+          <div className="white-text text-center">
+            <img src={coinData.image.small} alt={coinData.id} />
+            <Typography variant="h1" className="coin-name">
+              {coinData.id}
+            </Typography>
+            <Typography variant="h2">Market Cap Rank: {coinRank}</Typography>
+            <Typography variant="h2">
+              Current Price: ${price !== null ? price : coinPrice}
+            </Typography>
+            <Typography>{removeHtmlTags(coinDescription)}</Typography>
+            <Typography>
+              Website: <a href={coinWebsite}> {coinWebsite}</a>
+            </Typography>
           </div>
-        )}
-      </div>
-    );
-  }
+          {chartData !== undefined && (
+            <div className="chart-container">
+              <Line
+                data={{
+                  labels: chartData.map((time) => {
+                    return timeToDaysAndHours(time[0]);
+                  }),
+                  datasets: [
+                    {
+                      data: chartData.map((price) => price[1]),
+                      label: "Price in USD",
+                      borderColor: " #fb5462",
+                    },
+                  ],
+                }}
+                options={{
+                  elements: {
+                    point: {
+                      radius: 1,
+                    },
+                  },
+                }}
+              />
+            </div>
+          )}
+        </div>
+      )}
+    </>
+  );
 };
-
 export default CoinInfo;
