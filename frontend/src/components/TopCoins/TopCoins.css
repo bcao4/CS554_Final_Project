@@ -34,3 +34,10 @@
   padding-left: 10px;
 }
 
+.chart-container {
+  position: relative;
+  margin-left: auto;
+  top: 20px;
+  width: 80vw;
+}
+

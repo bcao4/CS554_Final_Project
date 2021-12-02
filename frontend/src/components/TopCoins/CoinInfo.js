@@ -92,7 +92,8 @@ const CoinInfo = () => {
           <br/>
           <br/>
           Website: <a href={coinWebsite}> {coinWebsite} </a>
-          <div className="coin-chart" >
+        </div>
+        <div class="chart-container">
             <Line
               data={{
                 labels: chartData.map((time) => {
@@ -107,9 +108,15 @@ const CoinInfo = () => {
                   }
                 ]
               }}
+              options={{
+                elements: {
+                  point: {
+                    radius: 1,
+                  },
+                },
+              }}
             />
           </div>
-        </div>
       </div>
     )
   }
