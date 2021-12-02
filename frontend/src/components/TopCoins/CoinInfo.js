@@ -103,7 +103,7 @@ const CoinInfo = () => {
                 datasets: [
                   {
                     data: chartData.map((price) => price[1]),
-                    label: "Price in USD",
+                    label: "Price",
                     borderColor:" #fb5462"
                   }
                 ]
@@ -111,7 +111,7 @@ const CoinInfo = () => {
               options={{
                 elements: {
                   point: {
-                    radius: 1,
+                    radius: 2,
                   },
                 },
               }}
