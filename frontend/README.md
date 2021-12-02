@@ -1,6 +1,6 @@
-# Getting Started with Create React App
+# CS554 Final Project Frontend
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+CryptoTracker
 
 ## Available Scripts
 

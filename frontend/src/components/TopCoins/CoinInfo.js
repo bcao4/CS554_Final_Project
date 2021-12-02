@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Line } from "react-chartjs-2";
-import { removeHtmlTags } from "../../utils";
-import { getCoinInfo, getChartData } from "../../api/api";
+import { removeHtmlTags, timeToDaysAndHours } from "../../utils";
+import { getCoinInfo, getChartData } from "../../api";
 //import TopCoins from "./TopCoins";
 import "./TopCoins.css";
 import socketIOClient from "socket.io-client";
@@ -52,12 +52,14 @@ const CoinInfo = () => {
     setChartLoading(true);
     async function fetchChartData() {
       try {
-        let days = 7; // TODO: change to useState variable that user can select to change time period
+        let days = 7; // TODO: change to useState variable that user can select to change time period?
         // TODO: using time = 7 days for testing for now
-        const data = await getChartData(coinID, days);
-        if (!data) {
-          // TODO: handle network error
-          return;
+        let data;
+        try {
+          data = await getChartData(coinID, days);
+        } catch (e) {
+          console.error(e);
+          return; // TODO: handle network error
         }
         setChartData(data.prices);
         setChartLoading(false);
@@ -111,8 +113,7 @@ const CoinInfo = () => {
             <Line
               data={{
                 labels: chartData.map((time) => {
-                  let hourlyData = new Date(time[0]).toLocaleString();
-                  return hourlyData;
+                  return timeToDaysAndHours(time[0]);
                 }),
                 datasets: [
                   {
