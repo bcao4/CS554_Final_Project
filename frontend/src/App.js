@@ -1,13 +1,13 @@
-import './App.css';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import Navbar from './components/NavBar/NavBar';
-import Account from './components/Account/Account';
-import Home from './components/HomePage/Home';
-import TopCoins from './components/TopCoins/TopCoins';
-import CoinInfo from './components/TopCoins/CoinInfo';
-import News from './components/News/News';
-import NotFound from './components/NotFound';
+import "./App.css";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import "bootstrap/dist/css/bootstrap.min.css";
+import Navbar from "./components/NavBar/NavBar";
+import Account from "./components/Account/Account";
+import Home from "./components/HomePage/Home";
+import TopCoins from "./components/TopCoins/TopCoins";
+import CoinInfo from "./components/TopCoins/CoinInfo";
+import News from "./components/News/News";
+import NotFound from "./components/NotFound";
 
 function App() {
   return (
@@ -20,7 +20,7 @@ function App() {
           <Route path="/coin/:id" element={<CoinInfo />} />
           <Route path="/news" element={<News />} />
           <Route path="/account" element={<Account />} />
-          <Route path="*" element={<NotFound  />} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </Router>
     </div>
