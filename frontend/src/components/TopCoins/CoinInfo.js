@@ -92,11 +92,7 @@ const CoinInfo = () => {
           <br/>
           <br/>
           Website: <a href={coinWebsite}> {coinWebsite} </a>
-          <br/>
-          <br/>
-          {/* Minutely data will be used for duration within 1 day, 
-          Hourly data will be used for duration between 1 day and 90 days, 
-          Daily data will be used for duration above 90 days. */}
+          <div className="coin-chart" >
             <Line
               data={{
                 labels: chartData.map((time) => {
@@ -106,11 +102,13 @@ const CoinInfo = () => {
                 datasets: [
                   {
                     data: chartData.map((price) => price[1]),
-                    label: "Price in USD"
+                    label: "Price in USD",
+                    borderColor:" #fb5462"
                   }
                 ]
               }}
             />
+          </div>
         </div>
       </div>
     )
