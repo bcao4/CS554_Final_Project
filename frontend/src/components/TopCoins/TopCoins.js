@@ -34,15 +34,6 @@ const TopCoins = () => {
     [loading]
   );
 
-  const searchFunc = () => {
-    return coinData.filter(
-      (coin) =>
-        coin.id.toLowerCase().includes(searchTerm) ||
-        coin.symbol.toLowerCase().includes(searchTerm) ||
-        coin.name.toLowerCase().includes(searchTerm)
-    );
-  };
-
   useEffect(() => {
     setLoading(true);
     async function fetchData() {
@@ -68,13 +59,6 @@ const TopCoins = () => {
     fetchData();
   }, [pageNum]);
 
-  // if(loading) {
-  //   return (
-  // 		<div>
-  // 			<h2>Loading....</h2>
-  // 		</div>
-  // 	);
-  // } else {
   return (
     <>
       <div className="container-fluid">
@@ -88,29 +72,35 @@ const TopCoins = () => {
               onChange={(e) => setSearchTerm(e.target.value)}
             />
           </form>
-          {searchFunc().map((coin, index) => {
-            let coinSymbol = coin.symbol
-              ? coin.symbol.toUpperCase()
-              : "No symbol";
-            let currentPrice = coin.market_data.current_price.usd
-              ? millify(coin.market_data.current_price.usd)
-              : "Not available";
-            let marketCap = coin.market_data.market_cap.usd
-              ? millify(coin.market_data.market_cap.usd)
-              : "Not available";
-            let dayHigh = coin.market_data.high_24h.usd
-              ? millify(coin.market_data.high_24h.usd)
-              : "Not available";
-            let dayLow = coin.market_data.low_24h.usd
-              ? millify(coin.market_data.low_24h.usd)
-              : "Not available";
-            let priceChange = coin.market_data.price_change_percentage_24h
-              ? millify(coin.market_data.price_change_percentage_24h, {
-                  precision: 2,
-                })
-              : "Not available";
+          {coinData
+            .filter(
+              (coin) =>
+                coin.id.toLowerCase().includes(searchTerm) ||
+                coin.symbol.toLowerCase().includes(searchTerm) ||
+                coin.name.toLowerCase().includes(searchTerm)
+            )
+            .map((coin, index) => {
+              let coinSymbol = coin.symbol
+                ? coin.symbol.toUpperCase()
+                : "No symbol";
+              let currentPrice = coin.market_data.current_price.usd
+                ? millify(coin.market_data.current_price.usd)
+                : "Not available";
+              let marketCap = coin.market_data.market_cap.usd
+                ? millify(coin.market_data.market_cap.usd)
+                : "Not available";
+              let dayHigh = coin.market_data.high_24h.usd
+                ? millify(coin.market_data.high_24h.usd)
+                : "Not available";
+              let dayLow = coin.market_data.low_24h.usd
+                ? millify(coin.market_data.low_24h.usd)
+                : "Not available";
+              let priceChange = coin.market_data.price_change_percentage_24h
+                ? millify(coin.market_data.price_change_percentage_24h, {
+                    precision: 2,
+                  })
+                : "Not available";
 
-            if (searchFunc().length === index + 1) {
               return (
                 <div
                   className="col-xl-3 col-lg-4 col-md-6 col-sm-12 col-xs-12"
@@ -147,50 +137,7 @@ const TopCoins = () => {
                   </div>
                 </div>
               );
-            } else {
-              return (
-                <div
-                  className="col-xl-3 col-lg-4 col-md-6 col-sm-12 col-xs-12 mb-3"
-                  key={coin.name}
-                >
-                  <div className="card text-center border-0 h-100">
-                    <div className="card-header h-100">
-                      {index + 1}. {coin.name}{" "}
-                      <img
-                        id="top-coin-img"
-                        src={coin.image.thumb}
-                        alt={coin.id}
-                        height="45"
-                      />
-                    </div>
-                    <div className="card-body">
-                      Symbol: {coinSymbol}
-                      <br />
-                      <br />
-                      Current Price: ${coin.current_price}
-                      <br />
-                      <br />
-                      Market Cap: ${marketCap}
-                      <br />
-                      <br />
-                      24h High: ${dayHigh}
-                      <br />
-                      <br />
-                      24h Low: ${dayLow}
-                      <br />
-                      <br />
-                      24h Change: {priceChange}%
-                      <br />
-                      <br />
-                      <Link to={`/coin/${coin.id}`} className="btn btn-primary">
-                        More Info
-                      </Link>
-                    </div>
-                  </div>
-                </div>
-              );
-            }
-          })}
+            })}
         </div>
       </div>
     </>
