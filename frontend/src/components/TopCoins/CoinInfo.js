@@ -7,6 +7,7 @@ import { getCoinInfo, getChartData } from "../../api";
 import { socket } from "../../api/socket";
 //import TopCoins from "./TopCoins";
 import "./TopCoins.css";
+
 const CoinInfo = () => {
   const [loading, setLoading] = useState(true);
   const [coinData, setCoinData] = useState([]);
@@ -15,15 +16,16 @@ const CoinInfo = () => {
 
   const lastPrice = useRef(0);
   const priceUpdateInterval = useRef(null);
+
   //const navigate = useNavigate();
   const params = useParams();
   const coinID = params.id;
 
   useEffect(() => {
-    setLoading(true);
-    async function fetchData() {
+    const fetchData = async () => {
+      setLoading(true);
       let coinData, chartData;
-      let days = 7; // TODO: change to useState variable that user can select to change time period?
+      const days = 7; // TODO: change to useState variable that user can select to change time period?
       try {
         chartData = await getChartData(coinID, days);
         coinData = await getCoinInfo(coinID);
@@ -33,8 +35,8 @@ const CoinInfo = () => {
       }
       priceUpdateInterval.current = setInterval(
         () => socket.emit("request price", { coin: coinID }),
-        3000 // request price update every 3 seconds
-      );
+        5000 // request price update every 5 seconds, could be more often but coin gecko api doesnt update the price that often
+      ); // TODO: possibly find new api that updates price more often?
       socket.on("price update", (data) => {
         const newPrice = data?.[coinID]?.usd;
         if (newPrice !== undefined) {
@@ -43,19 +45,20 @@ const CoinInfo = () => {
       });
       setChartData(chartData.prices);
       setCoinData(coinData);
+      if (lastPrice.current === 0) {
+        lastPrice.current = coinData.market_data?.current_price?.usd ?? 0;
+      }
       setLoading(false);
-    }
+    };
     fetchData();
     return () => {
-      socket.close();
+      socket.removeAllListeners("price update");
       clearInterval(priceUpdateInterval.current);
     };
   }, [coinID]);
 
   useEffect(() => {
     const livePriceElement = document.getElementById("live-price");
-    console.log(livePrice);
-    console.log(lastPrice.current);
     if (livePriceElement) {
       if (lastPrice.current < livePrice) {
         livePriceElement.classList.remove("live-price-decrease");
@@ -97,7 +100,10 @@ const CoinInfo = () => {
               {coinData.id}
             </Typography>
             <Typography variant="h2" key={livePrice} id={"live-price"}>
-              ${livePrice !== null ? livePrice : coinPrice}
+              $
+              {livePrice !== null
+                ? livePrice.toLocaleString()
+                : coinPrice.toLocaleString()}
             </Typography>
             <Typography>Market Cap Rank: {coinRank}</Typography>
             <Typography>{removeHtmlTags(coinDescription)}</Typography>
@@ -109,9 +115,7 @@ const CoinInfo = () => {
             <div className="chart-container">
               <Line
                 data={{
-                  labels: chartData.map((time) => {
-                    return timeToDaysAndHours(time[0]);
-                  }),
+                  labels: chartData.map((time) => timeToDaysAndHours(time[0])),
                   datasets: [
                     {
                       data: chartData.map((price) => price[1]),
@@ -135,4 +139,5 @@ const CoinInfo = () => {
     </>
   );
 };
+
 export default CoinInfo;
