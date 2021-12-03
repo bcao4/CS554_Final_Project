@@ -47,7 +47,36 @@
 
 .chart-container {
   position: relative;
-  margin-left: auto;
-  top: 20px;
-  width: 80vw;
+  margin-left: 200px;
+  width: calc(
+    100% - 220px
+  ); /* 100% - width of side nav bar + 30 for some padding */
+}
+
+.live-price-increase {
+  animation-name: priceIncreaseAnimation;
+  animation-duration: 5s;
+}
+
+.live-price-decrease {
+  animation-name: priceDecreaseAnimation;
+  animation-duration: 5s;
+}
+
+@keyframes priceIncreaseAnimation {
+  from {
+    color: rgb(4, 172, 4);
+  }
+  to {
+    color: white;
+  }
+}
+
+@keyframes priceDecreaseAnimation {
+  from {
+    color: red;
+  }
+  to {
+    color: white;
+  }
 }

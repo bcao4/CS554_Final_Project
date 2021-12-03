@@ -1,6 +1,6 @@
 import { NavLink } from "react-router-dom";
 import { NavBarData } from "./NavBarData";
-import * as faIcons from "react-icons/fa";
+import { FaBitcoin } from "react-icons/fa";
 import "./NavBar.css";
 
 const NavBar = () => {
@@ -8,7 +8,7 @@ const NavBar = () => {
     <>
       <div className="banner">
         <NavLink className="logo-icon" to="/">
-          <faIcons.FaBitcoin />
+          <FaBitcoin />
           <span>CryptoTracker</span>
         </NavLink>
       </div>
