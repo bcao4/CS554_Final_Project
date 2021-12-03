@@ -51,3 +51,31 @@
   top: 20px;
   width: 80vw;
 }
+
+.live-price-increase {
+  animation-name: priceIncreaseAnimation;
+  animation-duration: 5s;
+}
+
+.live-price-decrease {
+  animation-name: priceDecreaseAnimation;
+  animation-duration: 5s;
+}
+
+@keyframes priceIncreaseAnimation {
+  from {
+    color: green;
+  }
+  to {
+    color: white;
+  }
+}
+
+@keyframes priceDecreaseAnimation {
+  from {
+    color: red;
+  }
+  to {
+    color: white;
+  }
+}

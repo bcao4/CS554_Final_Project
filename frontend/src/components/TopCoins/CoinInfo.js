@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { Typography } from "@mui/material";
+import { Typography, LinearProgress } from "@mui/material";
 import { Line } from "react-chartjs-2";
 import { removeHtmlTags, timeToDaysAndHours } from "../../utils";
 import { getCoinInfo, getChartData } from "../../api";
@@ -13,10 +13,9 @@ let priceUpdateInterval;
 
 const CoinInfo = () => {
   const [loading, setLoading] = useState(true);
-  const [chartLoading, setChartLoading] = useState(true);
   const [coinData, setCoinData] = useState([]);
   const [chartData, setChartData] = useState(null);
-  const [price, setPrice] = useState(null);
+  const [livePrice, setLivePrice] = useState(null);
 
   //const navigate = useNavigate();
   let params = useParams();
@@ -31,12 +30,31 @@ const CoinInfo = () => {
         socket.emit("request price", { coin: coinID }); // request price on init
         priceUpdateInterval = setInterval(
           () => socket.emit("request price", { coin: coinID }),
-          5000
-        ); // request price update every 5 seconds
+          3000 // request price update every 5 seconds
+        );
         socket.on("price update", (data) => {
-          setPrice(data[coinID].usd);
-          console.log(data[coinID].usd);
+          const newPrice = data[coinID].usd;
+          const element = document.getElementById("live-price");
+          if (element) {
+            if (newPrice < livePrice) {
+              element.classList.remove("live-price-decrease");
+              element.classList.add("live-price-increase");
+            } else if (newPrice > livePrice) {
+              element.classList.remove("live-price-increase");
+              element.classList.add("live-price-decrease");
+            }
+          }
+          setLivePrice(newPrice);
         });
+        let days = 7; // TODO: change to useState variable that user can select to change time period?
+        let chartData;
+        try {
+          chartData = await getChartData(coinID, days);
+        } catch (e) {
+          console.error(e);
+          return;
+        }
+        setChartData(chartData.prices);
         setCoinData(data);
         setLoading(false);
       } catch (e) {
@@ -49,64 +67,39 @@ const CoinInfo = () => {
     };
   }, [coinID]);
 
-  useEffect(() => {
-    setChartLoading(true);
-    async function fetchChartData() {
-      try {
-        let days = 7; // TODO: change to useState variable that user can select to change time period?
-        // TODO: using time = 7 days for testing for now
-        let data;
-        try {
-          data = await getChartData(coinID, days);
-        } catch (e) {
-          console.error(e);
-          return; // TODO: handle network error
-        }
-        setChartData(data.prices);
-        setChartLoading(false);
-      } catch (e) {
-        console.log(e);
-      }
-    }
-    fetchChartData();
-  }, [coinID]);
-
   let coinDescription = coinData.description
     ? coinData.description.en.split(". ")[0]
-    : "no description available";
+    : "No description available";
   let coinWebsite = coinData.links
     ? coinData.links.homepage[0]
-    : "no website available";
-  let coinRank = coinData.market_cap_rank
-    ? coinData.market_cap_rank
-    : "no rank available";
-  let coinPrice = coinData.market_data // using price from websocket that updates real time, but can use this as fallback
-    ? coinData.market_data.current_price.usd
-    : "no rank available";
+    : "No website available";
+  let coinRank = coinData.market_cap_rank ?? "No rank available";
+  let coinPrice =
+    coinData.market_data?.current_price?.usd ?? "No price available";
 
   return (
     <>
-      {loading || chartLoading ? (
-        <div className="white-text">
-          <h2>Loading....</h2>
-        </div>
+      {loading ? (
+        <>
+          <LinearProgress />
+        </>
       ) : (
         <div>
           <div className="white-text text-center">
-            <img src={coinData.image.small} alt={coinData.id} />
+            <img src={coinData.image.large} alt={coinData.id} height={100} />
             <Typography variant="h1" className="coin-name">
               {coinData.id}
             </Typography>
-            <Typography variant="h2">Market Cap Rank: {coinRank}</Typography>
-            <Typography variant="h2">
-              Current Price: ${price !== null ? price : coinPrice}
+            <Typography key={livePrice} id={"live-price"}>
+              Current Price: ${livePrice !== null ? livePrice : coinPrice}
             </Typography>
+            <Typography>Market Cap Rank: {coinRank}</Typography>
             <Typography>{removeHtmlTags(coinDescription)}</Typography>
             <Typography>
               Website: <a href={coinWebsite}> {coinWebsite}</a>
             </Typography>
           </div>
-          {chartData !== undefined && (
+          {chartData !== null && (
             <div className="chart-container">
               <Line
                 data={{
