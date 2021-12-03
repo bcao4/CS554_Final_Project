@@ -90,21 +90,21 @@ const TopCoins = () => {
                 let coinSymbol = coin.symbol
                   ? coin.symbol.toUpperCase()
                   : "No symbol";
-                let currentPrice = coin.market_data.current_price.usd
+                let currentPrice = coin.market_data?.current_price.usd
                   ? millify(coin.market_data.current_price.usd, {
                       precision: 4,
                     })
                   : "Not available";
-                let marketCap = coin.market_data.market_cap.usd
+                let marketCap = coin.market_data?.market_cap.usd
                   ? millify(coin.market_data.market_cap.usd)
                   : "Not available";
-                let dayHigh = coin.market_data.high_24h.usd
+                let dayHigh = coin.market_data?.high_24h.usd
                   ? millify(coin.market_data.high_24h.usd)
                   : "Not available";
-                let dayLow = coin.market_data.low_24h.usd
+                let dayLow = coin.market_data?.low_24h.usd
                   ? millify(coin.market_data.low_24h.usd)
                   : "Not available";
-                let priceChange = coin.market_data.price_change_percentage_24h
+                let priceChange = coin.market_data?.price_change_percentage_24h
                   ? millify(coin.market_data.price_change_percentage_24h, {
                       precision: 2,
                     })
