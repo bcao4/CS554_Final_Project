@@ -12,7 +12,7 @@ const Home = () => {
         <h1 className="firstHeader">Cryptocurrency Exchange</h1>
         <br/>
         <h2 className="secondHeader">
-        Explore the crptocurrency trends and trade coins and much more !!
+        Explore the cryptocurrency trends and trade coins and much more !!
         </h2>
       </div>
     </div>
