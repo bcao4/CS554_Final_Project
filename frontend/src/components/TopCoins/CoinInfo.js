@@ -11,6 +11,7 @@ import "./TopCoins.css";
 const CoinInfo = () => {
   const [loading, setLoading] = useState(true);
   const [coinData, setCoinData] = useState([]);
+  const [days, setDays] = useState(1);
   const [chartData, setChartData] = useState(null);
   const [livePrice, setLivePrice] = useState(null);
 
@@ -25,7 +26,7 @@ const CoinInfo = () => {
     const fetchData = async () => {
       setLoading(true);
       let coinData, chartData;
-      const days = 7; // TODO: change to useState variable that user can select to change time period?
+      //const days = 7; // TODO: change to useState variable that user can select to change time period?
       try {
         chartData = await getChartData(coinID, days);
         coinData = await getCoinInfo(coinID);
@@ -55,7 +56,7 @@ const CoinInfo = () => {
       socket.removeAllListeners("price update");
       clearInterval(priceUpdateInterval.current);
     };
-  }, [coinID]);
+  }, [coinID, days]);
 
   useEffect(() => {
     const livePriceElement = document.getElementById("live-price");
@@ -111,6 +112,7 @@ const CoinInfo = () => {
               Website: <a href={coinWebsite}> {coinWebsite}</a>
             </Typography>
           </div>
+          <br/>
           {chartData !== null && (
             <div className="chart-container">
               <Line
@@ -120,7 +122,7 @@ const CoinInfo = () => {
                     {
                       data: chartData.map((price) => price[1]),
                       label: "Price in USD",
-                      borderColor: " #fb5462",
+                      borderColor: " #fb5462"
                     },
                   ],
                 }}
@@ -130,12 +132,47 @@ const CoinInfo = () => {
                       radius: 1,
                     },
                   },
+                  plugins: {
+                    title: {
+                      display: true,
+                      text: `${days} Day Chart`,
+                      color: "#FFFFFF",
+                      font: {
+                        size: 25
+                      }
+                    },
+                  },
+                  scales: {
+                    x: {
+                      ticks: {
+                        color: 'white'
+                      }
+                    },
+                    y: {
+                      ticks: {
+                        color: 'white'
+                      }
+                    }
+                  }
                 }}
               />
+              <br/>
+              <div className="text-center ">
+                <div className="btn-group">
+                  <button className="btn btn-outline-light" onClick={() => setDays(1)}>1 Day</button>
+                  <button className="btn btn-outline-light" onClick={() => setDays(7)}>1 Week</button>
+                  <button className="btn btn-outline-light" onClick={() => setDays(30)}>1 Month</button>
+                  <button className="btn btn-outline-light" onClick={() => setDays(90)}>3 Month</button>
+                  <button className="btn btn-outline-light" onClick={() => setDays(180)}>6 Month</button>
+                  <button className="btn btn-outline-light" onClick={() => setDays(365)}>1 Year</button>
+                  <button className="btn btn-outline-light" onClick={() => setDays("max")}>Max</button>
+                </div>
+              </div>
             </div>
           )}
         </div>
       )}
+      <br/>
     </>
   );
 };
