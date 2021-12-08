@@ -1,24 +1,22 @@
 import { useState, useEffect, useRef } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { Typography, LinearProgress } from "@mui/material";
 import { Line } from "react-chartjs-2";
 import { removeHtmlTags, timeToDaysAndHours } from "../../utils";
 import { getCoinInfo, getChartData } from "../../api";
 import { socket } from "../../api/socket";
-//import TopCoins from "./TopCoins";
 import "./TopCoins.css";
 
 const CoinInfo = () => {
   const [loading, setLoading] = useState(true);
-  const [coinData, setCoinData] = useState([]);
+  const [coinData, setCoinData] = useState(null);
   const [days, setDays] = useState(1);
   const [chartData, setChartData] = useState(null);
   const [livePrice, setLivePrice] = useState(null);
 
-  const lastPrice = useRef(0);
+  const lastPrice = useRef(null);
   const priceUpdateInterval = useRef(null);
 
-  //const navigate = useNavigate();
   const params = useParams();
   const coinID = params.id;
 
@@ -26,7 +24,6 @@ const CoinInfo = () => {
     const fetchData = async () => {
       setLoading(true);
       let coinData, chartData;
-      //const days = 7; // TODO: change to useState variable that user can select to change time period?
       try {
         chartData = await getChartData(coinID, days);
         coinData = await getCoinInfo(coinID);
@@ -37,7 +34,7 @@ const CoinInfo = () => {
       priceUpdateInterval.current = setInterval(
         () => socket.emit("request price", { coin: coinID }),
         5000 // request price update every 5 seconds, could be more often but coin gecko api doesnt update the price that often
-      ); // TODO: possibly find new api that updates price more often?
+      );
       socket.on("price update", (data) => {
         const newPrice = data?.[coinID]?.usd;
         if (newPrice !== undefined) {
@@ -46,7 +43,7 @@ const CoinInfo = () => {
       });
       setChartData(chartData.prices);
       setCoinData(coinData);
-      if (lastPrice.current === 0) {
+      if (lastPrice.current === null) {
         lastPrice.current = coinData.market_data?.current_price?.usd ?? 0;
       }
       setLoading(false);
@@ -80,15 +77,19 @@ const CoinInfo = () => {
   let coinWebsite = coinData?.links?.homepage[0] ?? "No website available";
   let coinRank = coinData?.market_cap_rank ?? "No rank available";
   let coinPrice =
-    coinData.market_data?.current_price?.usd ?? "No price available";
+    coinData?.market_data?.current_price?.usd ?? "No price available";
 
   return (
     <>
-      {loading ? (
+      {loading && (
         <>
-          <LinearProgress />
+          <LinearProgress
+            color="secondary"
+            style={{ position: "sticky", top: 0, height: 8 }}
+          />
         </>
-      ) : (
+      )}
+      {coinData !== null && (
         <div>
           <div className="white-text text-center">
             <img
@@ -112,7 +113,7 @@ const CoinInfo = () => {
               Website: <a href={coinWebsite}> {coinWebsite}</a>
             </Typography>
           </div>
-          <br/>
+          <br />
           {chartData !== null && (
             <div className="chart-container">
               <Line
@@ -122,7 +123,7 @@ const CoinInfo = () => {
                     {
                       data: chartData.map((price) => price[1]),
                       label: "Price in USD",
-                      borderColor: " #fb5462"
+                      borderColor: " #fb5462",
                     },
                   ],
                 }}
@@ -138,41 +139,75 @@ const CoinInfo = () => {
                       text: `${days} Day Chart`,
                       color: "#FFFFFF",
                       font: {
-                        size: 25
-                      }
+                        size: 25,
+                      },
                     },
                   },
                   scales: {
                     x: {
                       ticks: {
-                        color: 'white'
-                      }
+                        color: "white",
+                      },
                     },
                     y: {
                       ticks: {
-                        color: 'white'
-                      }
-                    }
-                  }
+                        color: "white",
+                      },
+                    },
+                  },
                 }}
               />
-              <br/>
+              <br />
               <div className="text-center ">
                 <div className="btn-group">
-                  <button className="btn btn-outline-light" onClick={() => setDays(1)}>1 Day</button>
-                  <button className="btn btn-outline-light" onClick={() => setDays(7)}>1 Week</button>
-                  <button className="btn btn-outline-light" onClick={() => setDays(30)}>1 Month</button>
-                  <button className="btn btn-outline-light" onClick={() => setDays(90)}>3 Month</button>
-                  <button className="btn btn-outline-light" onClick={() => setDays(180)}>6 Month</button>
-                  <button className="btn btn-outline-light" onClick={() => setDays(365)}>1 Year</button>
-                  <button className="btn btn-outline-light" onClick={() => setDays("max")}>Max</button>
+                  <button
+                    className="btn btn-outline-light"
+                    onClick={() => setDays(1)}
+                  >
+                    1 Day
+                  </button>
+                  <button
+                    className="btn btn-outline-light"
+                    onClick={() => setDays(7)}
+                  >
+                    1 Week
+                  </button>
+                  <button
+                    className="btn btn-outline-light"
+                    onClick={() => setDays(30)}
+                  >
+                    1 Month
+                  </button>
+                  <button
+                    className="btn btn-outline-light"
+                    onClick={() => setDays(90)}
+                  >
+                    3 Month
+                  </button>
+                  <button
+                    className="btn btn-outline-light"
+                    onClick={() => setDays(180)}
+                  >
+                    6 Month
+                  </button>
+                  <button
+                    className="btn btn-outline-light"
+                    onClick={() => setDays(365)}
+                  >
+                    1 Year
+                  </button>
+                  <button
+                    className="btn btn-outline-light"
+                    onClick={() => setDays("max")}
+                  >
+                    Max
+                  </button>
                 </div>
               </div>
             </div>
           )}
         </div>
       )}
-      <br/>
     </>
   );
 };
