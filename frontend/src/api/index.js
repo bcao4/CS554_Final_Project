@@ -24,3 +24,12 @@ export const getCoinPage = async (page, perPage) => {
   });
   return data;
 };
+
+export const getMarketNews = async (filter) => {
+  // General market news (not coin specific)
+  // filters: rising|hot|bullish|bearish
+  const { data } = await axios.get(`${API_URL}/market-news`, {
+    params: { filter },
+  });
+  return data;
+};

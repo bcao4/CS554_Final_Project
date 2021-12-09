@@ -1,5 +1,7 @@
 const axios = require("axios");
 const COIN_GECKO_ENDPOINT = "https://api.coingecko.com/api/v3";
+const CRYPTOPANIC_ENDPOINT = "https://cryptopanic.com/api/v1";
+const { CRYPTOPANIC_KEY } = process.env;
 
 const getPrice = async (coin) => {
   /* 
@@ -65,7 +67,31 @@ const getCoinPage = async (page, perPage) => {
   });
   return data;
 };
-module.exports = { getPrice, getCoinInfo, getChartData, getCoinPage };
+
+const getMarketNews = async (filter) => {
+  /*
+    Returns latest crypto market news
+    Available filters: rising|hot|bullish|bearish|important|saved|lol
+  */
+
+  const { data } = await axios.get(`${CRYPTOPANIC_ENDPOINT}/posts/`, {
+    params: {
+      auth_token: CRYPTOPANIC_KEY,
+      public: true,
+      filter,
+    },
+  });
+
+  return data;
+};
+
+module.exports = {
+  getPrice,
+  getCoinInfo,
+  getChartData,
+  getCoinPage,
+  getMarketNews,
+};
 
 // https://www.coingecko.com/en/api/documentation?
 // https://developers.coinranking.com/api/documentation
@@ -73,3 +99,22 @@ module.exports = { getPrice, getCoinInfo, getChartData, getCoinPage };
 // https://api.coingecko.com/api/v3/coins/bitcoin?localization=false&tickers=false&developer_data=false
 // https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days=1
 // https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&per_page=100&page=1&sparkline=true&price_change_percentage=24h
+
+/*
+https://cryptopanic.com/developers/api/
+You can use any of UI filters using filter=(rising|hot|bullish|bearish|important|saved|lol):
+/api/v1/posts/?auth_token=fcf1e560a52147d92650208d0fda96b3304557e8&filter=rising
+
+Filter by currencies using currencies=CURRENCY_CODE1,CURRENCY_CODE2 (max 50):
+/api/v1/posts/?auth_token=fcf1e560a52147d92650208d0fda96b3304557e8&currencies=BTC,ETH
+
+Filter by region using regions=REGION_CODE1,REGION_CODE2. Default: en.
+Available regions: en (English), de (Deutsch), nl (Dutch), es (Español), fr (Français), it (Italiano), pt (Português), ru (Русский):
+/api/v1/posts/?auth_token=fcf1e560a52147d92650208d0fda96b3304557e8&regions=en,de
+
+Filter by kind using kind=news. Default: all. Available values: news or media
+/api/v1/posts/?auth_token=fcf1e560a52147d92650208d0fda96b3304557e8&kind=news
+
+You can also combine multiple filters together:
+/api/v1/posts/?auth_token=fcf1e560a52147d92650208d0fda96b3304557e8&currencies=ETH&filter=rising
+*/

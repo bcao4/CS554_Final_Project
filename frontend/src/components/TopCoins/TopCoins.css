@@ -63,6 +63,14 @@
   animation-duration: 5s;
 }
 
+.price-green {
+  color: rgb(4, 172, 4);
+}
+
+.price-red {
+  color: red;
+}
+
 @keyframes priceIncreaseAnimation {
   from {
     color: rgb(4, 172, 4);
