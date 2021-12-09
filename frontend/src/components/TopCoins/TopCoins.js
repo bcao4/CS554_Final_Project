@@ -69,6 +69,7 @@ const TopCoins = () => {
     };
     fetchData();
   }, [pageNum]);
+  console.log(coinData)
 
   return (
     <>

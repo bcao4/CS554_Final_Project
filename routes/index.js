@@ -1,4 +1,4 @@
-const { getChartData, getCoinInfo, getCoinPage } = require("../api");
+const { getChartData, getCoinInfo, getCoinPage, getCryptoNews } = require("../api");
 
 module.exports = (app) => {
   app.get("/", (req, res) => {
@@ -29,6 +29,15 @@ module.exports = (app) => {
       const data = await getCoinPage(page, perPage);
       return res.json(data);
     } catch (e) {
+      return res.status(500);
+    }
+  });
+  app.get("/crypto-news", async (req, res) => {
+    const { page, perPage } = req.query;
+    try {
+      const data = await getCryptoNews(page, perPage);
+      return res.json(data);
+    } catch(e) {
       return res.status(500);
     }
   });

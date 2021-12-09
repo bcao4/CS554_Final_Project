@@ -24,3 +24,11 @@ export const getCoinPage = async (page, perPage) => {
   });
   return data;
 };
+
+export const getCryptoNews = async(page, perPage) => {
+  // Get crypto news
+  const { data } = await axios.get(`${API_URL}/crypto-news`, {
+    params: { page, perPage },
+  });
+  return data;
+}
