@@ -1,3 +1,4 @@
+const userRoutes = require('./AuthRoutes/users');
 const {
   getChartData,
   getCoinInfo,
@@ -56,4 +57,7 @@ module.exports = (app) => {
       return res.status(500);
     }
   });
+
+  //user route
+  app.use('/users', userRoutes);
 };

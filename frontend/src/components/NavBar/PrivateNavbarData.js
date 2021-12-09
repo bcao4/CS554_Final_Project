@@ -1,9 +1,9 @@
+import {MdOutlineAccountCircle} from "react-icons/md";
 import { AiOutlineHome } from "react-icons/ai";
 import { BsCurrencyBitcoin } from "react-icons/bs";
-import { IoNewspaperOutline, IoCreate} from "react-icons/io5";
-import {GoSignIn} from "react-icons/go";
+import { IoNewspaperOutline} from "react-icons/io5";
 
-export const NavBarData = [
+export const PrivateNavbarData = [
   {
     title: "Home",
     icon: <AiOutlineHome />,
@@ -25,13 +25,8 @@ export const NavBarData = [
     path: "/crypto-news",
   },
   {
-    title: "SignUp",
-    icon: <IoCreate />,
-    path: "/signup",
-  },
-  {
-    title: "Login",
-    icon: <GoSignIn />,
-    path: "/login",
+    title: "Account",
+    icon: <MdOutlineAccountCircle />,
+    path: "/account",
   },
 ];

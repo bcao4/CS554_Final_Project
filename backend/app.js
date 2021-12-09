@@ -6,6 +6,12 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
+//
+const bodyparser = require("body-parser");
+app.use(bodyparser.json());
+const checkAuth = require("./routes/AuthRoutes/checkAuthentication");
+app.use("/users", checkAuth.checkAuthentication);
+//
 const server = http.createServer(app);
 const io = require("socket.io")(server, {
   cors: {
