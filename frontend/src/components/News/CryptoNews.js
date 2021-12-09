@@ -130,7 +130,6 @@ const News = () => {
       </div>
       <div>
         <Pagination
-          className="pagination-button"
           count={5}
           page={pageNum}
           style={{
