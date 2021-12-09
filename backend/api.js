@@ -1,7 +1,8 @@
 const axios = require("axios");
 const COIN_GECKO_ENDPOINT = "https://api.coingecko.com/api/v3";
 const CRYPTOPANIC_ENDPOINT = "https://cryptopanic.com/api/v1";
-const { CRYPTOPANIC_KEY } = process.env;
+const NEWS_API_ENDPOINT = "https://newsapi.org/v2";
+const { CRYPTOPANIC_KEY, NEWS_API_KEY } = process.env;
 
 const getPrice = async (coin) => {
   /* 
@@ -85,12 +86,28 @@ const getMarketNews = async (filter) => {
   return data;
 };
 
+const getCryptoNews = async (page, perPage) => {
+  /*
+    Returns list of crypto news articles
+  */
+  const { data } = await axios.get(`${NEWS_API_ENDPOINT}/everything`, {
+    params: {
+      q: "cryptocurrency",
+      apiKey: NEWS_API_KEY,
+      pageSize: perPage,
+      page: page,
+    },
+  });
+  return data;
+};
+
 module.exports = {
   getPrice,
   getCoinInfo,
   getChartData,
   getCoinPage,
   getMarketNews,
+  getCryptoNews
 };
 
 // https://www.coingecko.com/en/api/documentation?
@@ -99,6 +116,7 @@ module.exports = {
 // https://api.coingecko.com/api/v3/coins/bitcoin?localization=false&tickers=false&developer_data=false
 // https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days=1
 // https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&per_page=100&page=1&sparkline=true&price_change_percentage=24h
+// https://newsapi.org/v2/everything?q=cryptocurrency&apiKey=1569464d633f4da2a0b6663b14266b84
 
 /*
 https://cryptopanic.com/developers/api/
