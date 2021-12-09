@@ -35,8 +35,22 @@
   color: white;
 }
 
+.MuiToggleButton-root {
+  color: white !important;
+  border-color: white !important;
+}
+
+.Mui-selected {
+  background-color: white !important;
+  color: black !important;
+}
+
 .coin-name {
   text-transform: capitalize;
+}
+
+.coin-website-link {
+  color: #809dff;
 }
 
 .coin-info-title h1 {
@@ -64,11 +78,11 @@
 }
 
 .price-green {
-  color: rgb(4, 172, 4);
+  color: #48b748;
 }
 
 .price-red {
-  color: red;
+  color: #ff7878;
 }
 
 @keyframes priceIncreaseAnimation {

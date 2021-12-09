@@ -138,7 +138,7 @@ const CoinInfo = () => {
             <Typography>Market Cap Rank: {coinRank}</Typography>
             <Typography>{removeHtmlTags(coinDescription)}</Typography>
             <Typography>
-              Website: <a href={coinWebsite}> {coinWebsite}</a>
+              Website: <a className="coin-website-link" href={coinWebsite}> {coinWebsite}</a>
             </Typography>
           </div>
           <br />
