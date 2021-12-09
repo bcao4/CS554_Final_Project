@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const data = require('../../backend/data');
+const data = require('../../data');
 const userData = data.users;
 const checkAuth = require("./checkAuthentication");
 

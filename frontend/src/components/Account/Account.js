@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import '../../App.css';
+import './accountPage.css';
 import { AuthContext } from '../../firebase/Auth';
 import axios from 'axios';
 import { NavLink } from 'react-router-dom';
