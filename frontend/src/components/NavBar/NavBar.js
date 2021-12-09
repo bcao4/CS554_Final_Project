@@ -7,37 +7,6 @@ import React, { useContext } from 'react';
 import { AuthContext } from '../../firebase/Auth';
 import { PrivateNavbarData } from "./PrivateNavbarData";
 
-// const NavBar = () => {
-//   return (
-//     <>
-//       <div className="banner">
-//         <NavLink className="logo-icon" to="/">
-//           <FaBitcoin />
-//           <span>CryptoTracker</span>
-//         </NavLink>
-//       </div>
-//       <div className="navbarComp">
-//         <ul className="navbar-items">
-//           {NavBarData.map((item, index) => {
-//             return (
-//               <li key={index} className="navbar-item">
-//                 <NavLink
-//                   className="navlink"
-//                   activeclassname="active"
-//                   to={item.path}
-//                 >
-//                   {item.icon}
-//                   <span>{item.title}</span>
-//                 </NavLink>
-//               </li>
-//             );
-//           })}
-//         </ul>
-//       </div>
-//     </>
-//   );
-// };
-
 const NavBar = () => {
   const { currentUser } = useContext(AuthContext);
   return <div>
