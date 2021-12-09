@@ -7,36 +7,38 @@ import {
   CardContent,
   CardActionArea,
   CardMedia,
-  Divider
+  Divider,
+  Pagination
 } from "@mui/material";
 import { removeHtmlTags } from "../../utils";
 import { getCryptoNews } from "../../api";
+import "./News.css";
 
 const News = () => {
   const [loading, setLoading] = useState(true);
   const [pageNum, setPageNum] = useState(1);
   const [newsData, setNewsData] = useState([]);
 
-  const observer = useRef();
-  const lastNewsElementRef = useCallback(
-    (node) => {
-      if (loading) return;
-      if (observer.current) {
-        observer.current.disconnect();
-      }
-      observer.current = new IntersectionObserver((entries) => {
-        if (entries[0].isIntersecting) {
-          //console.log("visible" && nextPageStatus);
-          setPageNum((prevPageNum) => prevPageNum + 1);
-        }
-      });
-      if (node) {
-        observer.current.observe(node);
-      }
-      //console.log(node);
-    },
-    [loading]
-  );
+  // const observer = useRef();
+  // const lastNewsElementRef = useCallback(
+  //   (node) => {
+  //     if (loading) return;
+  //     if (observer.current) {
+  //       observer.current.disconnect();
+  //     }
+  //     observer.current = new IntersectionObserver((entries) => {
+  //       if (entries[0].isIntersecting) {
+  //         //console.log("visible" && nextPageStatus);
+  //         setPageNum((prevPageNum) => prevPageNum + 1);
+  //       }
+  //     });
+  //     if (node) {
+  //       observer.current.observe(node);
+  //     }
+  //     //console.log(node);
+  //   },
+  //   [loading]
+  // );
 
   useEffect(() => {
     setLoading(true);
@@ -52,7 +54,8 @@ const News = () => {
           console.error(e);
           return;
         }
-        setNewsData((prevNews) => [...prevNews, ...data]);
+        //setNewsData((prevNews) => [...prevNews, ...data]);
+        setNewsData(data);
         setLoading(false);
       } catch (e) {
         console.error(e);
@@ -85,46 +88,63 @@ const News = () => {
               return (
                 <Grid key={index} item xs={12} sm={6} md={4} lg={4} xl={4}>
                   <Card>
-                    <div ref={lastNewsElementRef} />
-                    <div>
-                      <CardActionArea
-                        href={news.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        <CardMedia
-                          component="img"
-                          height="200"
-                          src={news.urlToImage}
-                          alt={news.title}
-                        />
-                        <CardContent>
-                          <Typography gutterBottom variant="h5" component="div">
-                            {news.title}
-                          </Typography>
-                          <Typography variant="body3" color="text.secondary">
-                            {removeHtmlTags(news.description)}
-                          </Typography>
-                          <br/>
-                          <br/>
-                          <Divider />
-                          <Typography variant="body2" color="text.secondary">
-                            By: {news.author}
+                    {/* <div ref={lastNewsElementRef} /> */}
+                      <div>
+                        <CardActionArea
+                          href={news.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          <CardMedia
+                            component="img"
+                            height="200"
+                            src={news.urlToImage}
+                            alt={news.title}
+                          />
+                          <CardContent>
+                            <Typography gutterBottom variant="h5" component="div">
+                              {news.title}
+                            </Typography>
+                            <Typography variant="body3" color="text.secondary">
+                              {removeHtmlTags(news.description)}
+                            </Typography>
                             <br/>
-                            Source: {news.source.name}
-                          </Typography>
-                        </CardContent>
-                      </CardActionArea>
-                      {/* <CardActions style={{ justifyContent: "center" }}>
-                        <a href={news.url}>Read more...</a>
-                      </CardActions> */}
-                    </div>
+                            <br/>
+                            <Divider />
+                            <Typography variant="body2" color="text.secondary">
+                              By: {news.author}
+                              <br/>
+                              Source: {news.source.name}
+                            </Typography>
+                          </CardContent>
+                        </CardActionArea>
+                        {/* <CardActions style={{ justifyContent: "center" }}>
+                          <a href={news.url}>Read more...</a>
+                        </CardActions> */}
+                      </div>
                   </Card>
                 </Grid>
               );
             })}
         </Grid>
       </div>
+      <div>
+        <Pagination
+          className="pagination-button"
+          count={5}
+          page={pageNum}
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            margin: "10px",
+          }}
+          size="large"
+          onChange={(_, newPage) => {
+            setPageNum(newPage);
+            window.scrollTo(0,0);
+          }}
+        />
+        </div>
     </>
   );
 };
