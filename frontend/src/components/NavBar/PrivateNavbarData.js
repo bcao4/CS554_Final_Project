@@ -15,9 +15,14 @@ export const PrivateNavbarData = [
     path: "/top-coins",
   },
   {
+    title: "Market News",
+    icon: <IoNewspaperOutline />,
+    path: "/market-news",
+  },
+  {
     title: "Crypto News",
     icon: <IoNewspaperOutline />,
-    path: "/news",
+    path: "/crypto-news",
   },
   {
     title: "Account",
