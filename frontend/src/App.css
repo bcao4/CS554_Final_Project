@@ -1,3 +1,9 @@
 body {
   background-color: rgb(55, 57, 59) !important;
 }
+
+.flex-center {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+}

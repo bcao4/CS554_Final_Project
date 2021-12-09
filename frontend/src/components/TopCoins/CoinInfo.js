@@ -1,8 +1,13 @@
 import { useState, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
-import { Typography, LinearProgress } from "@mui/material";
+import {
+  Typography,
+  LinearProgress,
+  ToggleButtonGroup,
+  ToggleButton,
+} from "@mui/material";
 import { Line } from "react-chartjs-2";
-import { removeHtmlTags, timeToDaysAndHours } from "../../utils";
+import { removeHtmlTags, convertPrice, convertDate } from "../../utils";
 import { getCoinInfo, getChartData } from "../../api";
 import { socket } from "../../api/socket";
 import "./TopCoins.css";
@@ -10,9 +15,11 @@ import "./TopCoins.css";
 const CoinInfo = () => {
   const [loading, setLoading] = useState(true);
   const [coinData, setCoinData] = useState(null);
-  const [days, setDays] = useState(1);
+  const [days, setDays] = useState("1");
   const [chartData, setChartData] = useState(null);
   const [livePrice, setLivePrice] = useState(null);
+  const [priceDifference, setPriceDifference] = useState(null);
+  const [earliestPrice, setEarliestPrice] = useState(null);
 
   const lastPrice = useRef(null);
   const priceUpdateInterval = useRef(null);
@@ -21,39 +28,63 @@ const CoinInfo = () => {
   const coinID = params.id;
 
   useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
-      let coinData, chartData;
-      try {
-        chartData = await getChartData(coinID, days);
-        coinData = await getCoinInfo(coinID);
-      } catch (e) {
-        console.error(e);
-        return;
-      }
-      priceUpdateInterval.current = setInterval(
-        () => socket.emit("request price", { coin: coinID }),
-        5000 // request price update every 5 seconds, could be more often but coin gecko api doesnt update the price that often
-      );
-      socket.on("price update", (data) => {
-        const newPrice = data?.[coinID]?.usd;
-        if (newPrice !== undefined) {
-          setLivePrice(newPrice);
+    priceUpdateInterval.current = setInterval(
+      () => socket.emit("request price", { coin: coinID }),
+      10000
+    );
+    socket.on("price update", (data) => {
+      const newPrice = data?.[coinID]?.usd;
+      if (newPrice !== undefined) {
+        setLivePrice(newPrice);
+        if (earliestPrice !== null) {
+          const [firstTime, firstPrice] = earliestPrice;
+          setPriceDifference([lastPrice.current - firstPrice, firstTime]);
         }
-      });
-      setChartData(chartData.prices);
-      setCoinData(coinData);
-      if (lastPrice.current === null) {
-        lastPrice.current = coinData.market_data?.current_price?.usd ?? 0;
       }
-      setLoading(false);
-    };
-    fetchData();
+    });
+
     return () => {
       socket.removeAllListeners("price update");
       clearInterval(priceUpdateInterval.current);
     };
+  }, [coinID, earliestPrice]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      let coinData, chartData;
+      try {
+        [chartData, coinData] = await Promise.all([
+          // execute both requests at same time
+          getChartData(coinID, days),
+          getCoinInfo(coinID),
+        ]);
+      } catch (e) {
+        console.error(e);
+        return;
+      } finally {
+        setLoading(false);
+      }
+      setChartData(chartData.prices);
+      setCoinData(coinData);
+      if (lastPrice.current === null) {
+        lastPrice.current = coinData?.market_data?.current_price?.usd ?? 0;
+      }
+      console.log(chartData);
+      const [firstTime, firstPrice] = chartData.prices[0];
+      setEarliestPrice([firstTime, firstPrice]);
+    };
+
+    fetchData();
   }, [coinID, days]);
+
+  useEffect(() => {
+    if (earliestPrice === null) {
+      return;
+    }
+    const [firstTime, firstPrice] = earliestPrice;
+    setPriceDifference([lastPrice.current - firstPrice, firstTime]);
+  }, [earliestPrice]);
 
   useEffect(() => {
     const livePriceElement = document.getElementById("live-price");
@@ -64,9 +95,6 @@ const CoinInfo = () => {
       } else if (lastPrice.current > livePrice) {
         livePriceElement.classList.remove("live-price-increase");
         livePriceElement.classList.add("live-price-decrease");
-      } else {
-        livePriceElement.classList.remove("live-price-increase");
-        livePriceElement.classList.remove("live-price-decrease");
       }
     }
     lastPrice.current = livePrice;
@@ -104,8 +132,8 @@ const CoinInfo = () => {
             <Typography variant="h2" key={livePrice} id={"live-price"}>
               $
               {livePrice !== null
-                ? livePrice.toLocaleString()
-                : coinPrice.toLocaleString()}
+                ? convertPrice(livePrice)
+                : convertPrice(coinPrice)}
             </Typography>
             <Typography>Market Cap Rank: {coinRank}</Typography>
             <Typography>{removeHtmlTags(coinDescription)}</Typography>
@@ -114,11 +142,37 @@ const CoinInfo = () => {
             </Typography>
           </div>
           <br />
-          {chartData !== null && (
+          {chartData !== null && earliestPrice !== null && (
             <div className="chart-container">
+              <div className="flex-center">
+                <Typography
+                  style={{ fontSize: "1.4rem" }}
+                  className={
+                    priceDifference !== null
+                      ? priceDifference[0] > 0
+                        ? "price-green"
+                        : "price-red"
+                      : ""
+                  }
+                >
+                  {priceDifference !== null
+                    ? priceDifference[0] < 0
+                      ? "-"
+                      : "+"
+                    : ""}
+                  {priceDifference !== null &&
+                    `$${convertPrice(priceDifference[0], {
+                      abs: true,
+                    })} since ${new Date(
+                      priceDifference[1]
+                    ).toLocaleDateString()}`}
+                </Typography>
+              </div>
               <Line
                 data={{
-                  labels: chartData.map((time) => timeToDaysAndHours(time[0])),
+                  labels: chartData.map((time) =>
+                    convertDate(time[0], earliestPrice[0])
+                  ),
                   datasets: [
                     {
                       data: chartData.map((price) => price[1]),
@@ -131,16 +185,6 @@ const CoinInfo = () => {
                   elements: {
                     point: {
                       radius: 1,
-                    },
-                  },
-                  plugins: {
-                    title: {
-                      display: true,
-                      text: `${days} Day Chart`,
-                      color: "#FFFFFF",
-                      font: {
-                        size: 25,
-                      },
                     },
                   },
                   scales: {
@@ -157,52 +201,31 @@ const CoinInfo = () => {
                   },
                 }}
               />
-              <br />
-              <div className="text-center ">
-                <div className="btn-group">
-                  <button
-                    className="btn btn-outline-light"
-                    onClick={() => setDays(1)}
-                  >
-                    1 Day
-                  </button>
-                  <button
-                    className="btn btn-outline-light"
-                    onClick={() => setDays(7)}
-                  >
-                    1 Week
-                  </button>
-                  <button
-                    className="btn btn-outline-light"
-                    onClick={() => setDays(30)}
-                  >
-                    1 Month
-                  </button>
-                  <button
-                    className="btn btn-outline-light"
-                    onClick={() => setDays(90)}
-                  >
-                    3 Month
-                  </button>
-                  <button
-                    className="btn btn-outline-light"
-                    onClick={() => setDays(180)}
-                  >
-                    6 Month
-                  </button>
-                  <button
-                    className="btn btn-outline-light"
-                    onClick={() => setDays(365)}
-                  >
-                    1 Year
-                  </button>
-                  <button
-                    className="btn btn-outline-light"
-                    onClick={() => setDays("max")}
-                  >
-                    Max
-                  </button>
-                </div>
+              <div>
+                <ToggleButtonGroup
+                  color="primary"
+                  size="large"
+                  value={days}
+                  exclusive
+                  onChange={(_, newTimePeriod) => {
+                    if (newTimePeriod) {
+                      setDays(newTimePeriod);
+                    }
+                  }}
+                  className="flex-center"
+                  style={{
+                    margin: "10px",
+                    marginBottom: "16px",
+                  }}
+                >
+                  <ToggleButton value="1">1 Day</ToggleButton>
+                  <ToggleButton value="7">1 Week</ToggleButton>
+                  <ToggleButton value="30">1 Month</ToggleButton>
+                  <ToggleButton value="90">3 Month</ToggleButton>
+                  <ToggleButton value="180">6 Month</ToggleButton>
+                  <ToggleButton value="365">1 Year</ToggleButton>
+                  <ToggleButton value="max">Max</ToggleButton>
+                </ToggleButtonGroup>
               </div>
             </div>
           )}

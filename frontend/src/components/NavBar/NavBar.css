@@ -58,7 +58,8 @@
   color: rgb(202, 195, 195);
 }
 
-span {
+.navbar-items span,
+.banner span {
   margin-left: 13px;
   vertical-align: middle;
 }
