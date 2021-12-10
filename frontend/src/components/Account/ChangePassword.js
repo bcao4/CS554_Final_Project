@@ -9,6 +9,7 @@ function ChangePassword() {
     const [pwMatch, setPwMatch] = useState('');
 
     const submitForm = async (e) => {
+        e.preventDefault();
         const { currentPassword, newPasswordOne, newPasswordTwo } = e.target.elements;
         if (newPasswordOne.value !== newPasswordTwo.value) {
             setPwMatch('New password do not match, please try again');
