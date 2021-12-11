@@ -5,9 +5,16 @@ import {
   LinearProgress,
   ToggleButtonGroup,
   ToggleButton,
+  Link,
 } from "@mui/material";
 import { Line } from "react-chartjs-2";
-import { removeHtmlTags, convertPrice, convertDate } from "../../utils";
+import {
+  removeHtmlTags,
+  convertPrice,
+  convertDate,
+  getDateDiffString,
+  generatePercentString,
+} from "../../utils";
 import { getCoinInfo, getChartData } from "../../api";
 import { socket } from "../../api/socket";
 import "./TopCoins.css";
@@ -18,7 +25,6 @@ const CoinInfo = () => {
   const [days, setDays] = useState("1");
   const [chartData, setChartData] = useState(null);
   const [livePrice, setLivePrice] = useState(null);
-  const [priceDifference, setPriceDifference] = useState(null);
   const [earliestPrice, setEarliestPrice] = useState(null);
 
   const lastPrice = useRef(null);
@@ -30,19 +36,14 @@ const CoinInfo = () => {
   useEffect(() => {
     priceUpdateInterval.current = setInterval(
       () => socket.emit("request price", { coin: coinID }),
-      10000
+      5000
     );
     socket.on("price update", (data) => {
       const newPrice = data?.[coinID]?.usd;
       if (newPrice !== undefined) {
         setLivePrice(newPrice);
-        if (earliestPrice !== null) {
-          const [firstTime, firstPrice] = earliestPrice;
-          setPriceDifference([lastPrice.current - firstPrice, firstTime]);
-        }
       }
     });
-
     return () => {
       socket.removeAllListeners("price update");
       clearInterval(priceUpdateInterval.current);
@@ -51,40 +52,30 @@ const CoinInfo = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      setLoading(true);
-      let coinData, chartData;
       try {
-        [chartData, coinData] = await Promise.all([
-          // execute both requests at same time
+        setLoading(true);
+        const [chartData, coinData] = await Promise.all([
           getChartData(coinID, days),
           getCoinInfo(coinID),
         ]);
+        setChartData(chartData.prices);
+        setCoinData(coinData);
+        if (lastPrice.current === null) {
+          lastPrice.current = coinData?.market_data?.current_price?.usd ?? 0;
+        }
+        setEarliestPrice(chartData.prices[0]); // earliest price is array of size 2 of [time, price]
+        if (livePrice === null) {
+          // if liveprice was already set, don't update to value from chart as the liveprice value should be the most recent!
+          setLivePrice(chartData.prices.at(-1)[1]); // init liveprice to last value from chartdata, if none was set so far
+        }
       } catch (e) {
         console.error(e);
-        return;
       } finally {
         setLoading(false);
       }
-      setChartData(chartData.prices);
-      setCoinData(coinData);
-      if (lastPrice.current === null) {
-        lastPrice.current = coinData?.market_data?.current_price?.usd ?? 0;
-      }
-      console.log(chartData);
-      const [firstTime, firstPrice] = chartData.prices[0];
-      setEarliestPrice([firstTime, firstPrice]);
     };
-
     fetchData();
   }, [coinID, days]);
-
-  useEffect(() => {
-    if (earliestPrice === null) {
-      return;
-    }
-    const [firstTime, firstPrice] = earliestPrice;
-    setPriceDifference([lastPrice.current - firstPrice, firstTime]);
-  }, [earliestPrice]);
 
   useEffect(() => {
     const livePriceElement = document.getElementById("live-price");
@@ -137,35 +128,43 @@ const CoinInfo = () => {
             </Typography>
             <Typography>Market Cap Rank: {coinRank}</Typography>
             <Typography>{removeHtmlTags(coinDescription)}</Typography>
-            <Typography>
-              Website: <a className="coin-website-link" href={coinWebsite}> {coinWebsite}</a>
-            </Typography>
+            <div className="flex-center" style={{ flexDirection: "row" }}>
+              <Typography style={{ marginRight: 4 }}>Website:</Typography>
+              <Link
+                className="coin-website-link"
+                href={coinWebsite}
+                style={{ marginBottom: 2 }}
+                target="_blank"
+                rel="noopener"
+              >
+                {coinWebsite}
+              </Link>
+            </div>
           </div>
-          <br />
-          {chartData !== null && earliestPrice !== null && (
+          {chartData !== null && earliestPrice !== null && livePrice !== null && (
             <div className="chart-container">
               <div className="flex-center">
                 <Typography
                   style={{ fontSize: "1.4rem" }}
                   className={
-                    priceDifference !== null
-                      ? priceDifference[0] > 0
-                        ? "price-green"
-                        : "price-red"
+                    livePrice - earliestPrice[1] > 0
+                      ? "price-green"
+                      : livePrice - earliestPrice[1] < 0
+                      ? "price-red"
                       : ""
                   }
                 >
-                  {priceDifference !== null
-                    ? priceDifference[0] < 0
-                      ? "-"
-                      : "+"
+                  {livePrice - earliestPrice[1] < 0
+                    ? "-"
+                    : livePrice - earliestPrice[1] > 0
+                    ? "+"
                     : ""}
-                  {priceDifference !== null &&
-                    `$${convertPrice(priceDifference[0], {
-                      abs: true,
-                    })} since ${new Date(
-                      priceDifference[1]
-                    ).toLocaleDateString()}`}
+                  {`$${convertPrice(
+                    livePrice - earliestPrice[1]
+                  )} ${generatePercentString(
+                    earliestPrice[1],
+                    livePrice
+                  )} ${getDateDiffString(earliestPrice[0])}`}
                 </Typography>
               </div>
               <Line
