@@ -31,6 +31,17 @@
   font-weight: bold;
 }
 
+.chart-container {
+  position: relative;
+  z-index: 0;
+  width: 100%;
+}
+
+.coin-price {
+  position: absolute;
+  z-index: 1;
+}
+
 .white-text {
   color: white;
 }

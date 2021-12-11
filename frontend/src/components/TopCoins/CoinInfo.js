@@ -6,6 +6,7 @@ import {
   ToggleButtonGroup,
   ToggleButton,
   Link,
+  Divider,
 } from "@mui/material";
 import { Line } from "react-chartjs-2";
 import {
@@ -111,8 +112,8 @@ const CoinInfo = () => {
         </>
       )}
       {coinData !== null && (
-        <div>
-          <div className="white-text">
+        <div style={{ marginTop: 10 }}>
+          <div className="white-text coin-price" style={{ marginLeft: 60 }}>
             <div
               style={{
                 display: "flex",
@@ -160,20 +161,6 @@ const CoinInfo = () => {
                 livePrice
               )} ${getDateDiffString(chartData[0][0])}`}
             </Typography>
-            <Typography>Market Cap Rank: {coinRank}</Typography>
-            <Typography>{removeHtmlTags(coinDescription)}</Typography>
-            <div className="flex-center" style={{ flexDirection: "row" }}>
-              <Typography style={{ marginRight: 4 }}>Website:</Typography>
-              <Link
-                className="coin-website-link"
-                href={coinWebsite}
-                style={{ marginBottom: 2 }}
-                target="_blank"
-                rel="noopener"
-              >
-                {coinWebsite}
-              </Link>
-            </div>
           </div>
           {chartData !== null && livePrice !== null && (
             <div className="chart-container">
@@ -191,6 +178,11 @@ const CoinInfo = () => {
                   ],
                 }}
                 options={{
+                  plugins: {
+                    legend: {
+                      display: false,
+                    },
+                  },
                   elements: {
                     point: {
                       radius: 1,
@@ -198,11 +190,17 @@ const CoinInfo = () => {
                   },
                   scales: {
                     x: {
+                      grid: {
+                        display: false,
+                      },
                       ticks: {
                         color: "white",
                       },
                     },
                     y: {
+                      grid: {
+                        display: false,
+                      },
                       ticks: {
                         color: "white",
                       },
@@ -238,6 +236,35 @@ const CoinInfo = () => {
               </div>
             </div>
           )}
+          <div id="coin-info" className="white-text">
+            <Typography
+              variant="h2"
+              className="coin-name"
+              style={{ fontSize: "2rem" }}
+            >
+              About {coinData.id}
+            </Typography>
+            <Divider sx={{ backgroundColor: "white" }} />
+            <Typography>{removeHtmlTags(coinDescription)}</Typography>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+              }}
+            >
+              <Typography style={{ marginRight: 4 }}>Website:</Typography>
+              <Link
+                className="coin-website-link"
+                href={coinWebsite}
+                target="_blank"
+                rel="noopener"
+              >
+                {coinWebsite}
+              </Link>
+            </div>
+            <Typography>Market Cap Rank: {coinRank}</Typography>
+          </div>
         </div>
       )}
     </>
