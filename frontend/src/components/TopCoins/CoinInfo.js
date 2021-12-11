@@ -48,7 +48,7 @@ const CoinInfo = () => {
       socket.removeAllListeners("price update");
       clearInterval(priceUpdateInterval.current);
     };
-  }, [coinID, earliestPrice]);
+  }, [coinID]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -64,10 +64,6 @@ const CoinInfo = () => {
           lastPrice.current = coinData?.market_data?.current_price?.usd ?? 0;
         }
         setEarliestPrice(chartData.prices[0]); // earliest price is array of size 2 of [time, price]
-        if (livePrice === null) {
-          // if liveprice was already set, don't update to value from chart as the liveprice value should be the most recent!
-          setLivePrice(chartData.prices.at(-1)[1]); // init liveprice to last value from chartdata, if none was set so far
-        }
       } catch (e) {
         console.error(e);
       } finally {
@@ -76,6 +72,14 @@ const CoinInfo = () => {
     };
     fetchData();
   }, [coinID, days]);
+
+  useEffect(() => {
+    // init livePrice if needed when chartData comes in
+    if (livePrice === null && chartData !== null) {
+      // if liveprice was already set, don't update to value from chart as the liveprice value should be the most recent!
+      setLivePrice(chartData.at(-1)[1]); // init liveprice to last value from chartdata, if none was set so far
+    }
+  }, [chartData, livePrice]);
 
   useEffect(() => {
     const livePriceElement = document.getElementById("live-price");
@@ -91,11 +95,11 @@ const CoinInfo = () => {
     lastPrice.current = livePrice;
   }, [livePrice]);
 
-  let coinDescription =
+  const coinDescription =
     coinData?.description?.en.split(". ")[0] ?? "No description available";
-  let coinWebsite = coinData?.links?.homepage[0] ?? "No website available";
-  let coinRank = coinData?.market_cap_rank ?? "No rank available";
-  let coinPrice =
+  const coinWebsite = coinData?.links?.homepage[0] ?? "No website available";
+  const coinRank = coinData?.market_cap_rank ?? "No rank available";
+  const coinPrice =
     coinData?.market_data?.current_price?.usd ?? "No price available";
 
   return (
