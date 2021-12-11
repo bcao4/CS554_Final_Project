@@ -134,7 +134,7 @@ const TopCoins = () => {
                     <div ref={lastCoinElementRef} />
                     <CardHeader
                       title={
-                        <>
+                        <div style={{ display: "flex", alignItems: "center" }}>
                           {index + 1}. {coin.name}
                           <img
                             style={{ marginLeft: 6 }}
@@ -142,7 +142,7 @@ const TopCoins = () => {
                             alt={coin.id}
                             height="45"
                           />
-                        </>
+                        </div>
                       }
                     />
                     <Divider />

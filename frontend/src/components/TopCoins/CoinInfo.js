@@ -112,21 +112,53 @@ const CoinInfo = () => {
       )}
       {coinData !== null && (
         <div>
-          <div className="white-text text-center">
-            <img
-              src={coinData.image.large}
-              alt={coinData.id}
-              height={100}
-              style={{ marginTop: "8px" }}
-            />
-            <Typography variant="h1" className="coin-name">
-              {coinData.id}
-            </Typography>
-            <Typography variant="h2" key={livePrice} id={"live-price"}>
+          <div className="white-text">
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "flex-start",
+              }}
+            >
+              <Typography
+                variant="h1"
+                className="coin-name"
+                style={{ fontSize: "2.6rem", marginRight: 4 }}
+              >
+                {coinData.id}
+              </Typography>
+              <img src={coinData.image.large} alt={coinData.id} height={50} />
+            </div>
+            <Typography
+              variant="h2"
+              id={"live-price"}
+              style={{ fontSize: "2rem" }}
+            >
               $
               {livePrice !== null
                 ? convertPrice(livePrice)
                 : convertPrice(coinPrice)}
+            </Typography>
+            <Typography
+              className={
+                livePrice - chartData[0][1] > 0
+                  ? "price-green"
+                  : livePrice - chartData[0][1] < 0
+                  ? "price-red"
+                  : ""
+              }
+            >
+              {livePrice - chartData[0][1] < 0
+                ? "-"
+                : livePrice - chartData[0][1] > 0
+                ? "+"
+                : ""}
+              {`$${convertPrice(
+                livePrice - chartData[0][1]
+              )} ${generatePercentString(
+                chartData[0][1],
+                livePrice
+              )} ${getDateDiffString(chartData[0][0])}`}
             </Typography>
             <Typography>Market Cap Rank: {coinRank}</Typography>
             <Typography>{removeHtmlTags(coinDescription)}</Typography>
@@ -145,30 +177,6 @@ const CoinInfo = () => {
           </div>
           {chartData !== null && livePrice !== null && (
             <div className="chart-container">
-              <div className="flex-center">
-                <Typography
-                  style={{ fontSize: "1.4rem" }}
-                  className={
-                    livePrice - chartData[0][1] > 0
-                      ? "price-green"
-                      : livePrice - chartData[0][1] < 0
-                      ? "price-red"
-                      : ""
-                  }
-                >
-                  {livePrice - chartData[0][1] < 0
-                    ? "-"
-                    : livePrice - chartData[0][1] > 0
-                    ? "+"
-                    : ""}
-                  {`$${convertPrice(
-                    livePrice - chartData[0][1]
-                  )} ${generatePercentString(
-                    chartData[0][1],
-                    livePrice
-                  )} ${getDateDiffString(chartData[0][0])}`}
-                </Typography>
-              </div>
               <Line
                 data={{
                   labels: chartData.map((time) =>

@@ -59,14 +59,6 @@
   padding-left: 10px;
 }
 
-.chart-container {
-  position: relative;
-  margin-left: 200px;
-  width: calc(
-    100% - 220px
-  ); /* 100% - width of side nav bar + 30 for some padding */
-}
-
 .live-price-increase {
   animation-name: priceIncreaseAnimation;
   animation-duration: 5s;
