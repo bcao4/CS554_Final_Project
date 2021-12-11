@@ -5,11 +5,20 @@ import {
   LinearProgress,
   ToggleButtonGroup,
   ToggleButton,
+  Link,
+  Divider,
 } from "@mui/material";
 import { Line } from "react-chartjs-2";
-import { removeHtmlTags, convertPrice, convertDate } from "../../utils";
+import {
+  removeHtmlTags,
+  convertPrice,
+  convertDate,
+  getDateDiffString,
+  generatePercentString,
+} from "../../utils";
 import { getCoinInfo, getChartData } from "../../api";
 import { socket } from "../../api/socket";
+import TradeBar from "./TradeBar";
 import "./TopCoins.css";
 
 const CoinInfo = () => {
@@ -18,8 +27,6 @@ const CoinInfo = () => {
   const [days, setDays] = useState("1");
   const [chartData, setChartData] = useState(null);
   const [livePrice, setLivePrice] = useState(null);
-  const [priceDifference, setPriceDifference] = useState(null);
-  const [earliestPrice, setEarliestPrice] = useState(null);
 
   const lastPrice = useRef(null);
   const priceUpdateInterval = useRef(null);
@@ -30,61 +37,50 @@ const CoinInfo = () => {
   useEffect(() => {
     priceUpdateInterval.current = setInterval(
       () => socket.emit("request price", { coin: coinID }),
-      10000
+      5000
     );
+    socket.removeAllListeners("price update");
     socket.on("price update", (data) => {
       const newPrice = data?.[coinID]?.usd;
       if (newPrice !== undefined) {
         setLivePrice(newPrice);
-        if (earliestPrice !== null) {
-          const [firstTime, firstPrice] = earliestPrice;
-          setPriceDifference([lastPrice.current - firstPrice, firstTime]);
-        }
       }
     });
-
     return () => {
       socket.removeAllListeners("price update");
       clearInterval(priceUpdateInterval.current);
     };
-  }, [coinID, earliestPrice]);
+  }, [coinID]);
 
   useEffect(() => {
     const fetchData = async () => {
-      setLoading(true);
-      let coinData, chartData;
       try {
-        [chartData, coinData] = await Promise.all([
-          // execute both requests at same time
+        setLoading(true);
+        const [chartData, coinData] = await Promise.all([
           getChartData(coinID, days),
           getCoinInfo(coinID),
         ]);
+        setChartData(chartData.prices);
+        setCoinData(coinData);
+        if (lastPrice.current === null) {
+          lastPrice.current = coinData?.market_data?.current_price?.usd ?? 0;
+        }
       } catch (e) {
         console.error(e);
-        return;
       } finally {
         setLoading(false);
       }
-      setChartData(chartData.prices);
-      setCoinData(coinData);
-      if (lastPrice.current === null) {
-        lastPrice.current = coinData?.market_data?.current_price?.usd ?? 0;
-      }
-      console.log(chartData);
-      const [firstTime, firstPrice] = chartData.prices[0];
-      setEarliestPrice([firstTime, firstPrice]);
     };
-
     fetchData();
   }, [coinID, days]);
 
   useEffect(() => {
-    if (earliestPrice === null) {
-      return;
+    // init livePrice if needed when chartData comes in
+    if (livePrice === null && chartData !== null) {
+      // if liveprice was already set, don't update to value from chart as the liveprice value should be the most recent!
+      setLivePrice(chartData.at(-1)[1]); // init liveprice to last value from chartdata, if none was set so far
     }
-    const [firstTime, firstPrice] = earliestPrice;
-    setPriceDifference([lastPrice.current - firstPrice, firstTime]);
-  }, [earliestPrice]);
+  }, [chartData, livePrice]);
 
   useEffect(() => {
     const livePriceElement = document.getElementById("live-price");
@@ -100,11 +96,11 @@ const CoinInfo = () => {
     lastPrice.current = livePrice;
   }, [livePrice]);
 
-  let coinDescription =
+  const coinDescription =
     coinData?.description?.en.split(". ")[0] ?? "No description available";
-  let coinWebsite = coinData?.links?.homepage[0] ?? "No website available";
-  let coinRank = coinData?.market_cap_rank ?? "No rank available";
-  let coinPrice =
+  const coinWebsite = coinData?.links?.homepage[0] ?? "No website available";
+  const coinRank = coinData?.market_cap_rank ?? "No rank available";
+  const coinPrice =
     coinData?.market_data?.current_price?.usd ?? "No price available";
 
   return (
@@ -118,60 +114,62 @@ const CoinInfo = () => {
         </>
       )}
       {coinData !== null && (
-        <div>
-          <div className="white-text text-center">
-            <img
-              src={coinData.image.large}
-              alt={coinData.id}
-              height={100}
-              style={{ marginTop: "8px" }}
-            />
-            <Typography variant="h1" className="coin-name">
-              {coinData.id}
-            </Typography>
-            <Typography variant="h2" key={livePrice} id={"live-price"}>
+        <div style={{ marginTop: 10 }}>
+          <div className="white-text coin-price" style={{ marginLeft: 60 }}>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "flex-start",
+              }}
+            >
+              <Typography
+                variant="h1"
+                className="coin-name"
+                style={{ fontSize: "2.6rem", marginRight: 4 }}
+              >
+                {coinData.id}
+              </Typography>
+              <img src={coinData.image.large} alt={coinData.id} height={50} />
+            </div>
+            <Typography
+              variant="h2"
+              id={"live-price"}
+              style={{ fontSize: "2rem" }}
+            >
               $
               {livePrice !== null
                 ? convertPrice(livePrice)
                 : convertPrice(coinPrice)}
             </Typography>
-            <Typography>Market Cap Rank: {coinRank}</Typography>
-            <Typography>{removeHtmlTags(coinDescription)}</Typography>
-            <Typography>
-              Website: <a className="coin-website-link" href={coinWebsite}> {coinWebsite}</a>
+            <Typography
+              className={
+                livePrice - chartData[0][1] > 0
+                  ? "price-green"
+                  : livePrice - chartData[0][1] < 0
+                  ? "price-red"
+                  : ""
+              }
+            >
+              {livePrice - chartData[0][1] < 0
+                ? "-"
+                : livePrice - chartData[0][1] > 0
+                ? "+"
+                : ""}
+              {`$${convertPrice(
+                livePrice - chartData[0][1]
+              )} ${generatePercentString(
+                chartData[0][1],
+                livePrice
+              )} ${getDateDiffString(chartData[0][0])}`}
             </Typography>
           </div>
-          <br />
-          {chartData !== null && earliestPrice !== null && (
+          {chartData !== null && livePrice !== null && (
             <div className="chart-container">
-              <div className="flex-center">
-                <Typography
-                  style={{ fontSize: "1.4rem" }}
-                  className={
-                    priceDifference !== null
-                      ? priceDifference[0] > 0
-                        ? "price-green"
-                        : "price-red"
-                      : ""
-                  }
-                >
-                  {priceDifference !== null
-                    ? priceDifference[0] < 0
-                      ? "-"
-                      : "+"
-                    : ""}
-                  {priceDifference !== null &&
-                    `$${convertPrice(priceDifference[0], {
-                      abs: true,
-                    })} since ${new Date(
-                      priceDifference[1]
-                    ).toLocaleDateString()}`}
-                </Typography>
-              </div>
               <Line
                 data={{
                   labels: chartData.map((time) =>
-                    convertDate(time[0], earliestPrice[0])
+                    convertDate(time[0], chartData[0][0])
                   ),
                   datasets: [
                     {
@@ -182,6 +180,11 @@ const CoinInfo = () => {
                   ],
                 }}
                 options={{
+                  plugins: {
+                    legend: {
+                      display: false,
+                    },
+                  },
                   elements: {
                     point: {
                       radius: 1,
@@ -189,11 +192,17 @@ const CoinInfo = () => {
                   },
                   scales: {
                     x: {
+                      grid: {
+                        display: false,
+                      },
                       ticks: {
                         color: "white",
                       },
                     },
                     y: {
+                      grid: {
+                        display: false,
+                      },
                       ticks: {
                         color: "white",
                       },
@@ -229,6 +238,36 @@ const CoinInfo = () => {
               </div>
             </div>
           )}
+          <TradeBar coin={coinID} />
+          <div id="coin-info" className="white-text">
+            <Typography
+              variant="h2"
+              className="coin-name"
+              style={{ fontSize: "2rem" }}
+            >
+              About {coinData.id}
+            </Typography>
+            <Divider sx={{ backgroundColor: "white" }} />
+            <Typography>{removeHtmlTags(coinDescription)}</Typography>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+              }}
+            >
+              <Typography style={{ marginRight: 4 }}>Website:</Typography>
+              <Link
+                className="coin-website-link"
+                href={coinWebsite}
+                target="_blank"
+                rel="noopener"
+              >
+                {coinWebsite}
+              </Link>
+            </div>
+            <Typography>Market Cap Rank: {coinRank}</Typography>
+          </div>
         </div>
       )}
     </>

@@ -1,7 +1,8 @@
 import { AiOutlineHome } from "react-icons/ai";
 import { BsCurrencyBitcoin } from "react-icons/bs";
-import { IoNewspaperOutline, IoCreate} from "react-icons/io5";
-import {GoSignIn} from "react-icons/go";
+import { IoNewspaperOutline, IoCreate } from "react-icons/io5";
+import { GoSignIn } from "react-icons/go";
+import { GiWallet } from "react-icons/gi";
 
 export const NavBarData = [
   {
@@ -25,7 +26,12 @@ export const NavBarData = [
     path: "/crypto-news",
   },
   {
-    title: "SignUp",
+    title: "Buy/Sell",
+    icon: <GiWallet />,
+    path: "/trade",
+  },
+  {
+    title: "Sign Up",
     icon: <IoCreate />,
     path: "/signup",
   },

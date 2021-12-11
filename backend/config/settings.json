@@ -1,6 +1,9 @@
 {
-    "mongoConfig": {
-        "serverUrl": "mongodb://localhost:27017/",
-        "database": "CS-554-Project"
-    }
+  "mongoConfig": {
+    "serverUrl": "mongodb://localhost:27017/",
+    "database": "CS-554-Project"
+  },
+  "server": {
+    "PORT": 4000
   }
+}
