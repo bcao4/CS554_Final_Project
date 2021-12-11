@@ -18,6 +18,7 @@ import {
 } from "../../utils";
 import { getCoinInfo, getChartData } from "../../api";
 import { socket } from "../../api/socket";
+import TradeBar from "./TradeBar";
 import "./TopCoins.css";
 
 const CoinInfo = () => {
@@ -38,6 +39,7 @@ const CoinInfo = () => {
       () => socket.emit("request price", { coin: coinID }),
       5000
     );
+    socket.removeAllListeners("price update");
     socket.on("price update", (data) => {
       const newPrice = data?.[coinID]?.usd;
       if (newPrice !== undefined) {
@@ -236,6 +238,7 @@ const CoinInfo = () => {
               </div>
             </div>
           )}
+          <TradeBar coin={coinID} />
           <div id="coin-info" className="white-text">
             <Typography
               variant="h2"
