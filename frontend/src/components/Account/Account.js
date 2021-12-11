@@ -1,14 +1,13 @@
-import React, { useContext, useEffect, useState } from 'react';
-import './accountPage.css';
-import { AuthContext } from '../../firebase/Auth';
-import axios from 'axios';
-import { NavLink } from 'react-router-dom';
-import SignOutButton from './SignOut';
-import { Container } from 'react-bootstrap';
+import { useContext, useEffect, useState } from "react";
+import "./accountPage.css";
+import { AuthContext } from "../../firebase/Auth";
+import axios from "axios";
+import { NavLink } from "react-router-dom";
+import SignOutButton from "./SignOut";
 
-function Account(props) {
-const { currentUser } = useContext(AuthContext);
-const [userName, setUserName] = useState(undefined);
+const Account = (props) => {
+  const { currentUser } = useContext(AuthContext);
+  const [userName, setUserName] = useState(undefined);
 
   useEffect(() => {
     console.log("render");
@@ -17,7 +16,7 @@ const [userName, setUserName] = useState(undefined);
         let token = await currentUser.getIdToken();
         let config = {
           method: "get",
-          url: "http://localhost:4000/users/" + (currentUser.email),
+          url: "http://localhost:4000/users/" + currentUser.email,
           headers: {
             accept: "application/json",
             "Accept-Language": "en-US,en;q=0.8",
@@ -32,14 +31,10 @@ const [userName, setUserName] = useState(undefined);
       }
     }
     fetchData();
-  }, [
-    currentUser.email,
-    userName,
-    currentUser
-  ]);
+  }, [currentUser.email, userName, currentUser]);
 
   const changePassword = () => {
-    if (currentUser.providerData[0].providerId === 'password') {
+    if (currentUser.providerData[0].providerId === "password") {
       return (
         <button className="btn-reset-pswd">
           <NavLink exact to="/changepassword" activeclassname="active">
@@ -54,25 +49,25 @@ const [userName, setUserName] = useState(undefined);
 
   return (
     <>
-    <Container>
-      <div className="form-body">
-        <h2>Account Details</h2>
-        <br />
-        <div>
-          <b>Name: </b>
-          {userName}
+      <div>
+        <div className="form-body">
+          <h2>Account Details</h2>
           <br />
+          <div>
+            <b>Name: </b>
+            {userName}
+            <br />
+            <br />
+            <b>Email: </b>
+            {currentUser.email}
+          </div>
           <br />
-          <b>Email: </b>
-          {currentUser.email}
+          {changePassword()}
+          <SignOutButton />
         </div>
-        <br />
-        {changePassword()}
-      <SignOutButton />
       </div>
-      </Container>
     </>
   );
-}
+};
 
 export default Account;

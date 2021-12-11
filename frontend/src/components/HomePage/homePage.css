@@ -1,11 +1,10 @@
 .container {
   position: absolute;
-  padding:0;
-  margin:0;
-  background-image: url("./image.jpg") ;
+  padding: 0;
+  margin: 0;
   filter: brightness(100%);
   background-size: 100%;
-  background-position:center center;
+  background-position: center center;
   background-attachment: fixed;
   -webkit-background-size: cover;
   -moz-background-size: cover;
@@ -23,14 +22,14 @@
 
 .firstHeader {
   /*backdrop-filter: brightness(50%);*/
-  text-align : center;  
+  text-align: center;
   color: white;
   text-decoration: solid;
 }
 
 .secondHeader {
   /*backdrop-filter: brightness(50%);*/
-  text-align : center;  
+  text-align: center;
   color: white;
   font-style: italic;
   text-decoration: solid;

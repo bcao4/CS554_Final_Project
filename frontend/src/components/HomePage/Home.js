@@ -1,18 +1,18 @@
-import React from "react";
-import './homePage.css';
-
-//backgroundImage:`url("${image}")`
+import home_image from "../../images/home_image.jpg";
+import "./homePage.css";
 
 const Home = () => {
-
   return (
-    <div className="container">
+    <div
+      className="container"
+      style={{ backgroundImage: `url(${home_image})` }}
+    >
       <div className="text">
-        <br/>
+        <br />
         <h1 className="firstHeader">Cryptocurrency Exchange</h1>
-        <br/>
+        <br />
         <h2 className="secondHeader">
-        Explore the cryptocurrency trends and trade coins and much more !!
+          Explore the cryptocurrency trends and trade coins and much more !!
         </h2>
       </div>
     </div>

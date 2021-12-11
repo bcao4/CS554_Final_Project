@@ -9,6 +9,8 @@ import {
   CardActions,
   CardHeader,
   Divider,
+  Button,
+  TextField,
 } from "@mui/material";
 import millify from "millify";
 import "./TopCoins.css";
@@ -21,7 +23,6 @@ const TopCoins = () => {
   const [pageNum, setPageNum] = useState(1);
   const [coinData, setCoinData] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
-  // const [nextPageStatus, setNextPageStatus] = useState(true);
 
   const observer = useRef();
   const lastCoinElementRef = useCallback(
@@ -57,11 +58,6 @@ const TopCoins = () => {
           return; // TODO: tell user there was a network error
         }
         setCoinData((prevCoins) => [...prevCoins, ...data]);
-        // if (data.length < 40) {
-        //   setNextPageStatus(false);
-        // } else {
-        //   setNextPageStatus(true);
-        // }
         setLoading(false);
       } catch (e) {
         console.error(e);
@@ -82,12 +78,16 @@ const TopCoins = () => {
       )}
       <div style={{ display: "flex", flexWrap: "wrap" }}>
         <form style={{ width: "100%", margin: "6px" }}>
-          <input
-            className="form-control"
-            type="search"
+          <TextField
             placeholder="Search for a Coin..."
             aria-label="Search"
             onChange={(e) => setSearchTerm(e.target.value)}
+            value={searchTerm}
+            style={{
+              width: "100%",
+              backgroundColor: "white",
+              borderRadius: "6px",
+            }}
           />
         </form>
         <Grid
@@ -167,9 +167,13 @@ const TopCoins = () => {
                       </Typography>
                     </CardContent>
                     <CardActions style={{ justifyContent: "center" }}>
-                      <Link to={`/coin/${coin.id}`} className="btn btn-primary">
+                      <Button
+                        variant="contained"
+                        component={Link}
+                        to={`/coin/${coin.id}`}
+                      >
                         More Info
-                      </Link>
+                      </Button>
                     </CardActions>
                   </Card>
                 </Grid>

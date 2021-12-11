@@ -1,7 +1,7 @@
-import {MdOutlineAccountCircle} from "react-icons/md";
+import { MdOutlineAccountCircle } from "react-icons/md";
 import { AiOutlineHome } from "react-icons/ai";
 import { BsCurrencyBitcoin } from "react-icons/bs";
-import { IoNewspaperOutline} from "react-icons/io5";
+import { IoNewspaperOutline } from "react-icons/io5";
 import { GiWallet } from "react-icons/gi";
 
 export const PrivateNavbarData = [
