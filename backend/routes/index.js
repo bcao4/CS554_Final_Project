@@ -6,8 +6,10 @@ module.exports = (app) => {
     // TODO: send react app from build folder - for deployment
     res.send("test");
   });
+
   // crypto data
   app.use("/", cryptoDataRoutes);
-  //user route
+
+  // user route
   app.use("/users", userRoutes);
 };

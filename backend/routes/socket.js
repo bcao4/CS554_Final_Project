@@ -3,6 +3,7 @@ const { getPrice } = require("../data/api.js");
 module.exports = (io) => {
   io.on("connection", (socket) => {
     console.log("websocket user connected");
+
     socket.on("request price", async (args) => {
       const coin = args.coin;
       try {
@@ -14,6 +15,7 @@ module.exports = (io) => {
         console.error(`Error fetching last price for ${coin}: ${e.message}`);
       }
     });
+
     socket.on("disconnect", () => {
       console.log("websocket user disconnected");
     });

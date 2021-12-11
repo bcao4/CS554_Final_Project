@@ -5,8 +5,7 @@ const {
   getMarketNews,
   getCryptoNews,
 } = require("../data/api");
-const express = require("express");
-const router = express.Router();
+const router = require("express").Router();
 
 router.get("/coin-info", async (req, res) => {
   const { coin } = req.query;
@@ -17,6 +16,7 @@ router.get("/coin-info", async (req, res) => {
     return res.status(500);
   }
 });
+
 router.get("/coin-chart", async (req, res) => {
   const { coin, days } = req.query;
   try {
@@ -26,6 +26,7 @@ router.get("/coin-chart", async (req, res) => {
     return res.status(500);
   }
 });
+
 router.get("/coin-list", async (req, res) => {
   const { page, perPage } = req.query;
   try {
@@ -35,6 +36,7 @@ router.get("/coin-list", async (req, res) => {
     return res.status(500);
   }
 });
+
 router.get("/market-news", async (req, res) => {
   const { filter } = req.query;
   try {
@@ -44,6 +46,7 @@ router.get("/market-news", async (req, res) => {
     return res.status(500);
   }
 });
+
 router.get("/crypto-news", async (req, res) => {
   const { page, perPage } = req.query;
   try {
