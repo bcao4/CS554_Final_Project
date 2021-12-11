@@ -1,8 +1,11 @@
 const axios = require("axios");
-const COIN_GECKO_ENDPOINT = "https://api.coingecko.com/api/v3";
-const CRYPTOPANIC_ENDPOINT = "https://cryptopanic.com/api/v1";
-const NEWS_API_ENDPOINT = "https://newsapi.org/v2";
-const { CRYPTOPANIC_KEY, NEWS_API_KEY } = process.env;
+const {
+  CRYPTOPANIC_KEY,
+  NEWS_API_KEY,
+  COIN_GECKO_URL,
+  CRYPTOPANIC_URL,
+  NEWS_API_URL,
+} = require("../config/constants");
 
 const getPrice = async (coin) => {
   /* 
@@ -13,7 +16,7 @@ const getPrice = async (coin) => {
   if (coin == null || typeof coin !== "string") {
     throw new TypeError("Coin param must be a string");
   }
-  const { data } = await axios.get(`${COIN_GECKO_ENDPOINT}/simple/price`, {
+  const { data } = await axios.get(`${COIN_GECKO_URL}/simple/price`, {
     params: {
       ids: coin,
       vs_currencies: "usd",
@@ -26,7 +29,7 @@ const getCoinInfo = async (coin) => {
   /*
     Returns general info for a coin
   */
-  const { data } = await axios.get(`${COIN_GECKO_ENDPOINT}/coins/${coin}`, {
+  const { data } = await axios.get(`${COIN_GECKO_URL}/coins/${coin}`, {
     params: {
       localization: "false",
       tickers: "false",
@@ -42,7 +45,7 @@ const getChartData = async (coin, days) => {
     Data for creating a chart for a given coin over a time period of given days
   */
   const { data } = await axios.get(
-    `${COIN_GECKO_ENDPOINT}/coins/${coin}/market_chart`,
+    `${COIN_GECKO_URL}/coins/${coin}/market_chart`,
     {
       params: {
         vs_currency: "usd",
@@ -57,7 +60,7 @@ const getCoinPage = async (page, perPage) => {
   /*
     Returns a paginated list of coins available
   */
-  const { data } = await axios.get(`${COIN_GECKO_ENDPOINT}/coins`, {
+  const { data } = await axios.get(`${COIN_GECKO_URL}/coins`, {
     params: {
       vs_currency: "usd",
       per_page: perPage,
@@ -75,7 +78,7 @@ const getMarketNews = async (filter) => {
     Available filters: rising|hot|bullish|bearish|important|saved|lol
   */
 
-  const { data } = await axios.get(`${CRYPTOPANIC_ENDPOINT}/posts/`, {
+  const { data } = await axios.get(`${CRYPTOPANIC_URL}/posts/`, {
     params: {
       auth_token: CRYPTOPANIC_KEY,
       public: true,
@@ -90,7 +93,7 @@ const getCryptoNews = async (page, perPage) => {
   /*
     Returns list of crypto news articles
   */
-  const { data } = await axios.get(`${NEWS_API_ENDPOINT}/everything`, {
+  const { data } = await axios.get(`${NEWS_API_URL}/everything`, {
     params: {
       q: "cryptocurrency",
       apiKey: NEWS_API_KEY,
@@ -107,7 +110,7 @@ module.exports = {
   getChartData,
   getCoinPage,
   getMarketNews,
-  getCryptoNews
+  getCryptoNews,
 };
 
 // https://www.coingecko.com/en/api/documentation?

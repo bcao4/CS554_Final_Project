@@ -1,4 +1,4 @@
-const { getPrice } = require("./api.js");
+const { getPrice } = require("../data/api.js");
 
 module.exports = (io) => {
   io.on("connection", (socket) => {

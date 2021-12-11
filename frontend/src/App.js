@@ -14,33 +14,31 @@ import Login from "./components/Account/Login";
 import SignUp from "./components/Account/SignUp";
 import ChangePassword from "./components/Account/ChangePassword";
 import PrivateRoute from "./components/Account/PrivateRoute";
-import { AuthProvider } from './firebase/Auth';
+import { AuthProvider } from "./firebase/Auth";
 
 function App() {
   return (
     <AuthProvider>
-      <div>
-        <Router>
-          <Navbar />
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/top-coins" element={<TopCoins />} />
-            <Route path="/coin/:id" element={<CoinInfo />} />
-            <Route path="/market-news" element={<MarketNews />} />
-            <Route path="/crypto-news" element={<CryptoNews />} />
-            <Route path="/trade" element={<Trade />} />
+      <Router>
+        <Navbar />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/top-coins" element={<TopCoins />} />
+          <Route path="/coin/:id" element={<CoinInfo />} />
+          <Route path="/market-news" element={<MarketNews />} />
+          <Route path="/crypto-news" element={<CryptoNews />} />
+          <Route path="/trade" element={<Trade />} />
+          <Route path="/account" element={<Account />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<SignUp />} />
+          <Route path="/account" element={<Account />} />
+          <Route path="/changepassword" element={<ChangePassword />} />
+          <Route element={<PrivateRoute />}>
             <Route path="/account" element={<Account />} />
-            <Route path="*" element={<NotFound />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/signup" element={<SignUp />} />
-            <Route path="/account" element={<Account />} />
-            <Route path="/changepassword" element={<ChangePassword />} />
-            <Route element={<PrivateRoute />}>
-              <Route path="/account" element={<Account />} />
-            </Route>
-          </Routes>
-        </Router>
-      </div>
+          </Route>
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </Router>
     </AuthProvider>
   );
 }

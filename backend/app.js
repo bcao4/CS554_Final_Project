@@ -3,15 +3,11 @@ const express = require("express");
 const cors = require("cors");
 const http = require("http");
 const app = express();
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
-//
-const bodyparser = require("body-parser");
-app.use(bodyparser.json());
-const checkAuth = require("./routes/AuthRoutes/checkAuthentication");
-app.use("/users", checkAuth.checkAuthentication);
-//
+
 const server = http.createServer(app);
 const io = require("socket.io")(server, {
   cors: {
@@ -19,13 +15,16 @@ const io = require("socket.io")(server, {
     methods: ["GET", "POST"],
   },
 });
+
+const checkAuth = require("./routes/AuthRoutes/checkAuthentication");
 const configRoutes = require("./routes");
-const configSocketIo = require("./socket");
+const configSocketIo = require("./routes/socket");
 
-const PORT = 4000;
-
+app.use("/users", checkAuth.checkAuthentication);
 configSocketIo(io);
 configRoutes(app);
+
+const PORT = 4000;
 
 server.listen(PORT, () => {
   console.log(`Server listening on localhost:${PORT}`);
