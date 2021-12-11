@@ -25,7 +25,6 @@ const CoinInfo = () => {
   const [days, setDays] = useState("1");
   const [chartData, setChartData] = useState(null);
   const [livePrice, setLivePrice] = useState(null);
-  const [earliestPrice, setEarliestPrice] = useState(null);
 
   const lastPrice = useRef(null);
   const priceUpdateInterval = useRef(null);
@@ -63,7 +62,6 @@ const CoinInfo = () => {
         if (lastPrice.current === null) {
           lastPrice.current = coinData?.market_data?.current_price?.usd ?? 0;
         }
-        setEarliestPrice(chartData.prices[0]); // earliest price is array of size 2 of [time, price]
       } catch (e) {
         console.error(e);
       } finally {
@@ -145,36 +143,36 @@ const CoinInfo = () => {
               </Link>
             </div>
           </div>
-          {chartData !== null && earliestPrice !== null && livePrice !== null && (
+          {chartData !== null && livePrice !== null && (
             <div className="chart-container">
               <div className="flex-center">
                 <Typography
                   style={{ fontSize: "1.4rem" }}
                   className={
-                    livePrice - earliestPrice[1] > 0
+                    livePrice - chartData[0][1] > 0
                       ? "price-green"
-                      : livePrice - earliestPrice[1] < 0
+                      : livePrice - chartData[0][1] < 0
                       ? "price-red"
                       : ""
                   }
                 >
-                  {livePrice - earliestPrice[1] < 0
+                  {livePrice - chartData[0][1] < 0
                     ? "-"
-                    : livePrice - earliestPrice[1] > 0
+                    : livePrice - chartData[0][1] > 0
                     ? "+"
                     : ""}
                   {`$${convertPrice(
-                    livePrice - earliestPrice[1]
+                    livePrice - chartData[0][1]
                   )} ${generatePercentString(
-                    earliestPrice[1],
+                    chartData[0][1],
                     livePrice
-                  )} ${getDateDiffString(earliestPrice[0])}`}
+                  )} ${getDateDiffString(chartData[0][0])}`}
                 </Typography>
               </div>
               <Line
                 data={{
                   labels: chartData.map((time) =>
-                    convertDate(time[0], earliestPrice[0])
+                    convertDate(time[0], chartData[0][0])
                   ),
                   datasets: [
                     {
