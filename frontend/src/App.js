@@ -37,10 +37,11 @@ function App() {
                 <Route path="/account" element={<Account />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/signup" element={<SignUp />} />
-                <Route path="/account" element={<Account />} />
-                <Route path="/changepassword" element={<ChangePassword />} />
-                <Route element={<PrivateRoute />}>
-                  <Route path="/account" element={<Account />} />
+                <Route exact path='/account' element={<PrivateRoute />}>
+                  <Route exact path='/account' element={<Account />} />
+                </Route>
+                <Route exact path='/changepassword' element={<PrivateRoute />}>
+                  <Route exact path='/changepassword' element={<ChangePassword />} />
                 </Route>
                 <Route path="*" element={<NotFound />} />
               </Routes>

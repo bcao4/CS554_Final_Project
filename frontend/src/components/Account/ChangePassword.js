@@ -7,13 +7,13 @@ const ChangePassword = () => {
   const { currentUser } = useContext(AuthContext);
   const [pwMatch, setPwMatch] = useState("");
 
-  const submitForm = async (e) => {
-    const { currentPassword, newPasswordOne, newPasswordTwo } =
-      e.target.elements;
-    if (newPasswordOne.value !== newPasswordTwo.value) {
-      setPwMatch("New password do not match, please try again");
-      return false;
-    }
+    const submitForm = async (e) => {
+        e.preventDefault();
+        const { currentPassword, newPasswordOne, newPasswordTwo } = e.target.elements;
+        if (newPasswordOne.value !== newPasswordTwo.value) {
+            setPwMatch('New password do not match, please try again');
+            return false;
+        }
 
     try {
       await doChangePassword(
