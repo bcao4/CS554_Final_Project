@@ -1,5 +1,7 @@
-const userData = require('./users');
+const userData = require("./users");
+const api = require("./api");
 
 module.exports = {
-    users: userData
+  users: userData,
+  api,
 };
