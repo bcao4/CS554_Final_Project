@@ -6,6 +6,7 @@ import {
   ToggleButtonGroup,
   ToggleButton,
   Link,
+  Divider,
 } from "@mui/material";
 import { Line } from "react-chartjs-2";
 import {
@@ -111,64 +112,58 @@ const CoinInfo = () => {
         </>
       )}
       {coinData !== null && (
-        <div>
-          <div className="white-text text-center">
-            <img
-              src={coinData.image.large}
-              alt={coinData.id}
-              height={100}
-              style={{ marginTop: "8px" }}
-            />
-            <Typography variant="h1" className="coin-name">
-              {coinData.id}
-            </Typography>
-            <Typography variant="h2" key={livePrice} id={"live-price"}>
+        <div style={{ marginTop: 10 }}>
+          <div className="white-text coin-price" style={{ marginLeft: 60 }}>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "flex-start",
+              }}
+            >
+              <Typography
+                variant="h1"
+                className="coin-name"
+                style={{ fontSize: "2.6rem", marginRight: 4 }}
+              >
+                {coinData.id}
+              </Typography>
+              <img src={coinData.image.large} alt={coinData.id} height={50} />
+            </div>
+            <Typography
+              variant="h2"
+              id={"live-price"}
+              style={{ fontSize: "2rem" }}
+            >
               $
               {livePrice !== null
                 ? convertPrice(livePrice)
                 : convertPrice(coinPrice)}
             </Typography>
-            <Typography>Market Cap Rank: {coinRank}</Typography>
-            <Typography>{removeHtmlTags(coinDescription)}</Typography>
-            <div className="flex-center" style={{ flexDirection: "row" }}>
-              <Typography style={{ marginRight: 4 }}>Website:</Typography>
-              <Link
-                className="coin-website-link"
-                href={coinWebsite}
-                style={{ marginBottom: 2 }}
-                target="_blank"
-                rel="noopener"
-              >
-                {coinWebsite}
-              </Link>
-            </div>
+            <Typography
+              className={
+                livePrice - chartData[0][1] > 0
+                  ? "price-green"
+                  : livePrice - chartData[0][1] < 0
+                  ? "price-red"
+                  : ""
+              }
+            >
+              {livePrice - chartData[0][1] < 0
+                ? "-"
+                : livePrice - chartData[0][1] > 0
+                ? "+"
+                : ""}
+              {`$${convertPrice(
+                livePrice - chartData[0][1]
+              )} ${generatePercentString(
+                chartData[0][1],
+                livePrice
+              )} ${getDateDiffString(chartData[0][0])}`}
+            </Typography>
           </div>
           {chartData !== null && livePrice !== null && (
             <div className="chart-container">
-              <div className="flex-center">
-                <Typography
-                  style={{ fontSize: "1.4rem" }}
-                  className={
-                    livePrice - chartData[0][1] > 0
-                      ? "price-green"
-                      : livePrice - chartData[0][1] < 0
-                      ? "price-red"
-                      : ""
-                  }
-                >
-                  {livePrice - chartData[0][1] < 0
-                    ? "-"
-                    : livePrice - chartData[0][1] > 0
-                    ? "+"
-                    : ""}
-                  {`$${convertPrice(
-                    livePrice - chartData[0][1]
-                  )} ${generatePercentString(
-                    chartData[0][1],
-                    livePrice
-                  )} ${getDateDiffString(chartData[0][0])}`}
-                </Typography>
-              </div>
               <Line
                 data={{
                   labels: chartData.map((time) =>
@@ -183,6 +178,11 @@ const CoinInfo = () => {
                   ],
                 }}
                 options={{
+                  plugins: {
+                    legend: {
+                      display: false,
+                    },
+                  },
                   elements: {
                     point: {
                       radius: 1,
@@ -190,11 +190,17 @@ const CoinInfo = () => {
                   },
                   scales: {
                     x: {
+                      grid: {
+                        display: false,
+                      },
                       ticks: {
                         color: "white",
                       },
                     },
                     y: {
+                      grid: {
+                        display: false,
+                      },
                       ticks: {
                         color: "white",
                       },
@@ -230,6 +236,35 @@ const CoinInfo = () => {
               </div>
             </div>
           )}
+          <div id="coin-info" className="white-text">
+            <Typography
+              variant="h2"
+              className="coin-name"
+              style={{ fontSize: "2rem" }}
+            >
+              About {coinData.id}
+            </Typography>
+            <Divider sx={{ backgroundColor: "white" }} />
+            <Typography>{removeHtmlTags(coinDescription)}</Typography>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+              }}
+            >
+              <Typography style={{ marginRight: 4 }}>Website:</Typography>
+              <Link
+                className="coin-website-link"
+                href={coinWebsite}
+                target="_blank"
+                rel="noopener"
+              >
+                {coinWebsite}
+              </Link>
+            </div>
+            <Typography>Market Cap Rank: {coinRank}</Typography>
+          </div>
         </div>
       )}
     </>
