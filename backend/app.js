@@ -3,6 +3,7 @@ const express = require("express");
 const cors = require("cors");
 const http = require("http");
 const app = express();
+const { SERVER_PORT } = require("./config/constants");
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -24,8 +25,6 @@ app.use("/users", checkAuth.checkAuthentication);
 configSocketIo(io);
 configRoutes(app);
 
-const PORT = 4000;
-
-server.listen(PORT, () => {
-  console.log(`Server listening on localhost:${PORT}`);
+server.listen(SERVER_PORT, () => {
+  console.log(`Server listening on localhost:${SERVER_PORT}`);
 });
