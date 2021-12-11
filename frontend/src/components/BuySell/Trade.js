@@ -33,7 +33,7 @@ export default function Trade() {
     
             'size': data.size,
     
-            'product_id': data.product_id,
+            'product_id': data.product_id
     
         };
         this.buyOrderId = authenticatedClient.buy(buyParams, callback);
@@ -49,7 +49,7 @@ export default function Trade() {
     
             'size': data.size,
 
-            'product_id': data.product_id,
+            'product_id': data.product_id
     
         };
         this.sellOrderId = authenticatedClient.sell(sellParams, callback); 
