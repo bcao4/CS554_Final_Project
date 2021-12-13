@@ -40,7 +40,7 @@ const SignUp = () => {
       await doCreateUserWithEmailAndPassword(
         email.value,
         passwordOne.value,
-        displayName
+        displayName.value
       );
     } catch (error) {
       alert(error);
