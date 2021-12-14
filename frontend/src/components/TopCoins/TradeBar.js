@@ -9,29 +9,47 @@ import axios from "axios";
 
 const TradeBar = (props) => {
   const { coin, livePrice, coinPrice } = props;
-  console.log(props)
+  //console.log(props)
   const { register, handleSubmit, reset, formState: { errors } } = useForm();
 
   const [tradeBarOpen, setTradeBarOpen] = useState(false);
 
   const [currBalance, setCurrBalance] = useState(0);
 
+  const [currCoins, setCurrCoins] = useState([]);
+
+  const [errorMsg, setErrorMsg] = useState("");
+
   const { currentUser } = useContext(AuthContext);
 
-  console.log(currentUser)
+  //console.log(currentUser)
   
   const onSubmit = async(data) =>{
 
     console.log(data);
     reset();
     let token = await currentUser.getIdToken();
-    let amount1 = (parseInt(data.numOfCoins))*(parseFloat(livePrice!=null?livePrice:coinPrice).toFixed(2));
+    let amount1 = (parseInt(data.numOfCoins))*(parseFloat((livePrice!=null?livePrice:coinPrice).replace(/,/, '')));
     let num1= parseInt(data.numOfCoins)
     console.log(amount1);
 
+    if(data.trade_type=='buy' && amount1>currBalance)
+    return setErrorMsg("You don't have enough balance!");
+
+    /* else if(!(Object.keys(currCoins).includes(data.coin)) && data.trade_type=='sell')
+    {
+      
+      console.log(data.coin)
+      console.log(Object.keys(currCoins))
+
+    return setErrorMsg("You don't have this coin!");
+    }*/
+   // else if(currCoins)
+
+    else
     return await axios.post(
       "http://localhost:4000/users/updateBalanceAndCoins",
-      { email: currentUser.email, amount: (parseInt(data.numOfCoins))*(parseFloat(livePrice!=null?livePrice:coinPrice)), coin: coin, num: num1, buyOrSell: data.trade_type   },
+      { email: currentUser.email, amount: (parseInt(data.numOfCoins))*(parseFloat((livePrice!=null?livePrice:coinPrice).replace(/,/, ''))), coin: coin, num: num1, buyOrSell: data.trade_type   },
       {
         headers: {
           accept: "application/json",
@@ -48,9 +66,10 @@ const TradeBar = (props) => {
       const getUser = await axios.get(
         "http://localhost:4000/users/"+ currentUser.email);
 
-      console.log(getUser)
+      console.log(getUser);
       
-      setCurrBalance(getUser.data.balance)
+      setCurrBalance(getUser.data.balance);
+      //setCurrCoins(getUser.data.displayName);
     })()
 
     return () => {
@@ -124,7 +143,7 @@ const TradeBar = (props) => {
               Welcome to trading in {capitalize(coin)}
               <p>Your Current balance = {parseFloat(currBalance).toFixed(2) }</p>
               <p> Price = {livePrice !== null
-                ? parseFloat(livePrice).toFixed(2) : parseFloat(coinPrice).toFixed(2) }</p>
+                ? livePrice : coinPrice}</p>
             </Typography>
               <form className="form" onSubmit={handleSubmit(onSubmit)}>
                 <br/>
@@ -138,8 +157,11 @@ const TradeBar = (props) => {
                   <option value="sell">Sell</option>
                 </select>
                 <br/>
+                <br/>
                 <input type="submit" />
               </form>
+              {errorMsg}
+              <p className="mesg">{errorMsg}</p>
           </>  
         )}
       </Drawer>
