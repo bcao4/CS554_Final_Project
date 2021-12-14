@@ -3,8 +3,7 @@ const cryptoDataRoutes = require("./crypto");
 
 module.exports = (app) => {
   app.get("/", (req, res) => {
-    // TODO: send react app from build folder - for deployment
-    res.send("test");
+    res.sendFile("index.html", { root: "build/" });
   });
 
   // crypto data
@@ -12,4 +11,8 @@ module.exports = (app) => {
 
   // user route
   app.use("/users", userRoutes);
+
+  app.get("*", (req, res) => {
+    res.sendFile("index.html", { root: "build/" });
+  });
 };

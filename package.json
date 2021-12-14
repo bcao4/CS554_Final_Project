@@ -1,12 +1,15 @@
 {
   "name": "cs554_final_project",
   "version": "1.0.0",
-  "description": "CS554 Final Project Backend",
+  "description": "",
   "main": "app.js",
   "scripts": {
-    "start": "node app.js",
-    "build": "bash ../build.sh",
+    "start": "cd backend && node app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "engines": {
+    "node": "16.x",
+    "npm": "8.x"
   },
   "repository": {
     "type": "git",
@@ -17,14 +20,5 @@
   "bugs": {
     "url": "https://github.com/bcao4/CS554_Final_Project/issues"
   },
-  "homepage": "https://github.com/bcao4/CS554_Final_Project#readme",
-  "dependencies": {
-    "axios": "^0.24.0",
-    "cors": "^2.8.5",
-    "dotenv": "^10.0.0",
-    "express": "^4.17.1",
-    "firebase-admin": "^10.0.0",
-    "mongodb": "^3.7.3",
-    "socket.io": "^4.4.0"
-  }
+  "homepage": "https://github.com/bcao4/CS554_Final_Project#readme"
 }

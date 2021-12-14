@@ -6,6 +6,7 @@ import { AuthContext } from "../../firebase/Auth";
 import SocialSignIn from "./SocialSignIn";
 import axios from "axios";
 import useDocumentTitle from "../../shared/useDocumentTitle";
+import { API_URL } from "../../api";
 
 const SignUp = () => {
   const { currentUser } = useContext(AuthContext);
@@ -61,7 +62,7 @@ const SignUp = () => {
     }
 
     return await axios.post(
-      "http://localhost:4000/users/addUser",
+      `http://${API_URL}/users/addUser`,
       { email: currentUser.email, displayname: dName },
       {
         headers: {

@@ -12,6 +12,7 @@ import {
   Button,
   TextField,
 } from "@mui/material";
+import { convertPrice } from "../../utils";
 import millify from "millify";
 import "./TopCoins.css";
 import { getCoinPage } from "../../api/";
@@ -113,7 +114,7 @@ const TopCoins = () => {
                 ? coin.symbol.toUpperCase()
                 : "No symbol";
               let currentPrice = coin.market_data?.current_price.usd
-                ? millify(coin.market_data.current_price.usd, {
+                ? convertPrice(coin.market_data.current_price.usd, {
                     precision: 4,
                   })
                 : "Not available";
@@ -121,10 +122,10 @@ const TopCoins = () => {
                 ? millify(coin.market_data.market_cap.usd)
                 : "Not available";
               let dayHigh = coin.market_data?.high_24h.usd
-                ? millify(coin.market_data.high_24h.usd)
+                ? convertPrice(coin.market_data.high_24h.usd)
                 : "Not available";
               let dayLow = coin.market_data?.low_24h.usd
-                ? millify(coin.market_data.low_24h.usd)
+                ? convertPrice(coin.market_data.low_24h.usd)
                 : "Not available";
               let priceChange = coin.market_data?.price_change_percentage_24h
                 ? millify(coin.market_data.price_change_percentage_24h, {

@@ -10,10 +10,16 @@ export const capitalize = (string) => {
 
 export const convertPrice = (price) => {
   price = Math.abs(price);
-  // TODO: if coin price is < 1, show more decimal points than 2
+
+  let precision = 2;
+
+  if (price < 1) {
+    precision = 6;
+  }
+
   price = price.toLocaleString(undefined, {
     minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
+    maximumFractionDigits: precision,
   });
 
   return price;
