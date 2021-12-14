@@ -1,5 +1,6 @@
 #!/bin/bash
 cd frontend
+npm install react-scripts
 npm run build
 cd ..
 mkdir backend/build
