@@ -16,7 +16,7 @@ const TradeBar = (props) => {
 
   const [currBalance, setCurrBalance] = useState(0);
 
-  const [currCoins, setCurrCoins] = useState([]);
+  const [currCoins, setCurrCoins] = useState();
 
   const [errorMsg, setErrorMsg] = useState("");
 
@@ -69,7 +69,12 @@ const TradeBar = (props) => {
       console.log(getUser);
       
       setCurrBalance(getUser.data.balance);
-      //setCurrCoins(getUser.data.displayName);
+      let coins=[]
+      for(let i of getUser.data.coins)
+        coins.push(i);
+
+        console.log(coins)
+      ;
     })()
 
     return () => {
