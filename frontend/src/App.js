@@ -16,7 +16,7 @@ import { AuthProvider } from "./firebase/Auth";
 import { ThemeProvider } from "@mui/material/styles";
 import { theme } from "./theme";
 
-function App() {
+const App = () => {
   return (
     <ThemeProvider theme={theme}>
       <AuthProvider>
@@ -53,6 +53,6 @@ function App() {
       </AuthProvider>
     </ThemeProvider>
   );
-}
+};
 
 export default App;
