@@ -4,6 +4,7 @@ module.exports = {
       {
         resolve: {
           fullySpecified: false,
+          extensions: [".wasm", ".mjs", ".js", ".jsx", ".json"],
         },
       },
     ],
