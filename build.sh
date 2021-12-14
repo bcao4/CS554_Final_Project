@@ -3,7 +3,7 @@ cd frontend
 rm -rf node_modules
 rm -rf package-lock.json
 npm uninstall react-scripts
-npm install -g react-scripts@^3
+npm install -g react-scripts@^4
 npm install
 npm run build
 cd ..
