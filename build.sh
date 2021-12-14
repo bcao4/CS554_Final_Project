@@ -3,7 +3,8 @@ cd frontend
 rm -rf node_modules
 rm -rf package-lock.json
 npm i -g yarn
-yarn global add react-scripts
+yarn global add react-scripts install-peers
+yarn install
 yarn run build
 cd ..
 mkdir backend/build
