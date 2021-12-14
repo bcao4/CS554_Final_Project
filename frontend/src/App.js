@@ -7,7 +7,6 @@ import TopCoins from "./components/TopCoins/TopCoins";
 import CoinInfo from "./components/TopCoins/CoinInfo";
 import MarketNews from "./components/News/MarketNews";
 import CryptoNews from "./components/News/CryptoNews";
-import Trade from "./components/BuySell/Trade";
 import NotFound from "./components/NotFound";
 import Login from "./components/Account/Login";
 import SignUp from "./components/Account/SignUp";
@@ -33,15 +32,18 @@ function App() {
                 <Route path="/coin/:id" element={<CoinInfo />} />
                 <Route path="/market-news" element={<MarketNews />} />
                 <Route path="/crypto-news" element={<CryptoNews />} />
-                <Route path="/trade" element={<Trade />} />
                 <Route path="/account" element={<Account />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/signup" element={<SignUp />} />
-                <Route exact path='/account' element={<PrivateRoute />}>
-                  <Route exact path='/account' element={<Account />} />
+                <Route exact path="/account" element={<PrivateRoute />}>
+                  <Route exact path="/account" element={<Account />} />
                 </Route>
-                <Route exact path='/changepassword' element={<PrivateRoute />}>
-                  <Route exact path='/changepassword' element={<ChangePassword />} />
+                <Route exact path="/changepassword" element={<PrivateRoute />}>
+                  <Route
+                    exact
+                    path="/changepassword"
+                    element={<ChangePassword />}
+                  />
                 </Route>
                 <Route path="*" element={<NotFound />} />
               </Routes>

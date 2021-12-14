@@ -8,12 +8,15 @@ import {
   Typography,
   ToggleButtonGroup,
 } from "@mui/material";
+import useDocumentTitle from "../../shared/useDocumentTitle";
 
 // TODO: pagination
 const News = () => {
   const [news, setNews] = useState(null);
   const [filter, setFilter] = useState("hot");
   const [loading, setLoading] = useState(false);
+
+  useDocumentTitle("News - CryptoTracker");
 
   useEffect(() => {
     const getNews = async () => {

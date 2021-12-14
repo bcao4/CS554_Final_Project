@@ -1,6 +1,7 @@
 import { Drawer, IconButton, Divider, Typography, Button } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import { useState, useContext, useCallback } from "react";
+import { useState, useContext } from "react";
+import { capitalize } from "../../utils";
 import { AuthContext } from "../../firebase/Auth";
 import { Link } from "react-router-dom";
 
@@ -10,11 +11,6 @@ const TradeBar = (props) => {
   const [tradeBarOpen, setTradeBarOpen] = useState(false);
 
   const { currentUser } = useContext(AuthContext);
-
-  const capitalize = useCallback(
-    (string) => string.charAt(0).toUpperCase() + string.slice(1),
-    []
-  );
 
   return (
     <>

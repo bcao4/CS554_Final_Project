@@ -5,11 +5,15 @@ import {
   doSignInWithEmailAndPassword,
   doPasswordReset,
 } from "../../firebase/FirebaseFunctions";
+import useDocumentTitle from "../../shared/useDocumentTitle";
 import { AuthContext } from "../../firebase/Auth";
 import SocialSignIn from "./SocialSignIn";
 
 const Login = () => {
   const { currentUser } = useContext(AuthContext);
+
+  useDocumentTitle("Login - CryptoTracker");
+
   const handleSignIn = async (e) => {
     e.preventDefault();
     let { email, password } = e.target.elements;

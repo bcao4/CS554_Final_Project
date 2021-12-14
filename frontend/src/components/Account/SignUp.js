@@ -5,6 +5,7 @@ import { doCreateUserWithEmailAndPassword } from "../../firebase/FirebaseFunctio
 import { AuthContext } from "../../firebase/Auth";
 import SocialSignIn from "./SocialSignIn";
 import axios from "axios";
+import useDocumentTitle from "../../shared/useDocumentTitle";
 
 const SignUp = () => {
   const { currentUser } = useContext(AuthContext);
@@ -12,12 +13,14 @@ const SignUp = () => {
 
   const [usernameData, setUsernameData] = useState();
 
+  useDocumentTitle("Sign Up - CryptoTracker");
+
   //added new user
   useEffect(() => {
     const userData = async () => {
       try {
         if (currentUser) {
-          addUser();
+          await addUser();
         }
       } catch (error) {
         console.log(error);
@@ -26,7 +29,7 @@ const SignUp = () => {
     userData();
   }, [currentUser]);
 
-  const hadleSignUp = async (e) => {
+  const handleSignUp = async (e) => {
     e.preventDefault();
     const { displayName, email, passwordOne, passwordTwo } = e.target.elements;
     if (passwordOne.value !== passwordTwo.value) {
@@ -80,7 +83,7 @@ const SignUp = () => {
       <div className="form-body">
         <h2>Sign Up</h2>
         {pwMatch && <h4 className="error">{pwMatch}</h4>}
-        <form onSubmit={hadleSignUp}>
+        <form onSubmit={handleSignUp}>
           <div>
             <div className="form-group">
               <label>

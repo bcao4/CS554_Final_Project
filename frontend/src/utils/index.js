@@ -4,9 +4,13 @@ export const removeHtmlTags = (htmlString) => {
   return htmlString.replace(/<\/?[^>]+(>|$)/g, "");
 };
 
+export const capitalize = (string) => {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+};
+
 export const convertPrice = (price) => {
   price = Math.abs(price);
-
+  // TODO: if coin price is < 1, show more decimal points than 2
   price = price.toLocaleString(undefined, {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,

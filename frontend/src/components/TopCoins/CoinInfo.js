@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { useParams } from "react-router-dom";
 import {
   Typography,
@@ -15,7 +15,9 @@ import {
   convertDate,
   getDateDiffString,
   generatePercentString,
+  capitalize,
 } from "../../utils";
+import useDocumentTitle from "../../shared/useDocumentTitle";
 import { getCoinInfo, getChartData } from "../../api";
 import { socket } from "../../api/socket";
 import TradeBar from "./TradeBar";
@@ -33,6 +35,15 @@ const CoinInfo = () => {
 
   const params = useParams();
   const coinID = params.id;
+
+  const getTitleString = useCallback(() => {
+    if (livePrice === null) {
+      return capitalize(coinID);
+    }
+    return `${capitalize(coinID)} - $${convertPrice(livePrice)}`;
+  }, [livePrice, coinID]);
+
+  useDocumentTitle(getTitleString());
 
   useEffect(() => {
     priceUpdateInterval.current = setInterval(

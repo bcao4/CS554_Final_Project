@@ -15,6 +15,7 @@ import {
 import millify from "millify";
 import "./TopCoins.css";
 import { getCoinPage } from "../../api/";
+import useDocumentTitle from "../../shared/useDocumentTitle";
 
 // Followed pagination tutorial: https://www.youtube.com/watch?v=NZKUirTtxcg&t=1218s
 
@@ -25,6 +26,9 @@ const TopCoins = () => {
   const [searchTerm, setSearchTerm] = useState("");
 
   const observer = useRef();
+
+  useDocumentTitle("Top Coins - CryptoTracker");
+
   const lastCoinElementRef = useCallback(
     (node) => {
       if (loading) return;
