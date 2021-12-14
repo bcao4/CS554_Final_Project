@@ -22,6 +22,7 @@ const checkAuth = require("./routes/AuthRoutes/checkAuthentication");
 const configRoutes = require("./routes");
 const configSocketIo = require("./routes/socket");
 
+app.use(express.static("build"));
 app.use("/users", checkAuth.checkAuthentication);
 configSocketIo(io);
 configRoutes(app);
