@@ -3,8 +3,8 @@ const express = require("express");
 const cors = require("cors");
 const http = require("http");
 const app = express();
-const serverSettings = require("./config/settings").server;
-const { PORT } = serverSettings;
+
+const PORT = process?.env?.port ?? 4000;
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
