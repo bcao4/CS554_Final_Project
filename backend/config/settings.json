@@ -1,6 +1,6 @@
 {
   "mongoConfig": {
-    "serverUrl": "mongodb://localhost:27017/",
+    "serverUrl": "mongodb+srv://cs554:5DkEmCFRAwyAhYO6@cluster0.8hjpy.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",
     "database": "CS-554-Project"
   }
 }

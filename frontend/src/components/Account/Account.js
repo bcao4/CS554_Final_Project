@@ -4,6 +4,7 @@ import { AuthContext } from "../../firebase/Auth";
 import axios from "axios";
 import { NavLink } from "react-router-dom";
 import SignOutButton from "./SignOut";
+import { API_URL } from "../../api";
 
 const Account = (props) => {
   const { currentUser } = useContext(AuthContext);
@@ -16,7 +17,7 @@ const Account = (props) => {
         let token = await currentUser.getIdToken();
         let config = {
           method: "get",
-          url: "http://localhost:4000/users/" + currentUser.email,
+          url: `http://${API_URL}/users/` + currentUser.email,
           headers: {
             accept: "application/json",
             "Accept-Language": "en-US,en;q=0.8",

@@ -1,5 +1,8 @@
 import axios from "axios";
-const API_URL = "http://localhost:4000";
+export const API_URL =
+  process.env?.NODE_ENV === "production"
+    ? "https://cryptotracker-exchange.herokuapp.com/"
+    : "http://localhost:4000";
 
 export const getCoinInfo = async (coin) => {
   // Gets general info for a coin
@@ -34,7 +37,7 @@ export const getMarketNews = async (filter) => {
   return data;
 };
 
-export const getCryptoNews = async(page, perPage) => {
+export const getCryptoNews = async (page, perPage) => {
   // Get crypto news
   const { data } = await axios.get(`${API_URL}/crypto-news`, {
     params: { page, perPage },
