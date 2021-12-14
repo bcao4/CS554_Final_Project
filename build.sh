@@ -4,6 +4,7 @@ rm -rf node_modules
 rm -rf package-lock.json
 npm uninstall react-scripts
 npm install -g react-scripts@^4
+npm install eslint-config-react-app
 npm install
 npm run build
 cd ..
