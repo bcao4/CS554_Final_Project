@@ -14,7 +14,7 @@ import ChangePassword from "./components/Account/ChangePassword";
 import PrivateRoute from "./components/Account/PrivateRoute";
 import { AuthProvider } from "./firebase/Auth";
 import { ThemeProvider } from "@mui/material/styles";
-import { theme } from "./theme";
+import { theme } from "./theme.js";
 
 const App = () => {
   return (
