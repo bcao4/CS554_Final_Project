@@ -5,6 +5,7 @@ rm -rf package-lock.json
 npm uninstall react-scripts
 npm install -g react-scripts
 npm install
+npm install react@alpha react-dom@alpha
 npm run build
 cd ..
 mkdir backend/build
