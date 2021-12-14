@@ -1,6 +1,8 @@
 import { Drawer, IconButton, Divider, Typography, Button } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
+import './tradeBar.css';
 import { useState, useContext, useCallback, useEffect } from "react";
+import { useForm } from "react-hook-form";
 import { AuthContext } from "../../firebase/Auth";
 import { Link } from "react-router-dom";
 import axios from "axios";
@@ -8,6 +10,7 @@ import axios from "axios";
 const TradeBar = (props) => {
   const { coin, livePrice, coinPrice } = props;
   console.log(props)
+  const { register, handleSubmit, reset, formState: { errors } } = useForm();
 
   const [tradeBarOpen, setTradeBarOpen] = useState(false);
 
@@ -17,29 +20,28 @@ const TradeBar = (props) => {
 
   console.log(currentUser)
   
-  const getBalance1 =  () =>{
+  const onSubmit = async(data) =>{
 
-    /*
-    let getUser = await axios.get(
-      "http://localhost:4000/users/"+ currentUser.email
+    console.log(data);
+    reset();
+    let token = await currentUser.getIdToken();
+    let amount1 = (parseInt(data.numOfCoins))*(parseFloat(livePrice!=null?livePrice:coinPrice).toFixed(2));
+    let num1= parseInt(data.numOfCoins)
+    console.log(amount1);
+
+    return await axios.post(
+      "http://localhost:4000/users/updateBalanceAndCoins",
+      { email: currentUser.email, amount: (parseInt(data.numOfCoins))*(parseFloat(livePrice!=null?livePrice:coinPrice)), coin: coin, num: num1, buyOrSell: data.trade_type   },
+      {
+        headers: {
+          accept: "application/json",
+          "Accept-Language": "en-US,en;q=0.8",
+          "Content-Type": "application/json",
+          authtoken: token,
+        }
+      }
     )
-
-    if(getUser)   
-    return await getUser.balance; */
-    return "hi"
-  }
-
-  const getBalance = async () =>{
-
-    /*
-    let getUser = await axios.get(
-      "http://localhost:4000/users/"+ currentUser.email
-    )
-
-    if(getUser)   
-    return await getUser.balance; */
-    return "hi"
-  }
+    }
 
   useEffect(() => {
     (async () => {
@@ -54,7 +56,7 @@ const TradeBar = (props) => {
     return () => {
       //unsubscribeOrRemoveEventHandler()  
     }
-  }, [currentUser])
+  }, [currentUser, onSubmit])
 
   const capitalize = useCallback(
     (string) => string.charAt(0).toUpperCase() + string.slice(1),
@@ -120,13 +122,24 @@ const TradeBar = (props) => {
               style={{ color: "white", textAlign: "center", marginTop: 10 }}
             >
               Welcome to trading in {capitalize(coin)}
-              <p>Your Current balance = {currBalance}</p>
+              <p>Your Current balance = {parseFloat(currBalance).toFixed(2) }</p>
               <p> Price = {livePrice !== null
-                ? livePrice : coinPrice}</p>
+                ? parseFloat(livePrice).toFixed(2) : parseFloat(coinPrice).toFixed(2) }</p>
             </Typography>
-            <div >
-              <p>The coin is : {capitalize(coin)}</p>
-            </div>
+              <form className="form" onSubmit={handleSubmit(onSubmit)}>
+                <br/>
+                <label className="input_label">
+                Num of coins to trade : 
+                <input {...register("numOfCoins", { required: true })} />
+                </label>
+                <br/>
+                <select className="input" {...register("trade_type")}>
+                  <option value="buy">Buy</option>
+                  <option value="sell">Sell</option>
+                </select>
+                <br/>
+                <input type="submit" />
+              </form>
           </>  
         )}
       </Drawer>

@@ -7,7 +7,7 @@ module.exports = (io) => {
     socket.on("request price", async (args) => {
       const coin = args.coin;
       try {
-        console.log(`requesting price for ${coin}`);
+        //console.log(`requesting price for ${coin}`);
         const price = await getPrice(coin);
         socket.emit("price update", price);
       } catch (e) {

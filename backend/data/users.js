@@ -7,7 +7,7 @@ async function createAccount(email, displayname) {
     if (typeof email != "string") throw "Email must be of type string";
     if (typeof displayname !== "string") throw "Username must be of type string";
 
-    console.log("Hello")
+    //console.log("Hello")
     let newUser = {
         email: email,
         displayName: displayname,
@@ -43,43 +43,64 @@ async function getUserByEmail(email) {
     return getUser;
 }
 
-async function updateUserBalance(email,amount) {
+async function updateUserBalance(email,amount,buyOrSell) {
+    console.log("hello from data")
     if (email === undefined) throw 'You must provide an email!';
-    if (typeof email != "string") throw "Email must be of type string";
+    if (typeof(email) != "string") throw "Email must be of type string";
+
+    if(buyOrSell=='buy')
+    amount= amount*(-1);
+
     const userCollection = await users();
     let getUserOld = await userCollection.findOne({ email: email });
     let newbalance = getUserOld.balance + amount;
-    let getUser = await userCollection.updateOne({ email: email }, {$push: {balance: newbalance}});
+    let getUser = await userCollection.updateOne({ email: email }, {$set: {balance: newbalance}});
 
     if (!getUser) throw 'User not found';
     getUser._id = getUser._id.toString();
     return getUser;
 }
 
-async function updateUserCoin(email,coin,number) {
+async function updateUserCoin(email,coin,number,buyOrSell) {
     if (email === undefined) throw 'You must provide an email!';
-    if (typeof email != "string") throw "Email must be of type string";
+    if (typeof(email) != "string") throw "Email must be of type string";
+
+    if(buyOrSell=='sell')
+    number = number * (-1);
+
     const userCollection = await users();
     let getUserOld = await userCollection.findOne({ email: email });
     let indicator =0;
-    let newCoin;
-    let getUser;
+    let newCoin={};
+    let getUser={};
     for (let i of getUserOld.coins)
     {
-        key = Object.keys(i)
+        console.log(i)
+        key = Object.keys(i);
+        value = Object.values(i);
+        console.log(newCoin);
         if(key[0]==coin)
         {
-            newCoin = {coin : i[`key[0]`]+ number}
-            getUser = await userCollection.updateOne({ email: email }, {$pull: {"coins" : {[`key[0]`]: i[`key[0]`]}}} ,{$push: {coins: newCoin}});
-            indicator+1;
+            console.log("if")
+            newCoin[coin] = value[0]+ number;
+            console.log(key[0])
+            console.log(newCoin);
+            getUser = await userCollection.updateOne({ email: email }, { $pull: {coins: {[key[0]]: value[0]}}} );
+            getUser = await userCollection.updateOne({ email: email },  {$push: {coins: newCoin}});
+            indicator= indicator+1;
             break;
         }
     }
     if(indicator==0)
     {
-        let newCoin = {coin : number}
-        getUser = await userCollection.updateOne({ email: email }, {$push: {coins: newCoin}});
+        console.log("else if")
+        let newCoin2={}
+        newCoin2[coin]=number;
+        console.log(newCoin2);
+        getUser = await userCollection.updateOne({ email: email }, {$push: {coins: newCoin2}});
     }
+
+    //console.log(getUser)
 
     if (!getUser) throw 'User not found';
     getUser._id = getUser._id.toString();
@@ -98,5 +119,7 @@ module.exports = {
     createAccount,
     getUserById,
     getUserByEmail,
-    getAllUser
+    getAllUser,
+    updateUserBalance,
+    updateUserCoin
 };
