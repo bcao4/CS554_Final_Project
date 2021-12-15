@@ -29,6 +29,10 @@ const TradeBar = (props) => {
     console.log(currBalance);
     setErrorMsg('');
     reset();
+
+    if(parseInt(data.numOfCoins)<0 || Number.isNaN(parseInt(data.numOfCoins)) || ((data.numOfCoins)%1)!==0)
+    return setErrorMsg("Input is invalid!!");
+
     let token = await currentUser.getIdToken();
     let amount1 = (parseInt(data.numOfCoins))*(parseFloat((livePrice!=null?livePrice:coinPrice).replace(/,/, '')));
     let num1= parseInt(data.numOfCoins)

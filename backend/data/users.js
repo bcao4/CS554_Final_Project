@@ -35,7 +35,7 @@ async function getUserById(id) {
 
 async function getUserByEmail(email) {
     if (email === undefined) throw 'You must provide an email!';
-    if (typeof email != "string") throw "Email must be of type string";
+    if (typeof(email) != "string") throw "Email must be of type string";
     const userCollection = await users();
     let getUser = await userCollection.findOne({ email: email });
     if (!getUser) throw 'User not found';
@@ -56,11 +56,11 @@ async function updateUserBalance(email,amount,buyOrSell) {
     const userCollection = await users();
     let getUserOld = await userCollection.findOne({ email: email });
     let newbalance = getUserOld.balance + amount;
-    let getUser = await userCollection.updateOne({ email: email }, {$set: {balance: newbalance}});
+    let updateInfo = await userCollection.updateOne({ email: email }, {$set: {balance: newbalance}});
 
-    if (!getUser) throw 'User not found';
-    getUser._id = getUser._id.toString();
-    return getUser;
+    if (!updateInfo.matchedCount && !updateInfo.modifiedCount)
+      throw 'Update failed';
+    return 1;
 }
 
 async function updateUserCoin(email,coin,number,buyOrSell) {
@@ -73,8 +73,8 @@ async function updateUserCoin(email,coin,number,buyOrSell) {
     const userCollection = await users();
     let getUserOld = await userCollection.findOne({ email: email });
     let indicator =0;
+    let updateInfo;
     let newCoin={};
-    let getUser={};
     for (let i of getUserOld.coins)
     {
         console.log(i)
@@ -87,8 +87,8 @@ async function updateUserCoin(email,coin,number,buyOrSell) {
             newCoin[coin] = value[0]+ number;
             console.log(key[0])
             console.log(newCoin);
-            getUser = await userCollection.updateOne({ email: email }, { $pull: {coins: {[key[0]]: value[0]}}} );
-            getUser = await userCollection.updateOne({ email: email },  {$push: {coins: newCoin}});
+            let updateInfo1 = await userCollection.updateOne({ email: email }, { $pull: {coins: {[key[0]]: value[0]}}} );
+            updateInfo = await userCollection.updateOne({ email: email },  {$push: {coins: newCoin}});
             indicator= indicator+1;
             break;
         }
@@ -99,14 +99,13 @@ async function updateUserCoin(email,coin,number,buyOrSell) {
         let newCoin2={}
         newCoin2[coin]=number;
         console.log(newCoin2);
-        getUser = await userCollection.updateOne({ email: email }, {$push: {coins: newCoin2}});
+        updateInfo = await userCollection.updateOne({ email: email }, {$push: {coins: newCoin2}});
     }
 
-    //console.log(getUser)
+    if (!updateInfo.matchedCount && !updateInfo.modifiedCount)
+        throw 'Update failed';
+    return 1;
 
-    if (!getUser) throw 'User not found';
-    getUser._id = getUser._id.toString();
-    return getUser;
 }
 // Buying and Selling code end ##################################################
 

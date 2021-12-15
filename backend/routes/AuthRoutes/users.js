@@ -18,6 +18,7 @@ router.post("/addUser", async(req,res)=>{
         );
         res.status(200).json(newUser);
     }catch(e){
+        console.log("In error3");
         res.status(404).json({message: "Error in inserting user data"});
     }
 });
@@ -40,7 +41,7 @@ router.post("/updateBalanceAndCoins", async(req,res)=>{
         );
         res.status(200).json(newTrade);
     }catch(e){
-        //console.log("in error1")
+        console.log("in error1");
         res.status(404).json({message: "Error in recording transaction data"});
     }
 
@@ -51,10 +52,10 @@ router.post("/updateBalanceAndCoins", async(req,res)=>{
             tradeInfo.num,
             tradeInfo.buyOrSell
         );
-        res.status(200).json(newTrade2);
+        //res.status(200).json(newTrade2);
     }catch(e){
-        //console.log("In error")
-        res.status(404) //.json({message: "Error in recording transaction data"});
+        console.log(e.toString());
+        res.status(404)//.json({message: e.toString()});
     }
 
 });
@@ -68,6 +69,7 @@ router.get("/:id", async(req,res)=>{
         let userById = await userData.getUserByEmail(req.params.id);
         res.status(200).json(userById);
       } catch (e) {
+          console.log("in error4");
         res.status(404).json({ message: "user id not found" });
       }
 });

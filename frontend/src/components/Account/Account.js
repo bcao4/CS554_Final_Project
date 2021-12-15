@@ -34,7 +34,18 @@ const Account = (props) => {
 
         // Buying and selling code start ############################
         setCurrBalance(data.balance);
-        setCurrCoins(data.coins);
+        let coinListDisplay=[];
+        let indicate=0;
+        for(let i of data.coins )
+        {
+          indicate=indicate+1;
+          if((Object.values(i)[0])>0)
+          coinListDisplay.push(i)
+        }
+        //if(indicate===0)
+        //setCurrCoins("None");
+        //else
+        setCurrCoins(coinListDisplay)
         // Buying and selling code end ############################
 
       } catch (e) {
@@ -80,11 +91,12 @@ const Account = (props) => {
             <br />
             <br />
             <b>Current coins: </b>
-            {(currCoins).map(i =>(
+            {currCoins.length?            
+              (currCoins).map(i =>( 
              <li> 
              {Object.keys(i)[0]} : {Object.values(i)[0]} 
              </li>
-            ))}
+            )): "None"}
           </div>
           {/*// Buying and selling code start ############################*/}
           <br />
