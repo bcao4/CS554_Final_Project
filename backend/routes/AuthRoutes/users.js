@@ -21,6 +21,8 @@ router.post("/addUser", async(req,res)=>{
         res.status(404).json({message: "Error in inserting user data"});
     }
 });
+
+// Buying and Selling code start ##################################################
 //update balance and coins
 router.post("/updateBalanceAndCoins", async(req,res)=>{
     let tradeInfo = req.body;
@@ -55,8 +57,8 @@ router.post("/updateBalanceAndCoins", async(req,res)=>{
         res.status(404) //.json({message: "Error in recording transaction data"});
     }
 
-
 });
+// Buying and Selling code end ###################################################
 
 
 //getUser by id

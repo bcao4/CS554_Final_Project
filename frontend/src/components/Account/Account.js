@@ -9,6 +9,11 @@ const Account = (props) => {
   const { currentUser } = useContext(AuthContext);
   const [userName, setUserName] = useState(undefined);
 
+  // Buying and selling code start ############################
+  const [currBalance, setCurrBalance] = useState(0);
+  const [currCoins, setCurrCoins] = useState([]);
+  // Buying and selling code end ##############################
+
   useEffect(() => {
     console.log("render");
     async function fetchData() {
@@ -26,6 +31,12 @@ const Account = (props) => {
         };
         const { data } = await axios(config);
         setUserName(data.displayName);
+
+        // Buying and selling code start ############################
+        setCurrBalance(data.balance);
+        setCurrCoins(data.coins);
+        // Buying and selling code end ############################
+
       } catch (e) {
         console.log(e);
       }
@@ -61,6 +72,21 @@ const Account = (props) => {
             <b>Email: </b>
             {currentUser.email}
           </div>
+          {/*// Buying and selling code start ############################*/}
+          <div>
+            <br />
+            <b>Current Balance: </b>
+            ${parseFloat(currBalance).toFixed(2)}
+            <br />
+            <br />
+            <b>Current coins: </b>
+            {(currCoins).map(i =>(
+             <li> 
+             {Object.keys(i)[0]} : {Object.values(i)[0]} 
+             </li>
+            ))}
+          </div>
+          {/*// Buying and selling code start ############################*/}
           <br />
           {changePassword()}
           <SignOutButton />

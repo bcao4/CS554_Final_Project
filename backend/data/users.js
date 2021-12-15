@@ -43,6 +43,8 @@ async function getUserByEmail(email) {
     return getUser;
 }
 
+// Buying and Selling code start ##################################################
+// updating user balance and coins in database
 async function updateUserBalance(email,amount,buyOrSell) {
     console.log("hello from data")
     if (email === undefined) throw 'You must provide an email!';
@@ -106,6 +108,7 @@ async function updateUserCoin(email,coin,number,buyOrSell) {
     getUser._id = getUser._id.toString();
     return getUser;
 }
+// Buying and Selling code end ##################################################
 
 
 async function getAllUser() {

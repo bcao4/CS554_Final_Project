@@ -16,35 +16,45 @@ const TradeBar = (props) => {
 
   const [currBalance, setCurrBalance] = useState(0);
 
-  const [currCoins, setCurrCoins] = useState([]);
+  const [currCoins, setCurrCoins] = useState(0);
 
   const [errorMsg, setErrorMsg] = useState("");
 
   const { currentUser } = useContext(AuthContext);
 
-  //console.log(currentUser)
   
   const onSubmit = async(data) =>{
 
-    console.log(data);
+    console.log(currCoins);
+    console.log(currBalance);
+    setErrorMsg('');
     reset();
     let token = await currentUser.getIdToken();
     let amount1 = (parseInt(data.numOfCoins))*(parseFloat((livePrice!=null?livePrice:coinPrice).replace(/,/, '')));
     let num1= parseInt(data.numOfCoins)
     console.log(amount1);
+    let indicator=0;
+
+    for(let i of currCoins)
+      {
+        console.log(Object.keys(i)[0]);
+        console.log(coin)
+        console.log(Object.values(i)[0]);
+        if(coin==Object.keys(i)[0] && Object.values(i)[0]>=data.numOfCoins)
+        {
+          indicator=indicator + 1;
+
+        }
+      }
 
     if(data.trade_type=='buy' && amount1>currBalance)
     return setErrorMsg("You don't have enough balance!");
 
-    /* else if(!(Object.keys(currCoins).includes(data.coin)) && data.trade_type=='sell')
+    else if(indicator === 0 && data.trade_type=='sell')
     {
-      
-      console.log(data.coin)
-      console.log(Object.keys(currCoins))
-
-    return setErrorMsg("You don't have this coin!");
-    }*/
-   // else if(currCoins)
+        return setErrorMsg("You don't have enough coins for this sale!");
+    }
+   // else if(currCoins)*/
 
     else
     return await axios.post(
@@ -69,13 +79,38 @@ const TradeBar = (props) => {
       console.log(getUser);
       
       setCurrBalance(getUser.data.balance);
-      //setCurrCoins(getUser.data.displayName);
+
     })()
 
     return () => {
       //unsubscribeOrRemoveEventHandler()  
     }
   }, [currentUser, onSubmit])
+
+
+  useEffect(() => {
+    (async () => {
+      const getUser = await axios.get(
+        "http://localhost:4000/users/"+ currentUser.email);
+
+      console.log(getUser);
+      
+      /*for(let i of getUser.data.coins)
+      {
+        console.log(Object.keys(i)[0]);
+        if(coin==Object.keys(i)[0])
+        indicator=indicator + 1;
+      }*/
+
+      setCurrCoins(getUser.data.coins);
+     
+    })()
+
+    return () => {
+      //unsubscribeOrRemoveEventHandler()  
+    }
+  }, [currentUser, currBalance])
+
 
   const capitalize = useCallback(
     (string) => string.charAt(0).toUpperCase() + string.slice(1),
