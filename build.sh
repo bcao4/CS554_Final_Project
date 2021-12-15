@@ -1,7 +1,7 @@
 #!/bin/bash
 cd frontend
 rm -rf node_modules
-rm -rf package-lock.json
+rm -f package-lock.json
 npm install -g react-scripts
 npm install
 npm run build
