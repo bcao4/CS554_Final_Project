@@ -11,9 +11,7 @@ app.use(express.urlencoded());
 
 let socketCorsConfig = {};
 
-if (process.env?.NODE_ENV === "production") {
-  app.use(express.static("build"));
-} else {
+if (process.env?.NODE_ENV !== "production") {
   // enable cors for local testing
   socketCorsConfig = {
     cors: {
@@ -26,6 +24,8 @@ if (process.env?.NODE_ENV === "production") {
 
 const server = http.createServer(app);
 const io = require("socket.io")(server, socketCorsConfig);
+
+app.use(express.static("build"));
 
 const checkAuth = require("./routes/AuthRoutes/checkAuthentication");
 const configRoutes = require("./routes");
