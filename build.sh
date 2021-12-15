@@ -8,5 +8,6 @@ npm run build
 cd ..
 mkdir backend/build
 mv frontend/build backend/
+rm -rf frontend
 cd backend
 npm install --production
