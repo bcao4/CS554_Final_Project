@@ -13,7 +13,7 @@ export const convertPrice = (price) => {
 
   let precision = 2;
 
-  if (price < 1) {
+  if (price < 10) {
     precision = 6;
   }
 
