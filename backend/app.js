@@ -7,7 +7,7 @@ const app = express();
 const PORT = process.env?.PORT ?? 4000;
 
 app.use(express.json());
-app.use(express.urlencoded());
+app.use(express.urlencoded({ extended: true }));
 
 let socketCorsConfig = {};
 
