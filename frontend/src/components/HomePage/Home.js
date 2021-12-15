@@ -1,19 +1,23 @@
 import home_image from "../../images/home_image.jpg";
-import "./homePage.css";
+import { Typography } from "@mui/material";
 
 const Home = () => {
   return (
     <div
       className="container"
-      style={{ backgroundImage: `url(${home_image})` }}
+      style={{
+        background: `url(${home_image}) no-repeat center center fixed`,
+        height: "100vh",
+        width: "100%",
+      }}
     >
-      <div className="text">
-        <br />
-        <h1 className="firstHeader">Cryptocurrency Exchange</h1>
-        <br />
-        <h2 className="secondHeader">
-          Explore the cryptocurrency trends and trade coins and much more !!
-        </h2>
+      <div className="flex-center" style={{ flexDirection: "column" }}>
+        <Typography variant="h1" color={"white"}>
+          Cryptocurrency Exchange
+        </Typography>
+        <Typography variant="h2" align="center" color={"white"}>
+          Explore the cryptocurrency trends and trade coins and much more !
+        </Typography>
       </div>
     </div>
   );

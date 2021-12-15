@@ -27,15 +27,17 @@ const NavigationAuth = () => {
         },
       }}
     >
-      <NavLink className="logo-icon" to="/">
-        <div
-          className="flex-center"
-          style={{ justifyContent: "flex-start !important" }}
-        >
-          <FaBitcoin />
-          <Typography style={{ marginLeft: 6 }}>CryptoTracker</Typography>
-        </div>
-      </NavLink>
+      <div>
+        <NavLink className="logo-icon" to="/">
+          <div
+            className="flex-center"
+            style={{ justifyContent: "flex-start !important" }}
+          >
+            <FaBitcoin />
+            <Typography style={{ marginLeft: 6 }}>CryptoTracker</Typography>
+          </div>
+        </NavLink>
+      </div>
       <Divider />
       <List className="navbar-items">
         {PrivateNavbarData.map((item, index) => {

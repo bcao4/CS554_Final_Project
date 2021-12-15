@@ -14,13 +14,13 @@ export const NavBarData = [
     icon: <BsCurrencyBitcoin />,
     path: "/top-coins",
   },
+  // {
+  //   title: "Market News",
+  //   icon: <IoNewspaperOutline />,
+  //   path: "/market-news",
+  // },
   {
     title: "Market News",
-    icon: <IoNewspaperOutline />,
-    path: "/market-news",
-  },
-  {
-    title: "Crypto News",
     icon: <IoNewspaperOutline />,
     path: "/crypto-news",
   },
