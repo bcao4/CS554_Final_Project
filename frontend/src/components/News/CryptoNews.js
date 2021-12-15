@@ -12,7 +12,6 @@ import {
 } from "@mui/material";
 import { removeHtmlTags } from "../../utils";
 import { getCryptoNews } from "../../api";
-import "./News.css";
 import useDocumentTitle from "../../shared/useDocumentTitle";
 
 const News = () => {
@@ -73,20 +72,28 @@ const News = () => {
       {loading && (
         <>
           <LinearProgress
-            color="secondary"
-            style={{ position: "sticky", top: 0, height: 8 }}
+            sx={{
+              position: "sticky",
+              top: 0,
+              height: 8,
+              backgroundColor: "loadingBar.color",
+            }}
           />
         </>
       )}
       <Pagination
         count={5}
         page={pageNum}
-        style={{
+        color="primary"
+        size="large"
+        variant="outlined"
+        hidePrevButton={pageNum === 1}
+        hideNextButton={pageNum === 5}
+        sx={{
           display: "flex",
           justifyContent: "center",
           margin: "10px",
         }}
-        size="large"
         onChange={(_, newPage) => {
           setPageNum(newPage);
         }}

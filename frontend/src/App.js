@@ -15,8 +15,14 @@ import PrivateRoute from "./components/Account/PrivateRoute";
 import { AuthProvider } from "./firebase/Auth";
 import { ThemeProvider } from "@mui/material/styles";
 import { theme } from "./theme.js";
+import { Box } from "@mui/material";
+import { useEffect } from "react";
 
 const App = () => {
+  useEffect(() => {
+    document.body.style.backgroundColor = theme.palette.background.color;
+  }, []);
+
   return (
     <ThemeProvider theme={theme}>
       <AuthProvider>
@@ -25,7 +31,7 @@ const App = () => {
             <div>
               <Navbar />
             </div>
-            <div style={{ marginLeft: NAVBAR_WIDTH }}>
+            <Box style={{ marginLeft: NAVBAR_WIDTH }}>
               <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/top-coins" element={<TopCoins />} />
@@ -47,7 +53,7 @@ const App = () => {
                 </Route>
                 <Route path="*" element={<NotFound />} />
               </Routes>
-            </div>
+            </Box>
           </div>
         </Router>
       </AuthProvider>

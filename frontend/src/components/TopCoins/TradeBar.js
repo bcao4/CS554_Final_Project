@@ -9,6 +9,9 @@ import { Link } from "react-router-dom";
 import { API_URL } from "../../api";
 import axios from "axios";
 
+const StyledTypography = (props) => {
+  return <Typography {...props} sx={{ color: "text.secondary" }} />;
+};
 const TradeBar = (props) => {
   const { coin, coinPrice } = props;
   console.log(props);
@@ -134,7 +137,14 @@ const TradeBar = (props) => {
     <>
       <Button
         variant="contained"
-        style={{ position: "fixed", right: 10, top: 10, zIndex: 2 }}
+        sx={{
+          position: "fixed",
+          right: 10,
+          top: 10,
+          zIndex: 2,
+          backgroundColor: "button.backgroundColor",
+          color: "button.color",
+        }}
         onClick={() => setTradeBarOpen(true)}
         size="large"
       >
@@ -157,43 +167,51 @@ const TradeBar = (props) => {
         <IconButton
           size="large"
           onClick={() => setTradeBarOpen(false)}
-          style={{ color: "white" }}
+          sx={{ color: "button.color" }}
         >
           <CloseIcon />
         </IconButton>
-        <Divider style={{ backgroundColor: "white" }} />
+        <Divider sx={{ backgroundColor: "white" }} />
         {!currentUser ? (
           <>
-            <Typography
-              style={{ color: "white", textAlign: "center", marginTop: 10 }}
-            >
+            <StyledTypography sx={{ textAlign: "center", marginTop: 10 }}>
               Please sign in to trade {capitalize(coin)}!
-            </Typography>
+            </StyledTypography>
             <div className="flex-center" style={{ marginTop: 10 }}>
               <Button
                 variant="contained"
                 component={Link}
                 to="/login"
-                style={{ marginRight: 6 }}
+                sx={{
+                  marginRight: 6,
+                  color: "button.color",
+                  backgroundColor: "button.backgroundColor",
+                }}
               >
                 Sign In
               </Button>
-              <Button variant="contained" component={Link} to="/signup">
+              <Button
+                variant="contained"
+                component={Link}
+                to="/signup"
+                sx={{
+                  color: "button.color",
+                  backgroundColor: "button.backgroundColor",
+                }}
+              >
                 Sign Up
               </Button>
             </div>
           </>
         ) : (
           <>
-            <Typography
-              style={{ color: "white", textAlign: "center", marginTop: 10 }}
-            >
+            <StyledTypography sx={{ textAlign: "center", marginTop: 10 }}>
               Welcome to trading in {capitalize(coin)}
-            </Typography>
-            <Typography>
+            </StyledTypography>
+            <StyledTypography>
               Your Current balance = {parseFloat(currBalance).toFixed(2)}
-            </Typography>
-            <Typography> Price = ${coinPrice}</Typography>
+            </StyledTypography>
+            <StyledTypography> Price = ${coinPrice}</StyledTypography>
             <form className="form" onSubmit={handleSubmit(onSubmit)}>
               <br />
               <label className="input_label">
