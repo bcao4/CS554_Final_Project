@@ -78,6 +78,19 @@ const News = () => {
           />
         </>
       )}
+      <Pagination
+        count={5}
+        page={pageNum}
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          margin: "10px",
+        }}
+        size="large"
+        onChange={(_, newPage) => {
+          setPageNum(newPage);
+        }}
+      />
       <div style={{ display: "flex", flexWrap: "wrap" }}>
         <Grid
           container
@@ -129,22 +142,6 @@ const News = () => {
             );
           })}
         </Grid>
-      </div>
-      <div>
-        <Pagination
-          count={5}
-          page={pageNum}
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            margin: "10px",
-          }}
-          size="large"
-          onChange={(_, newPage) => {
-            setPageNum(newPage);
-            window.scrollTo(0, 0);
-          }}
-        />
       </div>
     </>
   );
