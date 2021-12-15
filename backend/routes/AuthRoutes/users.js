@@ -22,6 +22,45 @@ router.post("/addUser", async(req,res)=>{
     }
 });
 
+
+// Buying and Selling code start ##################################################
+//update balance and coins
+router.post("/updateBalanceAndCoins", async(req,res)=>{
+    let tradeInfo = req.body;
+    console.log(req.body);
+    if(!tradeInfo) throw "you must provide transaction info";
+    if(!tradeInfo.amount) throw "you must provide amount1";
+    if(!tradeInfo.email) throw "you must provide an email"; 
+    console.log("hello from update bal")
+
+    try{
+        const newTrade = await userData.updateUserBalance(
+            tradeInfo.email,
+            tradeInfo.amount,
+            tradeInfo.buyOrSell
+        );
+        res.status(200).json(newTrade);
+    }catch(e){
+        console.log("in error1");
+        res.status(404).json({message: "Error in recording transaction data"});
+    }
+
+    try{
+        const newTrade2 = await userData.updateUserCoin(
+            tradeInfo.email,
+            tradeInfo.coin,
+            tradeInfo.num,
+            tradeInfo.buyOrSell
+        );
+        //res.status(200).json(newTrade2);
+    }catch(e){
+        console.log(e.toString());
+        res.status(404)//.json({message: e.toString()});
+    }
+
+});
+// Buying and Selling code end ###################################################
+
 //getUser by id
 router.get("/:id", async(req,res)=>{
     try {
