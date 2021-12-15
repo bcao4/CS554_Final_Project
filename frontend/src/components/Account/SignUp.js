@@ -62,7 +62,7 @@ const SignUp = () => {
     }
 
     return await axios.post(
-      `http://${API_URL}/users/addUser`,
+      `${API_URL}/users/addUser`,                 //removed https for API call
       { email: currentUser.email, displayname: dName },
       {
         headers: {

@@ -10,6 +10,11 @@ const Account = (props) => {
   const { currentUser } = useContext(AuthContext);
   const [userName, setUserName] = useState(undefined);
 
+  // Buying and selling code start ############################
+  const [currBalance, setCurrBalance] = useState(0);
+  const [currCoins, setCurrCoins] = useState([]);
+// Buying and selling code end ##############################
+
   useEffect(() => {
     console.log("render");
     async function fetchData() {
@@ -17,7 +22,7 @@ const Account = (props) => {
         let token = await currentUser.getIdToken();
         let config = {
           method: "get",
-          url: `http://${API_URL}/users/` + currentUser.email,
+          url: `${API_URL}/users/` + currentUser.email,   //removedhttp for API call
           headers: {
             accept: "application/json",
             "Accept-Language": "en-US,en;q=0.8",
@@ -27,6 +32,18 @@ const Account = (props) => {
         };
         const { data } = await axios(config);
         setUserName(data.displayName);
+      
+      // Buying and selling code start ############################
+        setCurrBalance(data.balance);
+        let coinListDisplay=[];
+        for(let i of data.coins )
+        {
+          if((Object.values(i)[0])>0)
+          coinListDisplay.push(i)
+        }
+        setCurrCoins(coinListDisplay)
+      // Buying and selling code end ############################
+
       } catch (e) {
         console.log(e);
       }
@@ -62,6 +79,22 @@ const Account = (props) => {
             <b>Email: </b>
             {currentUser.email}
           </div>
+          {/*// Buying and selling code start ############################*/}
+          <div>
+          <br />
+          <b>Current Balance: </b>
+          ${parseFloat(currBalance).toFixed(2)}
+          <br />
+          <br />
+          <b>Current coins: </b>
+          {currCoins.length?            
+            (currCoins).map(i =>( 
+          <li> 
+          {Object.keys(i)[0]} : {Object.values(i)[0]} 
+          </li>
+          )): "None"}
+          </div>
+          {/*// Buying and selling code start ############################*/}         
           <br />
           {changePassword()}
           <SignOutButton />
