@@ -4,8 +4,6 @@ COPY . .
 ENV NODE_ENV=production
 
 WORKDIR /app/frontend
-RUN rm -rf node_modules
-RUN rm -f package-lock.json
 RUN npm install -g react-scripts
 RUN npm install
 RUN npm run build
