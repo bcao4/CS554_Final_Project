@@ -20,6 +20,16 @@ import useDocumentTitle from "../../shared/useDocumentTitle";
 
 // Followed pagination tutorial: https://www.youtube.com/watch?v=NZKUirTtxcg&t=1218s
 
+const CardTextItem = (props) => {
+  return (
+    <Typography
+      sx={{ color: "text.primary" }}
+      className="card-text-item"
+      {...props}
+    />
+  );
+};
+
 const TopCoins = () => {
   const [loading, setLoading] = useState(true);
   const [pageNum, setPageNum] = useState(1);
@@ -76,15 +86,19 @@ const TopCoins = () => {
       {loading && (
         <>
           <LinearProgress
-            color="secondary"
-            style={{ position: "sticky", top: 0, height: 8 }}
+            sx={{
+              position: "sticky",
+              top: 0,
+              height: 8,
+              backgroundColor: "loadingBar.color",
+            }}
           />
         </>
       )}
       <div style={{ display: "flex", flexWrap: "wrap" }}>
         <form style={{ width: "100%", margin: "6px" }}>
           <TextField
-            placeholder="Search for a Coin..."
+            placeholder="Filter..."
             aria-label="Search"
             onChange={(e) => setSearchTerm(e.target.value)}
             value={searchTerm}
@@ -140,7 +154,12 @@ const TopCoins = () => {
                     <CardHeader
                       title={
                         <div style={{ display: "flex", alignItems: "center" }}>
-                          {index + 1}. {coin.name}
+                          <Typography
+                            sx={{ color: "text.primary", fontSize: "1.6rem" }}
+                          >
+                            {index + 1}. {coin.name}
+                          </Typography>
+
                           <img
                             style={{ marginLeft: 6 }}
                             src={coin.image.large}
@@ -152,30 +171,24 @@ const TopCoins = () => {
                     />
                     <Divider />
                     <CardContent>
-                      <Typography className="card-text-item">
-                        Symbol: {coinSymbol}
-                      </Typography>
-                      <Typography className="card-text-item">
+                      <CardTextItem>Symbol: {coinSymbol}</CardTextItem>
+                      <CardTextItem>
                         Current Price: ${currentPrice}
-                      </Typography>
-                      <Typography className="card-text-item">
-                        Market Cap: ${marketCap}
-                      </Typography>
-                      <Typography className="card-text-item">
-                        24h High: ${dayHigh}
-                      </Typography>
-                      <Typography className="card-text-item">
-                        24h Low: ${dayLow}
-                      </Typography>
-                      <Typography className="card-text-item">
-                        24h Change: {priceChange}%
-                      </Typography>
+                      </CardTextItem>
+                      <CardTextItem>Market Cap: ${marketCap}</CardTextItem>
+                      <CardTextItem>24h High: ${dayHigh}</CardTextItem>
+                      <CardTextItem>24h Low: ${dayLow}</CardTextItem>
+                      <CardTextItem>24h Change: {priceChange}%</CardTextItem>
                     </CardContent>
                     <CardActions style={{ justifyContent: "center" }}>
                       <Button
                         variant="contained"
                         component={Link}
                         to={`/coin/${coin.id}`}
+                        sx={{
+                          color: "button.color",
+                          backgroundColor: "button.backgroundColor",
+                        }}
                       >
                         More Info
                       </Button>

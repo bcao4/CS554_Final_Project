@@ -12,7 +12,7 @@ const Home = () => {
       }}
     >
       <div className="flex-center" style={{ flexDirection: "column" }}>
-        <Typography variant="h1" color={"white"}>
+        <Typography variant="h1" color="white">
           Cryptocurrency Exchange
         </Typography>
         <Typography variant="h2" align="center" color={"white"}>

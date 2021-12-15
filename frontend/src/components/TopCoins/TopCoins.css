@@ -37,23 +37,8 @@
   width: 100%;
 }
 
-.coin-price {
-  position: absolute;
-  z-index: 1;
-}
-
 .white-text {
   color: white;
-}
-
-.MuiToggleButton-root {
-  color: white !important;
-  border-color: white !important;
-}
-
-.Mui-selected {
-  background-color: white !important;
-  color: black !important;
 }
 
 .coin-name {
@@ -80,17 +65,9 @@
   animation-duration: 5s;
 }
 
-.price-green {
-  color: #48b748;
-}
-
-.price-red {
-  color: #ff7878;
-}
-
 @keyframes priceIncreaseAnimation {
   from {
-    color: rgb(4, 172, 4);
+    color: "#7CFC00";
   }
   to {
     color: white;

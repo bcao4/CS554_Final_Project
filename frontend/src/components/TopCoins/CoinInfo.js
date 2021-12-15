@@ -23,6 +23,18 @@ import { socket } from "../../api/socket";
 import TradeBar from "./TradeBar";
 import "./TopCoins.css";
 
+const StyledToggleButton = (props) => {
+  return (
+    <ToggleButton
+      {...props}
+      sx={{
+        // backgroundColor: "button.backgroundColor",
+        color: "button.color",
+      }}
+    />
+  );
+};
+
 const CoinInfo = () => {
   const [loading, setLoading] = useState(true);
   const [coinData, setCoinData] = useState(null);
@@ -119,14 +131,18 @@ const CoinInfo = () => {
       {loading && (
         <>
           <LinearProgress
-            color="secondary"
-            style={{ position: "sticky", top: 0, height: 8 }}
+            sx={{
+              position: "sticky",
+              top: 0,
+              height: 8,
+              backgroundColor: "loadingBar.color",
+            }}
           />
         </>
       )}
       {coinData !== null && (
         <div style={{ marginTop: 10 }}>
-          <div className="white-text coin-price" style={{ marginLeft: 60 }}>
+          <div style={{ position: "absolute", zIndex: 1, marginLeft: 60 }}>
             <div
               style={{
                 display: "flex",
@@ -137,7 +153,11 @@ const CoinInfo = () => {
               <Typography
                 variant="h1"
                 className="coin-name"
-                style={{ fontSize: "2.6rem", marginRight: 4 }}
+                sx={{
+                  color: "text.secondary",
+                  fontSize: "2.6rem",
+                  marginRight: 4,
+                }}
               >
                 {coinData.id}
               </Typography>
@@ -146,7 +166,10 @@ const CoinInfo = () => {
             <Typography
               variant="h2"
               id={"live-price"}
-              style={{ fontSize: "2rem" }}
+              sx={{
+                color: "text.secondary",
+                fontSize: "2rem",
+              }}
             >
               $
               {livePrice !== null
@@ -154,13 +177,14 @@ const CoinInfo = () => {
                 : convertPrice(coinPrice)}
             </Typography>
             <Typography
-              className={
-                livePrice - chartData[0][1] > 0
-                  ? "price-green"
-                  : livePrice - chartData[0][1] < 0
-                  ? "price-red"
-                  : ""
-              }
+              sx={{
+                color:
+                  livePrice - chartData[0][1] > 0
+                    ? "price.green"
+                    : livePrice - chartData[0][1] < 0
+                    ? "price.red"
+                    : "text.secondary",
+              }}
             >
               {livePrice - chartData[0][1] < 0
                 ? "-"
@@ -223,8 +247,8 @@ const CoinInfo = () => {
               />
               <div>
                 <ToggleButtonGroup
-                  color="primary"
                   size="large"
+                  color="primary"
                   value={days}
                   exclusive
                   onChange={(_, newTimePeriod) => {
@@ -233,33 +257,35 @@ const CoinInfo = () => {
                     }
                   }}
                   className="flex-center"
-                  style={{
+                  sx={{
                     margin: "10px",
                     marginBottom: "16px",
                   }}
                 >
-                  <ToggleButton value="1">1 Day</ToggleButton>
-                  <ToggleButton value="7">1 Week</ToggleButton>
-                  <ToggleButton value="30">1 Month</ToggleButton>
-                  <ToggleButton value="90">3 Month</ToggleButton>
-                  <ToggleButton value="180">6 Month</ToggleButton>
-                  <ToggleButton value="365">1 Year</ToggleButton>
-                  <ToggleButton value="max">Max</ToggleButton>
+                  <StyledToggleButton value="1">1 Day</StyledToggleButton>
+                  <StyledToggleButton value="7">1 Week</StyledToggleButton>
+                  <StyledToggleButton value="30">1 Month</StyledToggleButton>
+                  <StyledToggleButton value="90">3 Month</StyledToggleButton>
+                  <StyledToggleButton value="180">6 Month</StyledToggleButton>
+                  <StyledToggleButton value="365">1 Year</StyledToggleButton>
+                  <StyledToggleButton value="max">Max</StyledToggleButton>
                 </ToggleButtonGroup>
               </div>
             </div>
           )}
           <TradeBar coin={coinID} coinPrice={livePrice ?? coinPrice} />
-          <div id="coin-info" className="white-text">
+          <div id="coin-info">
             <Typography
               variant="h2"
               className="coin-name"
-              style={{ fontSize: "2rem" }}
+              sx={{ fontSize: "2rem", color: "text.secondary" }}
             >
               About {coinData.id}
             </Typography>
-            <Divider sx={{ backgroundColor: "white" }} />
-            <Typography>{removeHtmlTags(coinDescription)}</Typography>
+            <Divider sx={{ backgroundColor: "text.secondary" }} />
+            <Typography sx={{ color: "text.secondary" }}>
+              {removeHtmlTags(coinDescription)}
+            </Typography>
             <div
               style={{
                 display: "flex",
@@ -267,17 +293,21 @@ const CoinInfo = () => {
                 alignItems: "center",
               }}
             >
-              <Typography style={{ marginRight: 4 }}>Website:</Typography>
+              <Typography sx={{ marginRight: "4px", color: "text.secondary" }}>
+                Website:
+              </Typography>
               <Link
-                className="coin-website-link"
                 href={coinWebsite}
                 target="_blank"
-                rel="noopener"
+                rel="noopener noreferrer"
+                sx={{ color: "link.color" }}
               >
                 {coinWebsite}
               </Link>
             </div>
-            <Typography>Market Cap Rank: {coinRank}</Typography>
+            <Typography sx={{ color: "text.secondary" }}>
+              Market Cap Rank: {coinRank}
+            </Typography>
           </div>
         </div>
       )}
