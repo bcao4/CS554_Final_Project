@@ -2,7 +2,20 @@ import { createTheme } from "@mui/material/styles";
 import { orange, blue } from "@mui/material/colors";
 
 // https://mui.com/customization/color/
+// https://mui.com/customization/theming/
+// https://mui.com/system/basics/
+// https://mui.com/customization/theme-components/#global-style-overrides
+
 export const theme = createTheme({
+  components: {
+    MuiToggleButton: {
+      styleOverrides: {
+        root: {
+          "&.Mui-selected": { color: "black", backgroundColor: "white" },
+        },
+      },
+    },
+  },
   status: {
     danger: orange[500],
   },
