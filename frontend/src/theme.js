@@ -30,7 +30,7 @@ export const theme = createTheme({
     },
     button: {
       color: "white",
-      backgroundColor: "#007cc1",
+      backgroundColor: "#0072ee",
       selected: "blue",
     },
     loadingBar: {

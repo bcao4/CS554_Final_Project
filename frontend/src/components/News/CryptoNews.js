@@ -73,7 +73,7 @@ const News = () => {
             let author = news.author ? "By: " + news.author : "";
             return (
               <Grid key={index} item xs={12} sm={6} md={4} lg={4} xl={4}>
-                <Card>
+                <Card style={{ height: '100%' }}>
                   {/* <div ref={lastNewsElementRef} /> */}
                   <div>
                     <CardActionArea
@@ -129,6 +129,7 @@ const News = () => {
         }}
         onChange={(_, newPage) => {
           setPageNum(newPage);
+          window.scrollTo(0, 0);
         }}
       />
     </>
