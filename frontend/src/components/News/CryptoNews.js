@@ -127,13 +127,13 @@ const News = () => {
                         <Typography gutterBottom variant="h5" component="div">
                           {news.title}
                         </Typography>
-                        <Typography variant="body3" color="text.secondary">
+                        <Typography variant="body3" color="text.primary">
                           {removeHtmlTags(news.description)}
                         </Typography>
                         <br />
                         <br />
                         <Divider />
-                        <Typography variant="body2" color="text.secondary">
+                        <Typography variant="body2" color="text.primary">
                           By: {news.author}
                           <br />
                           Source: {news.source.name}

@@ -28,7 +28,7 @@ const StyledToggleButton = (props) => {
     <ToggleButton
       {...props}
       sx={{
-        // backgroundColor: "button.backgroundColor",
+        //backgroundColor: "button.backgroundColor",
         color: "button.color",
       }}
     />
