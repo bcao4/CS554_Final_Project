@@ -152,7 +152,6 @@ const TopCoins = () => {
                   <Card style={{ height: '100%' }}>
                     <div ref={lastCoinElementRef} />
                     <CardHeader
-                      style={{ height: '13%' }}
                       title={
                         <div style={{ display: "flex", alignItems: "center" }}>
                           <Typography
