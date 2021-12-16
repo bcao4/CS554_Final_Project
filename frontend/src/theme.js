@@ -16,20 +16,21 @@ export const theme = createTheme({
     text: {
       primary: "#000000",
       secondary: "#ffffff",
+      
     },
     link: {
-      color: "#4169e1", // royal blue
+      color: "#e4e8ff", // royal blue
     },
     price: {
-      green: "#7CFC00",
-      red: "red",
+      green: "#a8ff84",
+      red: "#ffaaaa",
     },
     background: {
-      color: "#696969",
+      color: "rgb(55, 57, 59)",
     },
     button: {
       color: "white",
-      backgroundColor: blue[400],
+      backgroundColor: "#007cc1",
       selected: "blue",
     },
     loadingBar: {

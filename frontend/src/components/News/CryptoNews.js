@@ -13,6 +13,7 @@ import {
 import { removeHtmlTags } from "../../utils";
 import { getCryptoNews } from "../../api";
 import useDocumentTitle from "../../shared/useDocumentTitle";
+import "./News.css";
 
 const News = () => {
   const [loading, setLoading] = useState(true);
@@ -20,27 +21,6 @@ const News = () => {
   const [newsData, setNewsData] = useState([]);
 
   useDocumentTitle("News - CryptoTracker");
-
-  // const observer = useRef();
-  // const lastNewsElementRef = useCallback(
-  //   (node) => {
-  //     if (loading) return;
-  //     if (observer.current) {
-  //       observer.current.disconnect();
-  //     }
-  //     observer.current = new IntersectionObserver((entries) => {
-  //       if (entries[0].isIntersecting) {
-  //         //console.log("visible" && nextPageStatus);
-  //         setPageNum((prevPageNum) => prevPageNum + 1);
-  //       }
-  //     });
-  //     if (node) {
-  //       observer.current.observe(node);
-  //     }
-  //     //console.log(node);
-  //   },
-  //   [loading]
-  // );
 
   useEffect(() => {
     setLoading(true);
@@ -107,6 +87,7 @@ const News = () => {
           padding={1}
         >
           {newsData.map((news, index) => {
+            let author = news.author ? "By: " + news.author : "";
             return (
               <Grid key={index} item xs={12} sm={6} md={4} lg={4} xl={4}>
                 <Card>
@@ -127,16 +108,16 @@ const News = () => {
                         <Typography gutterBottom variant="h5" component="div">
                           {news.title}
                         </Typography>
-                        <Typography variant="body3" color="text.secondary">
+                        <Typography variant="body3" color="text.primary">
                           {removeHtmlTags(news.description)}
                         </Typography>
                         <br />
                         <br />
                         <Divider />
-                        <Typography variant="body2" color="text.secondary">
-                          By: {news.author}
-                          <br />
+                        <Typography variant="body2" color="text.primary">
                           Source: {news.source.name}
+                          <br />
+                          {author}
                         </Typography>
                       </CardContent>
                     </CardActionArea>
