@@ -13,6 +13,22 @@
     
 }
 
+.profile-pic{
+    width: 150px;
+    height: 150px;
+    margin-left:160px;
+}
+
+.btn-img-upload{
+    margin-left: 200px;
+}
+.image-input{
+    margin-left: 150px;
+}
+.close-icon{
+    float: right;
+}
+
 .btn-forgot-pswd{
     margin-left: 10px;
 }
@@ -25,4 +41,5 @@
     color: white;
     padding: 5px;
     border-radius: 5px;
+    margin-left: 10px;
 }
