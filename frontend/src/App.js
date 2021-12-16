@@ -17,6 +17,7 @@ import { ThemeProvider } from "@mui/material/styles";
 import { theme } from "./theme.js";
 import { Box } from "@mui/material";
 import { useEffect } from "react";
+import UploadImage from "./components/Account/UploadImage";
 
 const App = () => {
   useEffect(() => {
@@ -50,6 +51,9 @@ const App = () => {
                     path="/changepassword"
                     element={<ChangePassword />}
                   />
+                </Route>
+                <Route exact path='/upload-image' element={<PrivateRoute />}>
+                  <Route exact path='/upload-image' element={<UploadImage />} />
                 </Route>
                 <Route path="*" element={<NotFound />} />
               </Routes>
