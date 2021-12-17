@@ -8,8 +8,7 @@ const db = app.firestore();
 const UploadImage = () => {
     const { currentUser } = useContext(AuthContext);
     const [selectedFile, setSelectedFile] = useState(null);
-	let uid;
-	const [token, setToken] = useState(null);
+	let uid = currentUser.uid;
 	const [userData, setUserData] = useState({});
 	const [url, setURL] = useState('');
 
@@ -32,13 +31,6 @@ const UploadImage = () => {
 		}
 		fetchData();
 	}, [url,uid]);
-
-    if (currentUser) {
-		uid = currentUser.uid;
-		// currentUser.getIdToken().then((t) => {
-		// 	setToken(t);
-		// });
-	}
 
 	const updateProfileImage = (uid, imgUrl) =>
 		db.collection('profilePics').doc(uid).set(
