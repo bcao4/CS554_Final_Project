@@ -21,8 +21,8 @@ const upload = multer({
 
 const convertImage = (image) => {
 	return new Promise((resolve, reject) => {
-		im.crop(
-			{ srcData: image, width: 256},
+		im.resize(
+			{ srcData: image, width: 256, height: 256},
 			(err, stdout) => {
 				if (err) reject(err);
 				resolve(stdout);
