@@ -272,7 +272,7 @@ const CoinInfo = () => {
               </div>
             </div>
           )}
-          <TradeBar coin={coinID} coinPrice={livePrice ?? coinPrice} />
+          <TradeBar coin={coinID} livePrice={convertPrice(livePrice)} coinPrice={convertPrice(coinPrice)} />{/* Buying selling modification*/}
           <div id="coin-info">
             <Typography
               variant="h2"
