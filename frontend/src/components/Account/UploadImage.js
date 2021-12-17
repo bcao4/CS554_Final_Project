@@ -10,10 +10,11 @@ const UploadImage = () => {
     const [selectedFile, setSelectedFile] = useState(null);
     const [userData, setUserData] = useState({});
     const [url, setURL] = useState('');
-    
+    let uid = currentUser.uid;
+       
     useEffect(() => {
         async function fetchData() {
-            var docRef = db.collection('profilePics').doc('currentUser');
+            var docRef = db.collection('profilePics').doc(uid);
             docRef
                 .get()
                 .then(function (doc) {
@@ -28,10 +29,10 @@ const UploadImage = () => {
                 });
         }
         fetchData();
-    }, [url, currentUser]);
+    }, [url, uid]);
 
-    const updateProfileImage = (currentUser, imgUrl) =>
-        db.collection('profilePics').doc('currentUser').set(
+    const updateProfileImage = (uid, imgUrl) =>
+        db.collection('profilePics').doc(uid).set(
             {
                 imageUrl: imgUrl,
             },
@@ -58,7 +59,7 @@ const UploadImage = () => {
                 .then(async (fireBaseUrl) => {
                     selectedFile.value = "";
                     setURL(fireBaseUrl);
-                    await updateProfileImage(currentUser, fireBaseUrl);
+                    await updateProfileImage(uid, fireBaseUrl);
                 })
             });
     }
@@ -67,7 +68,7 @@ const UploadImage = () => {
         <div>
             <form onSubmit={handleUpload}>
                 <img className="profile-pic"
-                    src={userData.imageUrl ? userData.imageUrl :
+                     src={userData.imageUrl ? userData.imageUrl :
                         'https://www.pngitem.com/pimgs/m/146-1468479_my-profile-icon-blank-profile-picture-circle-hd.png'
                     }
                     alt="Profile icon"

@@ -26,6 +26,7 @@ const Account = (props) => {
 //img upload
 const [isImageDialogOpen, setImageDialog] = useState(false);
 const [userData, setUserData] = useState({});
+let uid = currentUser.uid;
 
 const openImageDialog = () => {
   setImageDialog(true);
@@ -77,12 +78,11 @@ const handleClickCancel = () => {
 
   useEffect(() => {
     async function fetchData() {
-      var docRef = db.collection('profilePics').doc('currentUser');
+      var docRef = db.collection('profilePics').doc(uid);
       docRef
         .get()
         .then(function (doc) {
           if (doc.exists) {
-            console.log('Document data:', doc.data());
             setUserData(doc.data());
           } else {
             console.log('No file found!');
@@ -93,7 +93,7 @@ const handleClickCancel = () => {
         });
     }
     fetchData();
-  }, [isImageDialogOpen, currentUser]);
+  }, [isImageDialogOpen, uid]);
 
   const changePassword = () => {
     if (currentUser.providerData[0].providerId === "password") {
@@ -118,9 +118,9 @@ const handleClickCancel = () => {
           <p><img
               width={150}
               height={150}
-              src={userData.imageUrl
-                ? userData.imageUrl :
-                'https://www.pngitem.com/pimgs/m/146-1468479_my-profile-icon-blank-profile-picture-circle-hd.png'}
+              src={userData.imageUrl ? userData.imageUrl : 
+                'https://www.pngitem.com/pimgs/m/146-1468479_my-profile-icon-blank-profile-picture-circle-hd.png'
+              }
               alt="Profile icon"
             /></p>
             <b>Name: </b>
