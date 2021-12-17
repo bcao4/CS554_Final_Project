@@ -8,59 +8,59 @@ const db = app.firestore();
 const UploadImage = () => {
     const { currentUser } = useContext(AuthContext);
     const [selectedFile, setSelectedFile] = useState(null);
-	let uid = currentUser.uid;
-	const [userData, setUserData] = useState({});
-	const [url, setURL] = useState('');
+    let uid = currentUser.uid;
+    const [userData, setUserData] = useState({});
+    const [url, setURL] = useState('');
 
     useEffect(() => {
-		async function fetchData() {
-			var docRef = db.collection('profilePics').doc(uid);
-			docRef
-				.get()
-				.then(function (doc) {
-					if (doc.exists) {
-						console.log('Document data:', doc.data());
-						setUserData(doc.data());
-					} else {
-						console.log('No file found!');
-					}
-				})
-				.catch(function (e) {
-					console.log(e);
-				});
-		}
-		fetchData();
-	}, [url,uid]);
+        async function fetchData() {
+            var docRef = db.collection('profilePics').doc(uid);
+            docRef
+                .get()
+                .then(function (doc) {
+                    if (doc.exists) {
+                        console.log('Document data:', doc.data());
+                        setUserData(doc.data());
+                    } else {
+                        console.log('No file found!');
+                    }
+                })
+                .catch(function (e) {
+                    console.log(e);
+                });
+        }
+        fetchData();
+    }, [url, uid]);
 
-	const updateProfileImage = (uid, imgUrl) =>
-		db.collection('profilePics').doc(uid).set(
-			{
-				imageUrl: imgUrl,
-			},
-			{ merge: true }
-		);
+    const updateProfileImage = (uid, imgUrl) =>
+        db.collection('profilePics').doc(uid).set(
+            {
+                imageUrl: imgUrl,
+            },
+            { merge: true }
+        );
 
     const handleChange = async (e) => {
         setSelectedFile(e.target.files[0]);
     }
-    
+
     async function handleUpload(e) {
         e.preventDefault();
         const storage = app.storage();
-            const uploadTask = storage.ref(`/profilePics/${selectedFile.name}`).put(selectedFile);
-            uploadTask.on('state_changed',
-                (snapShot) => {
-                    console.log(snapShot)
-                }, (err) => {
-                    console.log(err)
-                }, () => {
-                    storage.ref('profilePics').child(selectedFile.name).getDownloadURL()
-                        .then(async(fireBaseUrl) => {
-                            selectedFile.value = "";
-                            setURL(fireBaseUrl);
-                            await updateProfileImage(uid, fireBaseUrl);
-                        })
-                });
+        const uploadTask = storage.ref(`/profilePics/${selectedFile.name}`).put(selectedFile);
+        uploadTask.on('state_changed',
+            (snapShot) => {
+                console.log(snapShot)
+            }, (err) => {
+                console.log(err)
+            }, () => {
+                storage.ref('profilePics').child(selectedFile.name).getDownloadURL()
+                    .then(async (fireBaseUrl) => {
+                        selectedFile.value = "";
+                        setURL(fireBaseUrl);
+                        await updateProfileImage(uid, fireBaseUrl);
+                    })
+            });
     }
 
     return (
