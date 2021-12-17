@@ -31,6 +31,15 @@ const checkAuth = require("./routes/AuthRoutes/checkAuthentication");
 const configRoutes = require("./routes");
 const configSocketIo = require("./routes/socket");
 
+// routes for image upload
+const static = express.static(__dirname + '/public');
+const fs = require('fs');
+//const imgUpload = require('./routes/AuthRoutes/imageUpload');
+global.__basedir = __dirname;
+// check images folder
+fs.exists('./images', (e) => {
+	if (!e) fs.mkdirSync('./images');
+});
 app.use("/users", checkAuth.checkAuthentication);
 configSocketIo(io);
 configRoutes(app);
