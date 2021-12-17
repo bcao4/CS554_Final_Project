@@ -10,7 +10,7 @@ const UploadImage = () => {
     const [selectedFile, setSelectedFile] = useState(null);
     const [userData, setUserData] = useState({});
     const [url, setURL] = useState('');
-
+    
     useEffect(() => {
         async function fetchData() {
             var docRef = db.collection('profilePics').doc('currentUser');
@@ -47,17 +47,19 @@ const UploadImage = () => {
         const storage = app.storage();
         const uploadTask = storage.ref(`/profilePics/${selectedFile.name}`).put(selectedFile);
         uploadTask.on('state_changed',
-            (snapShot) => {
-                console.log(snapShot)
-            }, (err) => {
+            (snapShot) => {}, 
+            (err) => {
                 console.log(err)
             }, () => {
-                storage.ref('profilePics').child(selectedFile.name).getDownloadURL()
-                    .then(async (fireBaseUrl) => {
-                        selectedFile.value = "";
-                        setURL(fireBaseUrl);
-                        await updateProfileImage(currentUser, fireBaseUrl);
-                    })
+                storage
+                .ref('profilePics')
+                .child(selectedFile.name)
+                .getDownloadURL()
+                .then(async (fireBaseUrl) => {
+                    selectedFile.value = "";
+                    setURL(fireBaseUrl);
+                    await updateProfileImage(currentUser, fireBaseUrl);
+                })
             });
     }
 
