@@ -12,8 +12,9 @@ import axios from "axios";
 const StyledTypography = (props) => {
   return <Typography {...props} sx={{ color: "text.secondary" }} />;
 };
+
 const TradeBar = (props) => {
-  const { coin, coinPrice } = props;
+  const { coin, coinPrice, setLoading } = props;
   console.log(props);
   const {
     register,
@@ -67,27 +68,30 @@ const TradeBar = (props) => {
         return setErrorMsg("You don't have enough coins for this sale!");
       }
       // else if(currCoins)*/
-      else
-        return await axios.post(
-          `${API_URL}/users/updateBalanceAndCoins`,
-          {
-            email: currentUser.email,
-            amount: parseInt(data.numOfCoins * coinPrice),
-            coin: coin,
-            num: num1,
-            buyOrSell: data.trade_type,
+      setLoading(true);
+      await axios.post(
+        `${API_URL}/users/updateBalanceAndCoins`,
+        {
+          email: currentUser.email,
+          amount: parseInt(data.numOfCoins * coinPrice),
+          coin: coin,
+          num: num1,
+          buyOrSell: data.trade_type,
+        },
+        {
+          headers: {
+            accept: "application/json",
+            "Accept-Language": "en-US,en;q=0.8",
+            "Content-Type": "application/json",
+            authtoken: token,
           },
-          {
-            headers: {
-              accept: "application/json",
-              "Accept-Language": "en-US,en;q=0.8",
-              "Content-Type": "application/json",
-              authtoken: token,
-            },
-          }
-        );
+        }
+      );
+      const getUser = await axios.get(`${API_URL}/users/${currentUser.email}`);
+      setCurrBalance(getUser.data.balance);
+      setLoading(false);
     },
-    [coin, currBalance, currCoins, currentUser, reset, coinPrice]
+    [coin, currBalance, currCoins, currentUser, reset, coinPrice, setLoading]
   );
 
   useEffect(() => {
