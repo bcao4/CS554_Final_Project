@@ -149,7 +149,7 @@ const TopCoins = () => {
 
               return (
                 <Grid key={coin.name} item xs={8} sm={6} md={4} lg={3} xl={2}>
-                  <Card>
+                  <Card style={{ height: '100%' }}>
                     <div ref={lastCoinElementRef} />
                     <CardHeader
                       title={

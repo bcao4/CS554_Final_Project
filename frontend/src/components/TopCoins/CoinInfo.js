@@ -248,7 +248,6 @@ const CoinInfo = () => {
               <div>
                 <ToggleButtonGroup
                   size="large"
-                  color="primary"
                   value={days}
                   exclusive
                   onChange={(_, newTimePeriod) => {
