@@ -26,7 +26,7 @@ const Account = (props) => {
 //img upload
 const [isImageDialogOpen, setImageDialog] = useState(false);
 const [userData, setUserData] = useState({});
-const uid = currentUser.uid;
+
 const openImageDialog = () => {
   setImageDialog(true);
 };
@@ -77,7 +77,7 @@ const handleClickCancel = () => {
 
   useEffect(() => {
     async function fetchData() {
-      var docRef = db.collection('profilePics').doc(uid);
+      var docRef = db.collection('profilePics').doc('currentUser');
       docRef
         .get()
         .then(function (doc) {
@@ -93,7 +93,7 @@ const handleClickCancel = () => {
         });
     }
     fetchData();
-  }, [isImageDialogOpen, uid]);
+  }, [isImageDialogOpen, currentUser]);
 
   const changePassword = () => {
     if (currentUser.providerData[0].providerId === "password") {

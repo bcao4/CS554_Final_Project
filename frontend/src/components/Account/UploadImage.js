@@ -8,18 +8,16 @@ const db = app.firestore();
 const UploadImage = () => {
     const { currentUser } = useContext(AuthContext);
     const [selectedFile, setSelectedFile] = useState(null);
-    let uid = currentUser.uid;
     const [userData, setUserData] = useState({});
     const [url, setURL] = useState('');
 
     useEffect(() => {
         async function fetchData() {
-            var docRef = db.collection('profilePics').doc(uid);
+            var docRef = db.collection('profilePics').doc('currentUser');
             docRef
                 .get()
                 .then(function (doc) {
                     if (doc.exists) {
-                        console.log('Document data:', doc.data());
                         setUserData(doc.data());
                     } else {
                         console.log('No file found!');
@@ -30,10 +28,10 @@ const UploadImage = () => {
                 });
         }
         fetchData();
-    }, [url, uid]);
+    }, [url, currentUser]);
 
-    const updateProfileImage = (uid, imgUrl) =>
-        db.collection('profilePics').doc(uid).set(
+    const updateProfileImage = (currentUser, imgUrl) =>
+        db.collection('profilePics').doc('currentUser').set(
             {
                 imageUrl: imgUrl,
             },
@@ -58,7 +56,7 @@ const UploadImage = () => {
                     .then(async (fireBaseUrl) => {
                         selectedFile.value = "";
                         setURL(fireBaseUrl);
-                        await updateProfileImage(uid, fireBaseUrl);
+                        await updateProfileImage(currentUser, fireBaseUrl);
                     })
             });
     }
