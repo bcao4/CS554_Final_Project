@@ -134,8 +134,6 @@ const News = () => {
                         <br />
                         <Divider />
                         <Typography variant="body2" color="text.primary">
-                          By: {news.author}
-                          <br />
                           Source: {news.source.name}
                         </Typography>
                       </CardContent>

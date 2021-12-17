@@ -28,7 +28,7 @@ const StyledToggleButton = (props) => {
     <ToggleButton
       {...props}
       sx={{
-        //backgroundColor: "button.backgroundColor",
+        // backgroundColor: "button.backgroundColor",
         color: "button.color",
       }}
     />
@@ -273,7 +273,11 @@ const CoinInfo = () => {
               </div>
             </div>
           )}
-          <TradeBar coin={coinID} coinPrice={livePrice ?? coinPrice} />
+          <TradeBar
+            coin={coinID}
+            coinPrice={livePrice ?? coinPrice}
+            setLoading={setLoading}
+          />
           <div id="coin-info">
             <Typography
               variant="h2"
