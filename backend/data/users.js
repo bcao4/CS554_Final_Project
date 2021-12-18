@@ -55,7 +55,7 @@ async function updateUserBalance(email,amount,buyOrSell) {
 
     const userCollection = await users();
     let getUserOld = await userCollection.findOne({ email: email });
-    let newbalance = getUserOld.balance + amount;
+    let newbalance = parseFloat(getUserOld.balance) + parseFloat(amount);
     let updateInfo = await userCollection.updateOne({ email: email }, {$set: {balance: newbalance}});
 
     if (!updateInfo.matchedCount && !updateInfo.modifiedCount)
@@ -84,7 +84,7 @@ async function updateUserCoin(email,coin,number,buyOrSell) {
         if(key[0]==coin)
         {
             console.log("if")
-            newCoin[coin] = value[0]+ number;
+            newCoin[coin] = parseFloat(value[0])+ parseFloat(number);
             console.log(key[0])
             console.log(newCoin);
             let updateInfo1 = await userCollection.updateOne({ email: email }, { $pull: {coins: {[key[0]]: value[0]}}} );
