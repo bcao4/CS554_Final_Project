@@ -13,7 +13,7 @@ import {
 import { removeHtmlTags } from "../../utils";
 import { getCryptoNews } from "../../api";
 import useDocumentTitle from "../../shared/useDocumentTitle";
-import "./News.css";
+//import "./News.css";
 
 const News = () => {
   const [loading, setLoading] = useState(true);

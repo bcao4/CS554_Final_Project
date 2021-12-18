@@ -15,6 +15,15 @@ export const theme = createTheme({
         },
       },
     },
+    MuiPaginationItem: {
+      styleOverrides: {
+        root: {
+          "&.MuiPaginationItem-circular":	{ color: "#ff7780" },
+          "&.Mui-selected": { color: "#ea1337", backgroundColor: "#FFFFFF" },
+          
+        }
+      }
+    }
   },
   status: {
     danger: orange[500],

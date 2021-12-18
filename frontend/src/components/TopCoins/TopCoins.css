@@ -41,7 +41,7 @@
   color: white;
 }
 
-.MuiToggleButton-root {
+/* .MuiToggleButton-root {
   color: white !important;
   border-color: white !important;
 }
@@ -49,7 +49,7 @@
 .Mui-selected {
   background-color: white !important;
   color: black !important;
-}
+} */
 
 .coin-name {
   text-transform: capitalize;
