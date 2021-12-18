@@ -30,6 +30,17 @@ const TradeBar = (props) => {
 
   const { currentUser } = useContext(AuthContext);
 
+  const decimalCount = num => {
+    // Convert to String
+    const numStr = String(num);
+    // String Contains Decimal
+    if (numStr.includes('.')) {
+       return numStr.split('.')[1].length;
+    };
+    // String Does Not Contain Decimal
+    return 0;
+ }
+
   const onSubmit = useCallback(
     async (data) => {
       console.log(currCoins);
@@ -40,14 +51,15 @@ const TradeBar = (props) => {
       if (
         parseInt(data.numOfCoins) < 0 ||
         Number.isNaN(parseInt(data.numOfCoins)) ||
-        Number.isNaN(parseFloat(data.numOfCoins * coinPrice))
+        Number.isNaN(parseFloat(data.numOfCoins * coinPrice)) ||
+        decimalCount(data.numOfCoins)>6
       )
         return setErrorMsg("Input is invalid!!");
 
       let token = await currentUser.getIdToken();
       let amount1 = parseFloat(data.numOfCoins * coinPrice).toFixed(2);
       let num1 = parseFloat(data.numOfCoins);
-      console.log(amount1);
+      console.log(typeof data.numOfCoins);
       let indicator = 0;
 
       for (let i of currCoins) {

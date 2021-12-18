@@ -45,6 +45,18 @@ async function getUserByEmail(email) {
 
 // Buying and Selling code start ##################################################
 // updating user balance and coins in database
+
+const decimalCount = num => {
+    // Convert to String
+    const numStr = String(num);
+    // String Contains Decimal
+    if (numStr.includes('.')) {
+       return numStr.split('.')[1].length;
+    };
+    // String Does Not Contain Decimal
+    return 0;
+ }
+
 async function updateUserBalance(email,amount,buyOrSell) {
     console.log("hello from data");
     let updateInfo
@@ -90,9 +102,16 @@ async function updateUserCoin(email,coin,number,buyOrSell) {
             newCoin[coin] = parseFloat(value[0])+ parseFloat(number);
             console.log(key[0])
             console.log(newCoin);
-            if(newCoin[coin]>=0){
-            let updateInfo1 = await userCollection.updateOne({ email: email }, { $pull: {coins: {[key[0]]: value[0]}}} );
-            updateInfo = await userCollection.updateOne({ email: email },  {$push: {coins: newCoin}});}
+            if(newCoin[coin]>=0)
+            {
+                if(decimalCount(newCoin[coin])>6)
+                newCoin[coin] = newCoin[coin].toFixed(6);
+                console.log("hey")
+                console.log(newCoin)
+                console.log(typeof newCoin[coin])
+                let updateInfo1 = await userCollection.updateOne({ email: email }, { $pull: {coins: {[key[0]]: value[0]}}} );
+                updateInfo = await userCollection.updateOne({ email: email },  {$push: {coins: newCoin}});
+            }
             indicator= indicator+1;
             break;
         }
