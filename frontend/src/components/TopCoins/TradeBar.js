@@ -40,13 +40,13 @@ const TradeBar = (props) => {
       if (
         parseInt(data.numOfCoins) < 0 ||
         Number.isNaN(parseInt(data.numOfCoins)) ||
-        data.numOfCoins % 1 !== 0
+        Number.isNaN(parseFloat(data.numOfCoins * coinPrice))
       )
         return setErrorMsg("Input is invalid!!");
 
       let token = await currentUser.getIdToken();
-      let amount1 = parseInt(data.numOfCoins) * coinPrice;
-      let num1 = parseInt(data.numOfCoins);
+      let amount1 = parseFloat(data.numOfCoins * coinPrice).toFixed(2);
+      let num1 = parseFloat(data.numOfCoins);
       console.log(amount1);
       let indicator = 0;
 
@@ -62,7 +62,7 @@ const TradeBar = (props) => {
         }
       }
 
-      if (data.trade_type === "buy" && amount1 > currBalance)
+      if (data.trade_type === "buy" && parseFloat(amount1) > parseFloat(currBalance))
         return setErrorMsg("You don't have enough balance!");
       else if (indicator === 0 && data.trade_type === "sell") {
         return setErrorMsg("You don't have enough coins for this sale!");
@@ -73,7 +73,7 @@ const TradeBar = (props) => {
         `${API_URL}/users/updateBalanceAndCoins`,
         {
           email: currentUser.email,
-          amount: parseInt(data.numOfCoins * coinPrice),
+          amount: parseFloat(data.numOfCoins * coinPrice).toFixed(2),
           coin: coin,
           num: num1,
           buyOrSell: data.trade_type,
