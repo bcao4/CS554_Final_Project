@@ -62,7 +62,7 @@ const TradeBar = (props) => {
         }
       }
 
-      if (data.trade_type === "buy" && amount1 > currBalance)
+      if (data.trade_type === "buy" && parseFloat(amount1) > parseFloat(currBalance))
         return setErrorMsg("You don't have enough balance!");
       else if (indicator === 0 && data.trade_type === "sell") {
         return setErrorMsg("You don't have enough coins for this sale!");

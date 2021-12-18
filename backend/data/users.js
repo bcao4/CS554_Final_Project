@@ -46,7 +46,8 @@ async function getUserByEmail(email) {
 // Buying and Selling code start ##################################################
 // updating user balance and coins in database
 async function updateUserBalance(email,amount,buyOrSell) {
-    console.log("hello from data")
+    console.log("hello from data");
+    let updateInfo
     if (email === undefined) throw 'You must provide an email!';
     if (typeof(email) != "string") throw "Email must be of type string";
 
@@ -56,7 +57,9 @@ async function updateUserBalance(email,amount,buyOrSell) {
     const userCollection = await users();
     let getUserOld = await userCollection.findOne({ email: email });
     let newbalance = parseFloat(getUserOld.balance) + parseFloat(amount);
-    let updateInfo = await userCollection.updateOne({ email: email }, {$set: {balance: newbalance}});
+    newbalance = newbalance.toFixed(2);
+    if (newbalance>=0)
+    updateInfo = await userCollection.updateOne({ email: email }, {$set: {balance: newbalance}});
 
     if (!updateInfo.matchedCount && !updateInfo.modifiedCount)
       throw 'Update failed';
@@ -87,8 +90,9 @@ async function updateUserCoin(email,coin,number,buyOrSell) {
             newCoin[coin] = parseFloat(value[0])+ parseFloat(number);
             console.log(key[0])
             console.log(newCoin);
+            if(newCoin[coin]>=0){
             let updateInfo1 = await userCollection.updateOne({ email: email }, { $pull: {coins: {[key[0]]: value[0]}}} );
-            updateInfo = await userCollection.updateOne({ email: email },  {$push: {coins: newCoin}});
+            updateInfo = await userCollection.updateOne({ email: email },  {$push: {coins: newCoin}});}
             indicator= indicator+1;
             break;
         }
