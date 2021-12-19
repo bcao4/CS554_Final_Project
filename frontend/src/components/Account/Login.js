@@ -8,7 +8,7 @@ import {
 import useDocumentTitle from "../../shared/useDocumentTitle";
 import { AuthContext } from "../../firebase/Auth";
 import SocialSignIn from "./SocialSignIn";
-import { Typography } from "@mui/material";
+import { Button, TextField, Typography } from "@mui/material";
 
 const Login = () => {
   const { currentUser } = useContext(AuthContext);
@@ -44,48 +44,52 @@ const Login = () => {
 
   return (
     <div className="form-body">
-      <Typography variant="h1" style={{ fontSize: "2rem" }}>
+      <Typography
+        variant="h1"
+        style={{ fontSize: "2rem", marginBottom: "14px" }}
+      >
         Login
       </Typography>
       <form onSubmit={handleSignIn}>
         <div>
-          <br />
-          <div className="form-group">
-            <label>
-              Email:
-              <input
-                className="form-control"
-                type="email"
-                name="email"
-                id="email"
-                placeholder="Enter Email"
-                required
-              ></input>
-            </label>
+          <div className="form-input">
+            <label htmlFor="email">Email:</label>
+            <TextField
+              type="email"
+              name="email"
+              id="email"
+              placeholder="Enter Email"
+              required
+            ></TextField>
           </div>
-          <br />
-          <div className="form-group">
-            <label>
-              Password:
-              <input
-                className="form-control"
-                name="password"
-                type="password"
-                placeholder="Password"
-                required
-              ></input>
-            </label>
+          <div className="form-input">
+            <label htmlFor="password">Password:</label>
+            <TextField
+              id="password"
+              name="password"
+              type="password"
+              placeholder="Password"
+              required
+            ></TextField>
           </div>
-          <br />
-          <button className="btn" type="submit">
+          <Button
+            type="submit"
+            variant="contained"
+            style={{ marginRight: "8px" }}
+            color="primary"
+          >
             Login
-          </button>
-          <button className="btn-forgot-pswd" onClick={passwordReset}>
+          </Button>
+          <Button
+            onClick={passwordReset}
+            variant="contained"
+            color="secondary"
+            style={{ marginTop: "10px", marginBottom: "10px" }}
+          >
             Forgot Password
-          </button>
+          </Button>
         </div>
       </form>
-      <br />
       <SocialSignIn />
     </div>
   );

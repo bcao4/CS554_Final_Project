@@ -32,7 +32,7 @@ export const theme = createTheme({
       main: blue[300],
     },
     secondary: {
-      main: "#f50057",
+      main: red["A700"],
     },
     text: {
       primary: "#000000",

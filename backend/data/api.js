@@ -77,7 +77,6 @@ const getMarketNews = async (filter) => {
     Returns latest crypto market news
     Available filters: rising|hot|bullish|bearish|important|saved|lol
   */
-
   const { data } = await axios.get(`${CRYPTOPANIC_URL}/posts/`, {
     params: {
       auth_token: CRYPTOPANIC_KEY,
@@ -104,6 +103,16 @@ const getCryptoNews = async (page, perPage) => {
   return data;
 };
 
+const getCoinNews = async (symbol) => {
+  const { data } = await axios.get(`${CRYPTOPANIC_URL}/posts/`, {
+    params: {
+      auth_token: CRYPTOPANIC_KEY,
+      currencies: symbol.toUpperCase(),
+    },
+  });
+  return data;
+};
+
 module.exports = {
   getPrice,
   getCoinInfo,
@@ -111,6 +120,7 @@ module.exports = {
   getCoinPage,
   getMarketNews,
   getCryptoNews,
+  getCoinNews,
 };
 
 // https://www.coingecko.com/en/api/documentation?
@@ -120,22 +130,3 @@ module.exports = {
 // https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days=1
 // https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&per_page=100&page=1&sparkline=true&price_change_percentage=24h
 // https://newsapi.org/v2/everything?q=cryptocurrency&apiKey=1569464d633f4da2a0b6663b14266b84
-
-/*
-https://cryptopanic.com/developers/api/
-You can use any of UI filters using filter=(rising|hot|bullish|bearish|important|saved|lol):
-/api/v1/posts/?auth_token=fcf1e560a52147d92650208d0fda96b3304557e8&filter=rising
-
-Filter by currencies using currencies=CURRENCY_CODE1,CURRENCY_CODE2 (max 50):
-/api/v1/posts/?auth_token=fcf1e560a52147d92650208d0fda96b3304557e8&currencies=BTC,ETH
-
-Filter by region using regions=REGION_CODE1,REGION_CODE2. Default: en.
-Available regions: en (English), de (Deutsch), nl (Dutch), es (Español), fr (Français), it (Italiano), pt (Português), ru (Русский):
-/api/v1/posts/?auth_token=fcf1e560a52147d92650208d0fda96b3304557e8&regions=en,de
-
-Filter by kind using kind=news. Default: all. Available values: news or media
-/api/v1/posts/?auth_token=fcf1e560a52147d92650208d0fda96b3304557e8&kind=news
-
-You can also combine multiple filters together:
-/api/v1/posts/?auth_token=fcf1e560a52147d92650208d0fda96b3304557e8&currencies=ETH&filter=rising
-*/

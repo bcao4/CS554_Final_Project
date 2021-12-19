@@ -7,7 +7,7 @@ import SocialSignIn from "./SocialSignIn";
 import axios from "axios";
 import useDocumentTitle from "../../shared/useDocumentTitle";
 import { API_URL } from "../../api";
-import { Typography } from "@mui/material";
+import { Typography, Button, TextField } from "@mui/material";
 
 const SignUp = () => {
   const { currentUser } = useContext(AuthContext);
@@ -83,71 +83,65 @@ const SignUp = () => {
   return (
     <div>
       <div className="form-body">
-        <Typography variant="h1" style={{ fontSize: "2rem" }}>
+        <Typography
+          variant="h1"
+          style={{ fontSize: "2rem", marginBottom: "14px" }}
+        >
           Sign Up
         </Typography>
         {pwMatch && <h4 className="error">{pwMatch}</h4>}
         <form onSubmit={handleSignUp}>
           <div>
-            <div className="form-group">
-              <label>
-                Name:
-                <input
-                  className="form-control"
-                  type="text"
-                  name="displayName"
-                  placeholder="Enter Name"
-                  required
-                ></input>
-              </label>
+            <div className="form-input">
+              <label htmlFor="displayName">Name:</label>
+              <TextField
+                type="text"
+                id="displayName"
+                name="displayName"
+                placeholder="Enter Name"
+                required
+              ></TextField>
             </div>
-            <br />
-            <div className="form-group">
-              <label>
-                Email:
-                <input
-                  className="form-control"
-                  type="email"
-                  name="email"
-                  placeholder="Enter Email"
-                  required
-                ></input>
-              </label>
+            <div className="form-input">
+              <label htmlFor="email">Email:</label>
+              <TextField
+                type="email"
+                name="email"
+                id="email"
+                placeholder="Enter Email"
+                required
+              ></TextField>
             </div>
-            <br />
-            <div className="form-group">
-              <label>
-                Password:
-                <input
-                  className="form-control"
-                  id="passwordOne"
-                  name="passwordOne"
-                  type="password"
-                  placeholder="Password"
-                  required
-                ></input>
-              </label>
+            <div className="form-input">
+              <label htmlFor="passwordOne">Password:</label>
+              <TextField
+                id="passwordOne"
+                name="passwordOne"
+                type="password"
+                placeholder="Password"
+                required
+              ></TextField>
             </div>
-            <br />
-            <div className="form-group">
-              <label>
-                Confirm Password:
-                <input
-                  className="form-control"
-                  name="passwordTwo"
-                  type="password"
-                  placeholder="Confirm password"
-                  required
-                ></input>
-              </label>
+            <div className="form-input">
+              <label htmlFor="passwordTwo">Confirm Password:</label>
+              <TextField
+                name="passwordTwo"
+                id="passwordTwo"
+                type="password"
+                placeholder="Confirm password"
+                required
+              ></TextField>
             </div>
-            <br />
-            <button id="submitButton" name="submitButton" type="submit">
+            <Button
+              variant="contained"
+              name="submitButton"
+              type="submit"
+              style={{ marginBottom: "14px" }}
+            >
               Sign Up
-            </button>
+            </Button>
           </div>
         </form>
-        <br />
         <SocialSignIn />
       </div>
     </div>

@@ -7,13 +7,14 @@ const ChangePassword = () => {
   const { currentUser } = useContext(AuthContext);
   const [pwMatch, setPwMatch] = useState("");
 
-    const submitForm = async (e) => {
-        e.preventDefault();
-        const { currentPassword, newPasswordOne, newPasswordTwo } = e.target.elements;
-        if (newPasswordOne.value !== newPasswordTwo.value) {
-            setPwMatch('New password do not match, please try again');
-            return false;
-        }
+  const submitForm = async (e) => {
+    e.preventDefault();
+    const { currentPassword, newPasswordOne, newPasswordTwo } =
+      e.target.elements;
+    if (newPasswordOne.value !== newPasswordTwo.value) {
+      setPwMatch("New password do not match, please try again");
+      return false;
+    }
 
     try {
       await doChangePassword(
@@ -35,7 +36,7 @@ const ChangePassword = () => {
           {pwMatch && <h4 className="error">{pwMatch}</h4>}
           <form onSubmit={submitForm}>
             <div>
-              <div className="form-group">
+              <div>
                 <label>
                   Current Password:
                   <input
@@ -49,7 +50,7 @@ const ChangePassword = () => {
                 </label>
               </div>
               <br />
-              <div className="form-group">
+              <div>
                 <label>
                   New Password:
                   <input
@@ -63,7 +64,7 @@ const ChangePassword = () => {
                 </label>
               </div>
               <br />
-              <div className="form-group">
+              <div>
                 <label>
                   Confirm New Password:
                   <input
