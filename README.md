@@ -10,4 +10,4 @@ Environment Setup Instructions:
     6. Once in the folder, run "npm install" to install all dependencies 
     7. Run "npm start" once everything has finished installing 
 
-The live site deploted on Heroku can be accessed here: https://cryptotracker-exchange.herokuapp.com/
+The live site deployed on Heroku can be accessed here: https://cryptotracker-exchange.herokuapp.com/
