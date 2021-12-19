@@ -5,6 +5,7 @@ import axios from "axios";
 import { NavLink } from "react-router-dom";
 import SignOutButton from "./SignOut";
 import { API_URL } from "../../api";
+//import { getCoinInfo } from "../../api";
 //img
 import UploadImage from "./UploadImage";
 import { Button, Dialog, DialogActions, DialogTitle } from "@mui/material";
@@ -21,6 +22,7 @@ const Account = (props) => {
   // Buying and selling code start ############################
   const [currBalance, setCurrBalance] = useState(0);
   const [currCoins, setCurrCoins] = useState([]);
+  //const [accBalance, setAccBalance] = useState(0);
 // Buying and selling code end ##############################
 
 //img upload
@@ -95,6 +97,11 @@ const handleClickCancel = () => {
     fetchData();
   }, [isImageDialogOpen, uid]);
 
+  // Buying and selling code start ############################
+
+
+  // Buying and selling code end ############################
+
   const changePassword = () => {
     if (currentUser.providerData[0].providerId === "password") {
       return (
@@ -133,7 +140,7 @@ const handleClickCancel = () => {
           {/*// Buying and selling code start ############################*/}
           <div>
           <br />
-          <b>Current Balance: </b>
+          <b>Cash Balance: </b>
           ${parseFloat(currBalance).toFixed(2)}
           <br />
           <br />
@@ -141,11 +148,12 @@ const handleClickCancel = () => {
           {currCoins.length?            
             (currCoins).map(i =>( 
           <li> 
-          {Object.keys(i)[0]} : {Object.values(i)[0]} 
+          <NavLink exact to={`/coin/${Object.keys(i)[0]}`} >{Object.keys(i)[0]} </NavLink>: {Object.values(i)[0]} 
           </li>
           )): "None"}
+
           </div>
-          {/*// Buying and selling code start ############################*/}         
+          {/*// Buying and selling code end ############################*/}         
           <br />
            {/* Image Upload Button */}
            <button className="btn-image-upload" onClick={openImageDialog}>
