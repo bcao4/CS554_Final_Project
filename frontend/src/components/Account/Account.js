@@ -192,7 +192,7 @@ const handleClickCancel = () => {
     <>
       <div>
         <div className="form-body">
-          <h2>Account Details</h2>
+          <h1>Account Details</h1>
           <div>
           <p><img
               width={150}
