@@ -44,3 +44,10 @@ export const getCryptoNews = async (page, perPage) => {
   });
   return data;
 };
+
+export const getCoinNews = async (symbol) => {
+  const { data } = await axios.get(`${API_URL}/coin-news`, {
+    params: { symbol },
+  });
+  return data;
+};
