@@ -29,10 +29,9 @@ export const theme = createTheme({
     text: {
       primary: "#000000",
       secondary: "#ffffff",
-      
     },
     link: {
-      color: "#e4e8ff", // royal blue
+      color: "#809dff",
     },
     price: {
       green: "#a8ff84",
