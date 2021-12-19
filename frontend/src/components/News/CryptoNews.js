@@ -26,10 +26,9 @@ const News = () => {
     const fetchData = async () => {
       try {
         setLoading(true);
-        let perPage = 20;
-        let data = await getCryptoNews(pageNum, perPage);
-        data = data.articles;
-        setNewsData(data);
+        const perPage = 20;
+        const data = await getCryptoNews(pageNum, perPage);
+        setNewsData(data.articles);
       } catch (e) {
         console.error(e);
       } finally {
