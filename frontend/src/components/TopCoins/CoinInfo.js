@@ -142,7 +142,14 @@ const CoinInfo = () => {
       )}
       {coinData !== null && (
         <div style={{ marginTop: 10 }}>
-          <div style={{ position: "absolute", zIndex: 1, marginLeft: 60 }}>
+          <div
+            style={{
+              position: "absolute",
+              zIndex: 1,
+              marginLeft: 80,
+              marginTop: "-40px",
+            }}
+          >
             <div
               style={{
                 display: "flex",
@@ -155,7 +162,7 @@ const CoinInfo = () => {
                 sx={{
                   color: "text.secondary",
                   fontSize: "2.6rem",
-                  marginRight: 4,
+                  marginRight: "6px",
                 }}
               >
                 {capitalize(coinData.id)}
