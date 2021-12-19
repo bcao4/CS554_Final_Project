@@ -5,7 +5,7 @@ import axios from "axios";
 import { NavLink } from "react-router-dom";
 import SignOutButton from "./SignOut";
 import { API_URL } from "../../api";
-//import { getCoinInfo } from "../../api";
+import { getCoinInfo } from "../../api";
 //img
 import UploadImage from "./UploadImage";
 import { Button, Dialog, DialogActions, DialogTitle } from "@mui/material";
@@ -22,7 +22,9 @@ const Account = (props) => {
   // Buying and selling code start ############################
   const [currBalance, setCurrBalance] = useState(0);
   const [currCoins, setCurrCoins] = useState([]);
-  //const [accBalance, setAccBalance] = useState(0);
+  const [accBalance, setAccBalance] = useState(0);
+  const [loading, setLoading] = useState(true);
+  const [defVal, setdefVal] = useState(0);
 // Buying and selling code end ##############################
 
 //img upload
@@ -44,6 +46,7 @@ const handleClickCancel = () => {
 
   useEffect(() => {
     console.log("render");
+    console.log("main useEffect fired")
     async function fetchData() {
       try {
         let token = await currentUser.getIdToken();
@@ -98,9 +101,78 @@ const handleClickCancel = () => {
   }, [isImageDialogOpen, uid]);
 
   // Buying and selling code start ############################
+  // useEffect with setInterval 10 sec to update price
+  useEffect(async() => {
+    console.log("buying useEffect fired")
 
+      const fetchData = async (coin, num) => {
+        try {
+          setLoading(true);
+          const [coinData] = await Promise.all([
+            getCoinInfo(coin),
+          ]);
+          console.log(coin + " " +num +" "+ coinData.market_data.current_price.usd)
+          console.log(coinData.market_data.current_price.usd * num)
+          //setAccBalance(parseFloat(accBalance) + (coinData.market_data.current_price.usd * num))
+          //console.log(accBalance)
+          return (coinData.market_data.current_price.usd * num)
+  
+        } catch (e) {
+          console.error(e);
+        } finally {
+          setLoading(false);
+        }
+      };
 
-  // Buying and selling code end ############################
+    const interval = setInterval(async function () {
+      
+      let val =0;
+      for(let i of currCoins)
+      {
+        val =val + await fetchData(Object.keys(i)[0], Object.values(i)[0]);
+      }
+      //console.log(count);
+      setAccBalance(val)
+    }, 7000);
+
+    return async() => {
+      console.log("cleanup");
+      clearInterval(interval);
+  }
+  }, [currCoins]);
+
+  // useEffect without setInterval to fire when accBalane changes to prevent delay
+  useEffect(async() => {
+
+    const fetchData = async (coin, num) => {
+      try {
+        setLoading(true);
+        const [coinData] = await Promise.all([
+          getCoinInfo(coin),
+        ]);
+        console.log(coin + " " +num +" "+ coinData.market_data.current_price.usd)
+        console.log(coinData.market_data.current_price.usd * num)
+        //setAccBalance(parseFloat(accBalance) + (coinData.market_data.current_price.usd * num))
+        //console.log(accBalance)
+        return (coinData.market_data.current_price.usd * num)
+
+      } catch (e) {
+        console.error(e);
+      } finally {
+        setLoading(false);
+      }
+    };
+    let defVal=0;
+        for(let i of currCoins)
+        {
+          defVal =defVal + await fetchData(Object.keys(i)[0], Object.values(i)[0]);
+        }
+      if(!accBalance)
+        setdefVal((parseFloat(defVal) + parseFloat(currBalance)).toFixed(2))
+
+}, [accBalance]);
+
+  // Buying and selling code end ##############################
 
   const changePassword = () => {
     if (currentUser.providerData[0].providerId === "password") {
@@ -150,8 +222,13 @@ const handleClickCancel = () => {
           <li> 
           <NavLink exact to={`/coin/${Object.keys(i)[0]}`} >{Object.keys(i)[0]} </NavLink>: {Object.values(i)[0]} 
           </li>
-          )): "None"}
-
+          )): "None" }
+          <br />
+          <b>Total Account value: $ </b>
+          {parseInt(accBalance)?
+          (parseFloat(accBalance) + parseFloat(currBalance)).toFixed(2):
+          (parseInt(defVal)? defVal: "loading...")
+          }
           </div>
           {/*// Buying and selling code end ############################*/}         
           <br />
