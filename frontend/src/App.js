@@ -5,7 +5,6 @@ import Account from "./components/Account/Account";
 import Home from "./components/HomePage/Home";
 import TopCoins from "./components/TopCoins/TopCoins";
 import CoinInfo from "./components/TopCoins/CoinInfo";
-import MarketNews from "./components/News/MarketNews";
 import CryptoNews from "./components/News/CryptoNews";
 import NotFound from "./components/NotFound";
 import Login from "./components/Account/Login";
@@ -37,7 +36,6 @@ const App = () => {
                 <Route path="/" element={<Home />} />
                 <Route path="/top-coins" element={<TopCoins />} />
                 <Route path="/coin/:id" element={<CoinInfo />} />
-                <Route path="/market-news" element={<MarketNews />} />
                 <Route path="/crypto-news" element={<CryptoNews />} />
                 <Route path="/account" element={<Account />} />
                 <Route path="/login" element={<Login />} />
@@ -52,8 +50,8 @@ const App = () => {
                     element={<ChangePassword />}
                   />
                 </Route>
-                <Route exact path='/upload-image' element={<PrivateRoute />}>
-                  <Route exact path='/upload-image' element={<UploadImage />} />
+                <Route exact path="/upload-image" element={<PrivateRoute />}>
+                  <Route exact path="/upload-image" element={<UploadImage />} />
                 </Route>
                 <Route path="*" element={<NotFound />} />
               </Routes>

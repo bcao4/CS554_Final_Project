@@ -1,5 +1,5 @@
 import { createTheme } from "@mui/material/styles";
-import { orange, blue } from "@mui/material/colors";
+import { orange, blue, lightGreen, red, lightBlue } from "@mui/material/colors";
 
 // https://mui.com/customization/color/
 // https://mui.com/customization/theming/
@@ -32,18 +32,18 @@ export const theme = createTheme({
       main: blue[300],
     },
     secondary: {
-      main: "#f50057",
+      main: red["A700"],
     },
     text: {
       primary: "#000000",
       secondary: "#ffffff",
     },
     link: {
-      color: "#809dff",
+      color: lightBlue["A100"],
     },
     price: {
-      green: "#a8ff84",
-      red: "#ffaaaa",
+      green: lightGreen["A400"],
+      red: red[200],
     },
     background: {
       color: "rgb(55, 57, 59)",
@@ -51,10 +51,9 @@ export const theme = createTheme({
     button: {
       color: "white",
       backgroundColor: "#0072ee",
-      selected: "blue",
     },
     loadingBar: {
-      color: "#1e90ff", // dodgerblue
+      color: lightBlue[500],
     },
   },
 });

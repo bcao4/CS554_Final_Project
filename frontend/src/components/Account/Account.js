@@ -8,11 +8,17 @@ import { API_URL } from "../../api";
 import { getCoinInfo } from "../../api";
 //img
 import UploadImage from "./UploadImage";
-import { Button, Dialog, DialogActions, DialogTitle } from "@mui/material";
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogTitle,
+  Typography,
+} from "@mui/material";
 import { IconButton } from "@mui/material";
-import CloseIcon from '@mui/icons-material/Close';
-import 'firebase/firestore';
-import app from 'firebase/app'
+import CloseIcon from "@mui/icons-material/Close";
+import "firebase/firestore";
+import app from "firebase/app";
 const db = app.firestore();
 
 const Account = (props) => {
@@ -27,22 +33,22 @@ const Account = (props) => {
   const [defVal, setdefVal] = useState(0);
 // Buying and selling code end ##############################
 
-//img upload
-const [isImageDialogOpen, setImageDialog] = useState(false);
-const [userData, setUserData] = useState({});
-let uid = currentUser.uid;
+  //img upload
+  const [isImageDialogOpen, setImageDialog] = useState(false);
+  const [userData, setUserData] = useState({});
+  let uid = currentUser.uid;
 
-const openImageDialog = () => {
-  setImageDialog(true);
-};
+  const openImageDialog = () => {
+    setImageDialog(true);
+  };
 
-const handleClickOk = () => {
-  setImageDialog(false);
-};
+  const handleClickOk = () => {
+    setImageDialog(false);
+  };
 
-const handleClickCancel = () => {
-  setImageDialog(false);
-};
+  const handleClickCancel = () => {
+    setImageDialog(false);
+  };
 
   useEffect(() => {
     console.log("render");
@@ -52,7 +58,7 @@ const handleClickCancel = () => {
         let token = await currentUser.getIdToken();
         let config = {
           method: "get",
-          url: `${API_URL}/users/` + currentUser.email,   //removedhttp for API call
+          url: `${API_URL}/users/` + currentUser.email, //removedhttp for API call
           headers: {
             accept: "application/json",
             "Accept-Language": "en-US,en;q=0.8",
@@ -62,18 +68,15 @@ const handleClickCancel = () => {
         };
         const { data } = await axios(config);
         setUserName(data.displayName);
-      
-      // Buying and selling code start ############################
-        setCurrBalance(data.balance);
-        let coinListDisplay=[];
-        for(let i of data.coins )
-        {
-          if((Object.values(i)[0])>0)
-          coinListDisplay.push(i)
-        }
-        setCurrCoins(coinListDisplay)
-      // Buying and selling code end ############################
 
+        // Buying and selling code start ############################
+        setCurrBalance(data.balance);
+        let coinListDisplay = [];
+        for (let i of data.coins) {
+          if (Object.values(i)[0] > 0) coinListDisplay.push(i);
+        }
+        setCurrCoins(coinListDisplay);
+        // Buying and selling code end ############################
       } catch (e) {
         console.log(e);
       }
@@ -83,14 +86,14 @@ const handleClickCancel = () => {
 
   useEffect(() => {
     async function fetchData() {
-      var docRef = db.collection('profilePics').doc(uid);
+      var docRef = db.collection("profilePics").doc(uid);
       docRef
         .get()
         .then(function (doc) {
           if (doc.exists) {
             setUserData(doc.data());
           } else {
-            console.log('No file found!');
+            console.log("No file found!");
           }
         })
         .catch(function (e) {
@@ -192,16 +195,22 @@ const handleClickCancel = () => {
     <>
       <div>
         <div className="form-body">
-          <h1>Account Details</h1>
+          <Typography variant="h1" style={{ fontSize: "2rem" }}>
+            Account Details
+          </Typography>
           <div>
-          <p><img
-              width={150}
-              height={150}
-              src={userData.imageUrl ? userData.imageUrl : 
-                'https://www.pngitem.com/pimgs/m/146-1468479_my-profile-icon-blank-profile-picture-circle-hd.png'
-              }
-              alt="Profile icon"
-            /></p>
+            <p>
+              <img
+                width={150}
+                height={150}
+                src={
+                  userData.imageUrl
+                    ? userData.imageUrl
+                    : "https://www.pngitem.com/pimgs/m/146-1468479_my-profile-icon-blank-profile-picture-circle-hd.png"
+                }
+                alt="Profile icon"
+              />
+            </p>
             <b>Name: </b>
             {userName}
             <br />
@@ -230,10 +239,10 @@ const handleClickCancel = () => {
           (parseInt(defVal)? defVal: "loading...")
           }
           </div>
-          {/*// Buying and selling code end ############################*/}         
+          {/*// Buying and selling code end ############################*/}
           <br />
-           {/* Image Upload Button */}
-           <button className="btn-image-upload" onClick={openImageDialog}>
+          {/* Image Upload Button */}
+          <button className="btn-image-upload" onClick={openImageDialog}>
             Upload Image
           </button>
           {changePassword()}
@@ -246,11 +255,12 @@ const handleClickCancel = () => {
             PaperProps={{
               style: {
                 height: 350,
-                width: 500
+                width: 500,
               },
             }}
           >
-            <DialogTitle>Upload Profile Picture
+            <DialogTitle>
+              Upload Profile Picture
               <IconButton onClick={handleClickCancel} className="close-icon">
                 <CloseIcon />
               </IconButton>

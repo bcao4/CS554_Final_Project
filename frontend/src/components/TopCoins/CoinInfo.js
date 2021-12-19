@@ -7,7 +7,12 @@ import {
   ToggleButton,
   Link,
   Divider,
+  Grid,
+  Card,
+  CardActionArea,
+  CardContent,
 } from "@mui/material";
+import millify from "millify";
 import { Line } from "react-chartjs-2";
 import {
   removeHtmlTags,
@@ -18,7 +23,7 @@ import {
   capitalize,
 } from "../../utils";
 import useDocumentTitle from "../../shared/useDocumentTitle";
-import { getCoinInfo, getChartData } from "../../api";
+import { getCoinInfo, getChartData, getCoinNews } from "../../api";
 import { socket } from "../../api/socket";
 import TradeBar from "./TradeBar";
 import "./TopCoins.css";
@@ -41,6 +46,7 @@ const CoinInfo = () => {
   const [days, setDays] = useState("1");
   const [chartData, setChartData] = useState(null);
   const [livePrice, setLivePrice] = useState(null);
+  const [coinNews, setCoinNews] = useState(null);
 
   const lastPrice = useRef(null);
   const priceUpdateInterval = useRef(null);
@@ -83,10 +89,13 @@ const CoinInfo = () => {
           getChartData(coinID, days),
           getCoinInfo(coinID),
         ]);
+        //console.log(coinData);
         setChartData(chartData.prices);
         setCoinData(coinData);
         if (lastPrice.current === null) {
           lastPrice.current = coinData?.market_data?.current_price?.usd ?? 0;
+          const news = await getCoinNews(coinData.symbol);
+          setCoinNews(news?.results?.slice(0, 12));
         }
       } catch (e) {
         console.error(e);
@@ -122,7 +131,6 @@ const CoinInfo = () => {
   const coinDescription =
     coinData?.description?.en.split(". ")[0] ?? "No description available";
   const coinWebsite = coinData?.links?.homepage[0] ?? "No website available";
-  const coinRank = coinData?.market_cap_rank ?? "No rank available";
   const coinPrice =
     coinData?.market_data?.current_price?.usd ?? "No price available";
 
@@ -142,7 +150,14 @@ const CoinInfo = () => {
       )}
       {coinData !== null && (
         <div style={{ marginTop: 10 }}>
-          <div style={{ position: "absolute", zIndex: 1, marginLeft: 60 }}>
+          <div
+            style={{
+              position: "absolute",
+              zIndex: 1,
+              marginLeft: 80,
+              marginTop: "-40px",
+            }}
+          >
             <div
               style={{
                 display: "flex",
@@ -155,7 +170,7 @@ const CoinInfo = () => {
                 sx={{
                   color: "text.secondary",
                   fontSize: "2.6rem",
-                  marginRight: 4,
+                  marginRight: "6px",
                 }}
               >
                 {capitalize(coinData.id)}
@@ -310,20 +325,77 @@ const CoinInfo = () => {
                 </Link>
               </div>
               <Typography sx={{ color: "text.secondary" }}>
-                Market Cap Rank: {coinRank}
+                {`Market Capitalization: ${millify(
+                  coinData.market_data.market_cap.usd
+                )}`}
+              </Typography>
+              <Typography sx={{ color: "text.secondary" }}>
+                {`Circulating Supply: ${millify(
+                  coinData.market_data.circulating_supply
+                )}`}
+              </Typography>
+              <Typography sx={{ color: "text.secondary" }}>
+                {`Current Market Sentiment: ${
+                  coinData.sentiment_votes_up_percentage > 55
+                    ? "Bullish"
+                    : coinData.sentiment_votes_up_percentage < 45
+                    ? "Bearish"
+                    : "Neutral"
+                }`}
               </Typography>
             </div>
           </div>
-          <div style={{ margin: "6px" }}>
-            <Typography
-              variant="h2"
-              sx={{ fontSize: "2rem", color: "text.secondary" }}
-            >
-              {capitalize(coinData.id)} News
-            </Typography>
-            <Divider sx={{ backgroundColor: "text.secondary" }} />
-          </div>
-          <div id="news"></div>
+          {coinNews !== null && (
+            <>
+              <div style={{ margin: "6px" }}>
+                <Typography
+                  variant="h2"
+                  sx={{ fontSize: "2rem", color: "text.secondary" }}
+                >
+                  {capitalize(coinData.id)} News
+                </Typography>
+                <Divider sx={{ backgroundColor: "text.secondary" }} />
+              </div>
+              <div id="news">
+                <Grid
+                  container
+                  justifyContent="center"
+                  alignContent="center"
+                  spacing={1}
+                  padding={1}
+                >
+                  {coinNews.map((item) => {
+                    return (
+                      <Grid
+                        key={item.id}
+                        item
+                        xs={12}
+                        sm={6}
+                        md={4}
+                        lg={4}
+                        xl={4}
+                      >
+                        <Card style={{ height: "100%" }}>
+                          <CardActionArea
+                            href={item.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            <CardContent>
+                              <Typography>{item.title}</Typography>
+                              <Typography variant="caption">
+                                {item.source.title} - {item.source.domain}
+                              </Typography>
+                            </CardContent>
+                          </CardActionArea>
+                        </Card>
+                      </Grid>
+                    );
+                  })}
+                </Grid>
+              </div>
+            </>
+          )}
         </div>
       )}
     </>
