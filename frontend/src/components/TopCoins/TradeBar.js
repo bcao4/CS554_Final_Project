@@ -20,7 +20,6 @@ const TradeBar = (props) => {
     register,
     handleSubmit,
     reset,
-    formState: { errors },
   } = useForm();
 
   const [tradeBarOpen, setTradeBarOpen] = useState(false);
