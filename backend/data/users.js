@@ -1,6 +1,7 @@
 const mongoCollections = require('../config/mongoCollections');
 const users = mongoCollections.users;
 const ObjectId = require('mongodb').ObjectId;
+const ApiFile = require('../data/api.js')
 
 async function createAccount(email, displayname) {
     if (!email || !displayname) throw "String cannot be emapty, you must provide all values";
@@ -130,6 +131,16 @@ async function updateUserCoin(email,coin,number,buyOrSell) {
     return 1;
 
 }
+/*
+async function getTotalCoinsValue(coins){
+    let tot =0;
+    for (let i of coins) {
+        let price = ApiFile.getPrice(Object.keys(i)[0]);
+        price = price * (Object.values(i)[0])
+        tot = tot + price;
+    }
+    return tot.toFixed(2);
+} */
 // Buying and Selling code end ##################################################
 
 
