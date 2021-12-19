@@ -29,7 +29,6 @@ const Account = (props) => {
   const [currBalance, setCurrBalance] = useState(0);
   const [currCoins, setCurrCoins] = useState([]);
   const [accBalance, setAccBalance] = useState(0);
-  const [loading, setLoading] = useState(true);
   const [defVal, setdefVal] = useState(0);
 // Buying and selling code end ##############################
 
@@ -105,12 +104,11 @@ const Account = (props) => {
 
   // Buying and selling code start ############################
   // useEffect with setInterval 10 sec to update price
-  useEffect(async() => {
+  useEffect(() => {
     console.log("buying useEffect fired")
 
       const fetchData = async (coin, num) => {
         try {
-          setLoading(true);
           const [coinData] = await Promise.all([
             getCoinInfo(coin),
           ]);
@@ -122,8 +120,6 @@ const Account = (props) => {
   
         } catch (e) {
           console.error(e);
-        } finally {
-          setLoading(false);
         }
       };
 
@@ -145,11 +141,10 @@ const Account = (props) => {
   }, [currCoins]);
 
   // useEffect without setInterval to fire when accBalane changes to prevent delay
-  useEffect(async() => {
+  useEffect(() => {
 
     const fetchData = async (coin, num) => {
       try {
-        setLoading(true);
         const [coinData] = await Promise.all([
           getCoinInfo(coin),
         ]);
@@ -161,19 +156,17 @@ const Account = (props) => {
 
       } catch (e) {
         console.error(e);
-      } finally {
-        setLoading(false);
       }
     };
     let defVal=0;
         for(let i of currCoins)
         {
-          defVal =defVal + await fetchData(Object.keys(i)[0], Object.values(i)[0]);
+          defVal =defVal + fetchData(Object.keys(i)[0], Object.values(i)[0]);
         }
       if(!accBalance)
         setdefVal((parseFloat(defVal) + parseFloat(currBalance)).toFixed(2))
 
-}, [accBalance]);
+}, [accBalance, currBalance, currCoins]);
 
   // Buying and selling code end ##############################
 
