@@ -49,7 +49,7 @@
 
 @keyframes priceIncreaseAnimation {
   from {
-    color: "#76ff03";
+    color: #76ff03;
   }
   to {
     color: white;
@@ -58,7 +58,7 @@
 
 @keyframes priceDecreaseAnimation {
   from {
-    color: "#ff5252";
+    color: #ff5252;
   }
   to {
     color: white;

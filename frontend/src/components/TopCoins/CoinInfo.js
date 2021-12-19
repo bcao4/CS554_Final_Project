@@ -94,10 +94,9 @@ const CoinInfo = () => {
         setCoinData(coinData);
         if (lastPrice.current === null) {
           lastPrice.current = coinData?.market_data?.current_price?.usd ?? 0;
+          const news = await getCoinNews(coinData.symbol);
+          setCoinNews(news?.results?.slice(0, 12));
         }
-        const news = await getCoinNews(coinData.symbol);
-        console.log(coinData);
-        setCoinNews(news?.results?.slice(0, 12));
       } catch (e) {
         console.error(e);
       } finally {

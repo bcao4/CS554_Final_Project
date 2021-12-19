@@ -7,7 +7,6 @@ import {
   Card,
   CardContent,
   CardActions,
-  CardHeader,
   Divider,
   Button,
   TextField,
@@ -100,7 +99,6 @@ const TopCoins = () => {
           <form style={{ width: "100%", margin: "6px" }}>
             <TextField
               placeholder="Filter..."
-              aria-label="Search"
               onChange={(e) => setSearchTerm(e.target.value)}
               value={searchTerm}
               style={{
@@ -151,26 +149,27 @@ const TopCoins = () => {
 
               return (
                 <Grid key={coin.name} item xs={8} sm={6} md={4} lg={3} xl={2}>
-                  <Card style={{ height: "100%" }}>
-                    <div ref={lastCoinElementRef} />
-                    <CardHeader
-                      title={
-                        <div style={{ display: "flex", alignItems: "center" }}>
-                          <Typography
-                            sx={{ color: "text.primary", fontSize: "1.6rem" }}
-                          >
-                            {index + 1}. {coin.name}
-                          </Typography>
+                  <Card style={{ height: "100%" }} ref={lastCoinElementRef}>
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        margin: "10px",
+                      }}
+                    >
+                      <Typography
+                        sx={{ color: "text.primary", fontSize: "1.6rem" }}
+                      >
+                        {index + 1}. {coin.name}
+                      </Typography>
 
-                          <img
-                            style={{ marginLeft: 6 }}
-                            src={coin.image.large}
-                            alt={coin.id}
-                            height="45"
-                          />
-                        </div>
-                      }
-                    />
+                      <img
+                        style={{ marginLeft: 6 }}
+                        src={coin.image.large}
+                        alt={coin.id}
+                        height="45"
+                      />
+                    </div>
                     <Divider />
                     <CardContent>
                       <CardTextItem>Symbol: {coinSymbol}</CardTextItem>
