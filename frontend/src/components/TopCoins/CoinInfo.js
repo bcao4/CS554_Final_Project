@@ -152,14 +152,13 @@ const CoinInfo = () => {
             >
               <Typography
                 variant="h1"
-                className="coin-name"
                 sx={{
                   color: "text.secondary",
                   fontSize: "2.6rem",
                   marginRight: 4,
                 }}
               >
-                {coinData.id}
+                {capitalize(coinData.id)}
               </Typography>
               <img src={coinData.image.large} alt={coinData.id} height={50} />
             </div>
@@ -277,41 +276,54 @@ const CoinInfo = () => {
             coinPrice={livePrice ?? coinPrice}
             setLoading={setLoading}
           />
-          <div id="coin-info">
+          <div id="coin-info" style={{ margin: "6px" }}>
             <Typography
               variant="h2"
-              className="coin-name"
               sx={{ fontSize: "2rem", color: "text.secondary" }}
             >
-              About {coinData.id}
+              About {capitalize(coinData.id)}
             </Typography>
             <Divider sx={{ backgroundColor: "text.secondary" }} />
-            <Typography sx={{ color: "text.secondary" }}>
-              {removeHtmlTags(coinDescription)}
-            </Typography>
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                alignItems: "center",
-              }}
-            >
-              <Typography sx={{ marginRight: "4px", color: "text.secondary" }}>
-                Website:
+            <div>
+              <Typography sx={{ color: "text.secondary" }}>
+                {removeHtmlTags(coinDescription)}
               </Typography>
-              <Link
-                href={coinWebsite}
-                target="_blank"
-                rel="noopener noreferrer"
-                sx={{ color: "link.color" }}
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "center",
+                }}
               >
-                {coinWebsite}
-              </Link>
+                <Typography
+                  sx={{ marginRight: "4px", color: "text.secondary" }}
+                >
+                  Website:
+                </Typography>
+                <Link
+                  href={coinWebsite}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  sx={{ color: "link.color" }}
+                >
+                  {coinWebsite}
+                </Link>
+              </div>
+              <Typography sx={{ color: "text.secondary" }}>
+                Market Cap Rank: {coinRank}
+              </Typography>
             </div>
-            <Typography sx={{ color: "text.secondary" }}>
-              Market Cap Rank: {coinRank}
-            </Typography>
           </div>
+          <div style={{ margin: "6px" }}>
+            <Typography
+              variant="h2"
+              sx={{ fontSize: "2rem", color: "text.secondary" }}
+            >
+              {capitalize(coinData.id)} News
+            </Typography>
+            <Divider sx={{ backgroundColor: "text.secondary" }} />
+          </div>
+          <div id="news"></div>
         </div>
       )}
     </>

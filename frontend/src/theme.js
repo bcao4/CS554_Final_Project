@@ -18,12 +18,11 @@ export const theme = createTheme({
     MuiPaginationItem: {
       styleOverrides: {
         root: {
-          "&.MuiPaginationItem-circular":	{ color: "#ff7780" },
+          "&.MuiPaginationItem-circular": { color: "#ff7780" },
           "&.Mui-selected": { color: "#ea1337", backgroundColor: "#FFFFFF" },
-          
-        }
-      }
-    }
+        },
+      },
+    },
   },
   status: {
     danger: orange[500],
@@ -38,10 +37,9 @@ export const theme = createTheme({
     text: {
       primary: "#000000",
       secondary: "#ffffff",
-      
     },
     link: {
-      color: "#e4e8ff", // royal blue
+      color: "#809dff",
     },
     price: {
       green: "#a8ff84",

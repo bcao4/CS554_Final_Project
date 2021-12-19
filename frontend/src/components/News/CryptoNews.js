@@ -23,29 +23,21 @@ const News = () => {
   useDocumentTitle("News - CryptoTracker");
 
   useEffect(() => {
-    setLoading(true);
     const fetchData = async () => {
       try {
+        setLoading(true);
         let perPage = 20;
-        let data;
-        try {
-          data = await getCryptoNews(pageNum, perPage);
-          data = data.articles;
-          console.log(data);
-        } catch (e) {
-          console.error(e);
-          return;
-        }
-        //setNewsData((prevNews) => [...prevNews, ...data]);
+        let data = await getCryptoNews(pageNum, perPage);
+        data = data.articles;
         setNewsData(data);
-        setLoading(false);
       } catch (e) {
         console.error(e);
+      } finally {
+        setLoading(false);
       }
     };
     fetchData();
   }, [pageNum]);
-  console.log(newsData);
 
   return (
     <>
@@ -73,7 +65,7 @@ const News = () => {
             let author = news.author ? "By: " + news.author : "";
             return (
               <Grid key={index} item xs={12} sm={6} md={4} lg={4} xl={4}>
-                <Card style={{ height: '100%' }}>
+                <Card style={{ height: "100%" }}>
                   {/* <div ref={lastNewsElementRef} /> */}
                   <div>
                     <CardActionArea
