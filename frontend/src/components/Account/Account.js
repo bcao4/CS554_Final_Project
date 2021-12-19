@@ -25,9 +25,7 @@ const db = app.firestore();
 const Account = (props) => {
   const { currentUser } = useContext(AuthContext);
   const [userName, setUserName] = useState(undefined);
-  const [loading, setLoading] = useState(false);
   const interval = useRef(null);
-
   const [symbols, setSymbols] = useState({});
 
   // Buying and selling code start ############################
@@ -79,7 +77,7 @@ const Account = (props) => {
         for (let i of data.coins) {
           if (Object.values(i)[0] > 0) coinListDisplay.push(i);
         }
-        console.log(data);
+        //console.log(data);
         setCurrCoins(coinListDisplay);
         // Buying and selling code end ############################
       } catch (e) {
@@ -110,24 +108,21 @@ const Account = (props) => {
 
   // Buying and selling code start ############################
   // useEffect with setInterval 10 sec to update price
-  useEffect(async () => {
+  useEffect(() => {
     console.log("buying useEffect fired");
 
     const fetchData = async (coin, num) => {
       try {
-        setLoading(true);
         const [coinData] = await Promise.all([getCoinInfo(coin)]);
-        console.log(
-          coin + " " + num + " " + coinData.market_data.current_price.usd
-        );
-        console.log(coinData.market_data.current_price.usd * num);
+        // console.log(
+        //   coin + " " + num + " " + coinData.market_data.current_price.usd
+        // );
+        //console.log(coinData.market_data.current_price.usd * num);
         //setAccBalance(parseFloat(accBalance) + (coinData.market_data.current_price.usd * num))
         //console.log(accBalance)
         return coinData.market_data.current_price.usd * num;
       } catch (e) {
         console.error(e);
-      } finally {
-        setLoading(false);
       }
     };
 
@@ -144,21 +139,20 @@ const Account = (props) => {
     interval.current = setInterval(updateAccVal, 7000);
 
     return () => {
-      console.log("cleanup");
+      //console.log("cleanup");
       clearInterval(interval.current);
     };
   }, [currCoins]);
 
   // useEffect without setInterval to fire when accBalane changes to prevent delay
-  useEffect(async () => {
+  useEffect(() => {
     const fetchData = async (coin, num) => {
       try {
-        setLoading(true);
         const [coinData] = await Promise.all([getCoinInfo(coin)]);
-        console.log(
-          coin + " " + num + " " + coinData.market_data.current_price.usd
-        );
-        console.log(coinData.market_data.current_price.usd * num);
+        // console.log(
+        //   coin + " " + num + " " + coinData.market_data.current_price.usd
+        // );
+        // console.log(coinData.market_data.current_price.usd * num);
         setSymbols((old) => {
           return {
             ...old,
@@ -177,11 +171,11 @@ const Account = (props) => {
     let defVal = 0;
     for (let i of currCoins) {
       defVal =
-        defVal + (await fetchData(Object.keys(i)[0], Object.values(i)[0]));
+        defVal + (fetchData(Object.keys(i)[0], Object.values(i)[0]));
     }
     if (!accBalance)
       setdefVal((parseFloat(defVal) + parseFloat(currBalance)).toFixed(2));
-  }, [accBalance]);
+  }, [accBalance, currBalance, currCoins]);
 
   // Buying and selling code end ##############################
 
@@ -248,8 +242,7 @@ const Account = (props) => {
             {parseInt(accBalance)
               ? (parseFloat(accBalance) + parseFloat(currBalance)).toFixed(2)
               : parseInt(defVal)
-              ? defVal
-              : "loading..."}
+            }
           </div>
           {/*// Buying and selling code end ############################*/}
           {/* Image Upload Button */}
