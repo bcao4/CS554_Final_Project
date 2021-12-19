@@ -33,7 +33,6 @@ const Account = (props) => {
   const [currBalance, setCurrBalance] = useState(0);
   const [currCoins, setCurrCoins] = useState([]);
   const [accBalance, setAccBalance] = useState(0);
-  const [loading, setLoading] = useState(true);
   const [defVal, setdefVal] = useState(0);
   // Buying and selling code end ##############################
 
@@ -130,7 +129,7 @@ const Account = (props) => {
         setLoading(false);
       }
     };
-
+    
     const updateAccVal = async () => {
       let val = 0;
       for (let i of currCoins) {
@@ -172,8 +171,6 @@ const Account = (props) => {
         return coinData.market_data.current_price.usd * num;
       } catch (e) {
         console.error(e);
-      } finally {
-        setLoading(false);
       }
     };
     let defVal = 0;

@@ -15,12 +15,11 @@ const StyledTypography = (props) => {
 
 const TradeBar = (props) => {
   const { coin, coinPrice, setLoading } = props;
-  console.log(props);
+  //console.log(props);
   const {
     register,
     handleSubmit,
     reset,
-    formState: { errors },
   } = useForm();
 
   const [tradeBarOpen, setTradeBarOpen] = useState(false);
@@ -113,7 +112,7 @@ const TradeBar = (props) => {
           `${API_URL}/users/${currentUser.email}`
         );
 
-        console.log(getUser);
+        //console.log(getUser);
 
         setCurrBalance(getUser.data.balance);
       } catch (e) {}
@@ -131,7 +130,7 @@ const TradeBar = (props) => {
           `${API_URL}/users/${currentUser.email}`
         );
 
-        console.log(getUser);
+        //console.log(getUser);
 
         /*for(let i of getUser.data.coins)
       {
