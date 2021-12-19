@@ -325,14 +325,14 @@ const CoinInfo = () => {
                 </Link>
               </div>
               <Typography sx={{ color: "text.secondary" }}>
-                {`Market Capitalization: ${millify(
+                {`Market Capitalization: $${millify(
                   coinData.market_data.market_cap.usd
                 )}`}
               </Typography>
               <Typography sx={{ color: "text.secondary" }}>
                 {`Circulating Supply: ${millify(
                   coinData.market_data.circulating_supply
-                )}`}
+                )} ${coinData.symbol.toUpperCase()}`}
               </Typography>
               <Typography sx={{ color: "text.secondary" }}>
                 {`Current Market Sentiment: ${

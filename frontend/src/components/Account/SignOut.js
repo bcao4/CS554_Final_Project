@@ -1,11 +1,12 @@
 import { doSignOut } from "../../firebase/FirebaseFunctions";
+import { Button } from "@mui/material";
 import "../../App.css";
 
-const SignOutButton = () => {
+const SignOutButton = (props) => {
   return (
-    <button className="btn-signout" type="button" onClick={doSignOut}>
+    <Button {...props} variant="contained" onClick={doSignOut}>
       Sign Out
-    </button>
+    </Button>
   );
 };
 
