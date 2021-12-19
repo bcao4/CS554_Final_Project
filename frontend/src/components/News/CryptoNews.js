@@ -13,6 +13,7 @@ import {
 import { removeHtmlTags } from "../../utils";
 import { getCryptoNews } from "../../api";
 import useDocumentTitle from "../../shared/useDocumentTitle";
+//import "./News.css";
 
 const News = () => {
   const [loading, setLoading] = useState(true);
@@ -22,29 +23,21 @@ const News = () => {
   useDocumentTitle("News - CryptoTracker");
 
   useEffect(() => {
-    setLoading(true);
     const fetchData = async () => {
       try {
+        setLoading(true);
         let perPage = 20;
-        let data;
-        try {
-          data = await getCryptoNews(pageNum, perPage);
-          data = data.articles;
-          console.log(data);
-        } catch (e) {
-          console.error(e);
-          return;
-        }
-        //setNewsData((prevNews) => [...prevNews, ...data]);
+        let data = await getCryptoNews(pageNum, perPage);
+        data = data.articles;
         setNewsData(data);
-        setLoading(false);
       } catch (e) {
         console.error(e);
+      } finally {
+        setLoading(false);
       }
     };
     fetchData();
   }, [pageNum]);
-  console.log(newsData);
 
   return (
     <>

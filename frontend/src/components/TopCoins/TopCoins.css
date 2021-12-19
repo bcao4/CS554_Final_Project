@@ -37,6 +37,34 @@
   width: 100%;
 }
 
+.white-text {
+  color: white;
+}
+
+/* .MuiToggleButton-root {
+  color: white !important;
+  border-color: white !important;
+}
+
+.Mui-selected {
+  background-color: white !important;
+  color: black !important;
+} */
+
+.coin-name {
+  text-transform: capitalize;
+}
+
+.coin-website-link {
+  color: #809dff;
+}
+
+.coin-info-title h1 {
+  display: inline;
+  vertical-align: middle;
+  padding-left: 10px;
+}
+
 .live-price-increase {
   animation-name: priceIncreaseAnimation;
   animation-duration: 5s;

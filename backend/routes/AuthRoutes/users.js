@@ -59,6 +59,19 @@ router.post("/updateBalanceAndCoins", async(req,res)=>{
     }
 
 });
+/*
+router.get("/:id", async(req,res)=>{
+    let coinInfo = req.body;
+    console.log("hey111")
+    console.log(coinInfo)
+    try {
+        const totalValue = await userData.getTotalCoinsValue(
+            coinInfo.coins
+        )
+    } catch (e) {
+        res.status(404).json({ message: "Total value not found" });
+      }
+});*/
 // Buying and Selling code end ###################################################
 
 //getUser by id

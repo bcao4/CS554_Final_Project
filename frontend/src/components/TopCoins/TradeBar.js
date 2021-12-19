@@ -30,6 +30,17 @@ const TradeBar = (props) => {
 
   const { currentUser } = useContext(AuthContext);
 
+  const decimalCount = num => {
+    // Convert to String
+    const numStr = String(num);
+    // String Contains Decimal
+    if (numStr.includes('.')) {
+       return numStr.split('.')[1].length;
+    };
+    // String Does Not Contain Decimal
+    return 0;
+ }
+
   const onSubmit = useCallback(
     async (data) => {
       console.log(currCoins);
@@ -40,14 +51,15 @@ const TradeBar = (props) => {
       if (
         parseInt(data.numOfCoins) < 0 ||
         Number.isNaN(parseInt(data.numOfCoins)) ||
-        data.numOfCoins % 1 !== 0
+        Number.isNaN(parseFloat(data.numOfCoins * coinPrice)) ||
+        decimalCount(data.numOfCoins)>6
       )
         return setErrorMsg("Input is invalid!!");
 
       let token = await currentUser.getIdToken();
-      let amount1 = parseInt(data.numOfCoins) * coinPrice;
-      let num1 = parseInt(data.numOfCoins);
-      console.log(amount1);
+      let amount1 = parseFloat(data.numOfCoins * coinPrice).toFixed(2);
+      let num1 = parseFloat(data.numOfCoins);
+      console.log(typeof data.numOfCoins);
       let indicator = 0;
 
       for (let i of currCoins) {
@@ -62,7 +74,7 @@ const TradeBar = (props) => {
         }
       }
 
-      if (data.trade_type === "buy" && amount1 > currBalance)
+      if (data.trade_type === "buy" && parseFloat(amount1) > parseFloat(currBalance))
         return setErrorMsg("You don't have enough balance!");
       else if (indicator === 0 && data.trade_type === "sell") {
         return setErrorMsg("You don't have enough coins for this sale!");
@@ -73,7 +85,7 @@ const TradeBar = (props) => {
         `${API_URL}/users/updateBalanceAndCoins`,
         {
           email: currentUser.email,
-          amount: parseInt(data.numOfCoins * coinPrice),
+          amount: parseFloat(data.numOfCoins * coinPrice).toFixed(2),
           coin: coin,
           num: num1,
           buyOrSell: data.trade_type,

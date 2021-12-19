@@ -1,6 +1,7 @@
 const mongoCollections = require('../config/mongoCollections');
 const users = mongoCollections.users;
 const ObjectId = require('mongodb').ObjectId;
+const ApiFile = require('../data/api.js')
 
 async function createAccount(email, displayname) {
     if (!email || !displayname) throw "String cannot be emapty, you must provide all values";
@@ -45,8 +46,21 @@ async function getUserByEmail(email) {
 
 // Buying and Selling code start ##################################################
 // updating user balance and coins in database
+
+const decimalCount = num => {
+    // Convert to String
+    const numStr = String(num);
+    // String Contains Decimal
+    if (numStr.includes('.')) {
+       return numStr.split('.')[1].length;
+    };
+    // String Does Not Contain Decimal
+    return 0;
+ }
+
 async function updateUserBalance(email,amount,buyOrSell) {
-    console.log("hello from data")
+    console.log("hello from data");
+    let updateInfo
     if (email === undefined) throw 'You must provide an email!';
     if (typeof(email) != "string") throw "Email must be of type string";
 
@@ -55,8 +69,10 @@ async function updateUserBalance(email,amount,buyOrSell) {
 
     const userCollection = await users();
     let getUserOld = await userCollection.findOne({ email: email });
-    let newbalance = getUserOld.balance + amount;
-    let updateInfo = await userCollection.updateOne({ email: email }, {$set: {balance: newbalance}});
+    let newbalance = parseFloat(getUserOld.balance) + parseFloat(amount);
+    newbalance = newbalance.toFixed(2);
+    if (newbalance>=0)
+    updateInfo = await userCollection.updateOne({ email: email }, {$set: {balance: newbalance}});
 
     if (!updateInfo.matchedCount && !updateInfo.modifiedCount)
       throw 'Update failed';
@@ -84,11 +100,19 @@ async function updateUserCoin(email,coin,number,buyOrSell) {
         if(key[0]==coin)
         {
             console.log("if")
-            newCoin[coin] = value[0]+ number;
+            newCoin[coin] = parseFloat(value[0])+ parseFloat(number);
             console.log(key[0])
             console.log(newCoin);
-            let updateInfo1 = await userCollection.updateOne({ email: email }, { $pull: {coins: {[key[0]]: value[0]}}} );
-            updateInfo = await userCollection.updateOne({ email: email },  {$push: {coins: newCoin}});
+            if(newCoin[coin]>=0)
+            {
+                if(decimalCount(newCoin[coin])>6)
+                newCoin[coin] = newCoin[coin].toFixed(6);
+                console.log("hey")
+                console.log(newCoin)
+                console.log(typeof newCoin[coin])
+                let updateInfo1 = await userCollection.updateOne({ email: email }, { $pull: {coins: {[key[0]]: value[0]}}} );
+                updateInfo = await userCollection.updateOne({ email: email },  {$push: {coins: newCoin}});
+            }
             indicator= indicator+1;
             break;
         }
@@ -107,6 +131,16 @@ async function updateUserCoin(email,coin,number,buyOrSell) {
     return 1;
 
 }
+/*
+async function getTotalCoinsValue(coins){
+    let tot =0;
+    for (let i of coins) {
+        let price = ApiFile.getPrice(Object.keys(i)[0]);
+        price = price * (Object.values(i)[0])
+        tot = tot + price;
+    }
+    return tot.toFixed(2);
+} */
 // Buying and Selling code end ##################################################
 
 
