@@ -8,6 +8,7 @@ import {
 import useDocumentTitle from "../../shared/useDocumentTitle";
 import { AuthContext } from "../../firebase/Auth";
 import SocialSignIn from "./SocialSignIn";
+import { Typography } from "@mui/material";
 
 const Login = () => {
   const { currentUser } = useContext(AuthContext);
@@ -43,7 +44,9 @@ const Login = () => {
 
   return (
     <div className="form-body">
-      <h2>Login Page</h2>
+      <Typography variant="h1" style={{ fontSize: "2rem" }}>
+        Login
+      </Typography>
       <form onSubmit={handleSignIn}>
         <div>
           <br />

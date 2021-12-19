@@ -7,6 +7,7 @@ import SocialSignIn from "./SocialSignIn";
 import axios from "axios";
 import useDocumentTitle from "../../shared/useDocumentTitle";
 import { API_URL } from "../../api";
+import { Typography } from "@mui/material";
 
 const SignUp = () => {
   const { currentUser } = useContext(AuthContext);
@@ -62,7 +63,7 @@ const SignUp = () => {
     }
 
     return await axios.post(
-      `${API_URL}/users/addUser`,                 //removed https for API call
+      `${API_URL}/users/addUser`, //removed https for API call
       { email: currentUser.email, displayname: dName },
       {
         headers: {
@@ -82,7 +83,9 @@ const SignUp = () => {
   return (
     <div>
       <div className="form-body">
-        <h2>Sign Up</h2>
+        <Typography variant="h1" style={{ fontSize: "2rem" }}>
+          Sign Up
+        </Typography>
         {pwMatch && <h4 className="error">{pwMatch}</h4>}
         <form onSubmit={handleSignUp}>
           <div>

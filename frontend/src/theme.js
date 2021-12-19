@@ -39,11 +39,11 @@ export const theme = createTheme({
       secondary: "#ffffff",
     },
     link: {
-      color: lightBlue[600],
+      color: lightBlue["A100"],
     },
     price: {
       green: lightGreen["A400"],
-      red: red["A200"],
+      red: red[200],
     },
     background: {
       color: "rgb(55, 57, 59)",

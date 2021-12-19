@@ -97,8 +97,10 @@ const TopCoins = () => {
       <div style={{ display: "flex", flexWrap: "wrap" }}>
         {!loading && coinData !== null && (
           <form style={{ width: "100%", margin: "6px" }}>
+            <label htmlFor="filter-text"></label>
             <TextField
               placeholder="Filter..."
+              id="filter-text"
               onChange={(e) => setSearchTerm(e.target.value)}
               value={searchTerm}
               style={{
