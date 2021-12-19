@@ -1,15 +1,7 @@
 .input_label {
-    color: white;
+  color: white;
 }
 
 .mesg {
-    color: white;
-}
-
-.input {
-    align-items: right;
-}
-
-.form {
-    align-items : right;
+  color: white;
 }

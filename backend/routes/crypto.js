@@ -4,6 +4,7 @@ const {
   getCoinPage,
   getMarketNews,
   getCryptoNews,
+  getCoinNews,
 } = require("../data/api");
 const router = require("express").Router();
 
@@ -51,6 +52,16 @@ router.get("/crypto-news", async (req, res) => {
   const { page, perPage } = req.query;
   try {
     const data = await getCryptoNews(page, perPage);
+    return res.json(data);
+  } catch (e) {
+    return res.status(500);
+  }
+});
+
+router.get("/coin-news", async (req, res) => {
+  const { symbol } = req.query;
+  try {
+    const data = await getCoinNews(symbol);
     return res.json(data);
   } catch (e) {
     return res.status(500);

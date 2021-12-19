@@ -43,11 +43,7 @@ const NavigationAuth = () => {
         {PrivateNavbarData.map((item, index) => {
           return (
             <ListItem key={index} className="navbar-item">
-              <NavLink
-                className="navlink"
-                activeclassname="active"
-                to={item.path}
-              >
+              <NavLink className="navlink" to={item.path}>
                 <div className="flex-center">
                   {item.icon}
                   <Typography style={{ marginLeft: 4 }}>
@@ -92,11 +88,7 @@ const NavigationNonAuth = () => {
         {NavBarData.map((item, index) => {
           return (
             <ListItem key={index} className="navbar-item">
-              <NavLink
-                className="navlink"
-                activeclassname="active"
-                to={item.path}
-              >
+              <NavLink className="navlink" to={item.path}>
                 <div className="flex-center">
                   {item.icon}
                   <Typography style={{ marginLeft: 4 }}>

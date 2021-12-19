@@ -32,18 +32,18 @@ export const theme = createTheme({
       main: blue[300],
     },
     secondary: {
-      main: "#f50057",
+      main: red["A700"],
     },
     text: {
       primary: "#000000",
       secondary: "#ffffff",
     },
     link: {
-      color: lightBlue[600],
+      color: lightBlue["A100"],
     },
     price: {
       green: lightGreen["A400"],
-      red: red["A200"],
+      red: red[200],
     },
     background: {
       color: "rgb(55, 57, 59)",

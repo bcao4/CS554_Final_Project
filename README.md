@@ -1,4 +1,6 @@
-# CS554 Final Project
+# CS554 Final Project - CryptoTracker
+
+Michael Arrabito, Brandon Cao, Krishna Patel, Omkar Sinha
 
 Environment Setup Instructions:
 
