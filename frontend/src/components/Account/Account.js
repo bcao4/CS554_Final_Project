@@ -25,6 +25,7 @@ const db = app.firestore();
 const Account = (props) => {
   const { currentUser } = useContext(AuthContext);
   const [userName, setUserName] = useState(undefined);
+  const [loading, setLoading] = useState(false);
   const interval = useRef(null);
 
   const [symbols, setSymbols] = useState({});
@@ -129,7 +130,7 @@ const Account = (props) => {
         setLoading(false);
       }
     };
-    
+
     const updateAccVal = async () => {
       let val = 0;
       for (let i of currCoins) {
