@@ -26,7 +26,8 @@ const TradeBar = (props) => {
   const [currBalance, setCurrBalance] = useState(0);
   const [currCoins, setCurrCoins] = useState(0);
   const [errorMsg, setErrorMsg] = useState("");
-
+  const [haveCoin, setHaveCoin] = useState(0);
+  
   const { currentUser } = useContext(AuthContext);
 
   const decimalCount = num => {
@@ -132,12 +133,16 @@ const TradeBar = (props) => {
 
         //console.log(getUser);
 
-        /*for(let i of getUser.data.coins)
+      for(let i of getUser.data.coins)
       {
         console.log(Object.keys(i)[0]);
         if(coin==Object.keys(i)[0])
-        indicator=indicator + 1;
-      }*/
+        {
+        //indicator=indicator + 1;
+        setHaveCoin(Object.values(i)[0])
+        }
+
+      }
 
         setCurrCoins(getUser.data.coins);
       } catch (e) {}
@@ -227,6 +232,9 @@ const TradeBar = (props) => {
               Your Current balance = {parseFloat(currBalance).toFixed(2)}
             </StyledTypography>
             <StyledTypography> Price = ${coinPrice}</StyledTypography>
+            {parseFloat(haveCoin)>0?
+            <StyledTypography> No. of coin owned = {haveCoin}</StyledTypography> : ""
+            }
             <form className="form" onSubmit={handleSubmit(onSubmit)}>
               <br />
               <label className="input_label">
