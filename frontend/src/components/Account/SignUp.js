@@ -22,14 +22,33 @@ const SignUp = () => {
     const userData = async () => {
       try {
         if (currentUser) {
-          await addUser();
+          let token = await currentUser.getIdToken();
+          let dName;
+          if (!currentUser.displayName) {
+            dName = usernameData;
+          } else {
+            dName = currentUser.displayName;
+          }
+
+          await axios.post(
+            `${API_URL}/users/addUser`, //removed https for API call
+            { email: currentUser.email, displayname: dName },
+            {
+              headers: {
+                accept: "application/json",
+                "Accept-Language": "en-US,en;q=0.8",
+                "Content-Type": "application/json",
+                authtoken: token,
+              },
+            }
+          );
         }
       } catch (error) {
         console.log(error);
       }
     };
     userData();
-  }, [currentUser]);
+  }, [currentUser, usernameData]);
 
   const handleSignUp = async (e) => {
     e.preventDefault();
@@ -50,30 +69,6 @@ const SignUp = () => {
     } catch (error) {
       alert(error);
     }
-  };
-
-  //add data to database
-  const addUser = async () => {
-    let token = await currentUser.getIdToken();
-    let dName;
-    if (!currentUser.displayName) {
-      dName = usernameData;
-    } else {
-      dName = currentUser.displayName;
-    }
-
-    return await axios.post(
-      `${API_URL}/users/addUser`, //removed https for API call
-      { email: currentUser.email, displayname: dName },
-      {
-        headers: {
-          accept: "application/json",
-          "Accept-Language": "en-US,en;q=0.8",
-          "Content-Type": "application/json",
-          authtoken: token,
-        },
-      }
-    );
   };
 
   if (currentUser) {
