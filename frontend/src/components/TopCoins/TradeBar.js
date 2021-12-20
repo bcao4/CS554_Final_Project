@@ -106,6 +106,11 @@ const TradeBar = (props) => {
       );
       const getUser = await axios.get(`${API_URL}/users/${currentUser.email}`);
       setCurrBalance(getUser.data.balance);
+      for (let i of getUser.data.coins) {
+        if (coin === Object.keys(i)[0]) {
+          setAmountOwned(Object.values(i)[0]);
+        }
+      }
       setLoading(false);
     },
     [
@@ -128,12 +133,8 @@ const TradeBar = (props) => {
           `${API_URL}/users/${currentUser.email}`
         );
 
-        //console.log(getUser);
-
         for (let i of getUser.data.coins) {
-          console.log(Object.keys(i)[0]);
           if (coin === Object.keys(i)[0]) {
-            //indicator=indicator + 1;
             setAmountOwned(Object.values(i)[0]);
           }
         }
