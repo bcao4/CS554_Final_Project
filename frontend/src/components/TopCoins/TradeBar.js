@@ -1,8 +1,18 @@
-import { Drawer, IconButton, Divider, Typography, Button } from "@mui/material";
+import {
+  Drawer,
+  IconButton,
+  Divider,
+  Typography,
+  Button,
+  ToggleButton,
+  ToggleButtonGroup,
+  FormLabel,
+  Input,
+} from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import "./TradeBar.css";
 import { useState, useContext, useCallback, useEffect } from "react";
-import { capitalize } from "../../utils";
+import { capitalize, convertPrice } from "../../utils";
 import { useForm } from "react-hook-form";
 import { AuthContext } from "../../firebase/Auth";
 import { Link } from "react-router-dom";
@@ -16,29 +26,27 @@ const StyledTypography = (props) => {
 const TradeBar = (props) => {
   const { coin, coinPrice, setLoading } = props;
   //console.log(props);
-  const {
-    register,
-    handleSubmit,
-    reset,
-  } = useForm();
+  const { handleSubmit, reset } = useForm();
 
   const [tradeBarOpen, setTradeBarOpen] = useState(false);
   const [currBalance, setCurrBalance] = useState(0);
   const [currCoins, setCurrCoins] = useState(0);
   const [errorMsg, setErrorMsg] = useState("");
+  const [tradeType, setTradeType] = useState("buy");
+  const [numOfCoins, setNumOfCoins] = useState(0);
 
   const { currentUser } = useContext(AuthContext);
 
-  const decimalCount = num => {
+  const decimalCount = (num) => {
     // Convert to String
     const numStr = String(num);
     // String Contains Decimal
-    if (numStr.includes('.')) {
-       return numStr.split('.')[1].length;
-    };
+    if (numStr.includes(".")) {
+      return numStr.split(".")[1].length;
+    }
     // String Does Not Contain Decimal
     return 0;
- }
+  };
 
   const onSubmit = useCallback(
     async (data) => {
@@ -48,34 +56,31 @@ const TradeBar = (props) => {
       reset();
 
       if (
-        parseInt(data.numOfCoins) < 0 ||
-        Number.isNaN(parseInt(data.numOfCoins)) ||
-        Number.isNaN(parseFloat(data.numOfCoins * coinPrice)) ||
-        decimalCount(data.numOfCoins)>6
+        parseInt(numOfCoins) < 0 ||
+        Number.isNaN(parseInt(numOfCoins)) ||
+        Number.isNaN(parseFloat(numOfCoins * coinPrice)) ||
+        decimalCount(numOfCoins) > 6
       )
         return setErrorMsg("Input is invalid!!");
 
       let token = await currentUser.getIdToken();
-      let amount1 = parseFloat(data.numOfCoins * coinPrice).toFixed(2);
-      let num1 = parseFloat(data.numOfCoins);
-      console.log(typeof data.numOfCoins);
+      let amount1 = parseFloat(numOfCoins * coinPrice).toFixed(2);
+      let num1 = parseFloat(numOfCoins);
+      console.log(typeof numOfCoins);
       let indicator = 0;
 
       for (let i of currCoins) {
         console.log(Object.keys(i)[0]);
         console.log(coin);
         console.log(Object.values(i)[0]);
-        if (
-          coin === Object.keys(i)[0] &&
-          Object.values(i)[0] >= data.numOfCoins
-        ) {
+        if (coin === Object.keys(i)[0] && Object.values(i)[0] >= numOfCoins) {
           indicator = indicator + 1;
         }
       }
 
-      if (data.trade_type === "buy" && parseFloat(amount1) > parseFloat(currBalance))
+      if (tradeType === "buy" && parseFloat(amount1) > parseFloat(currBalance))
         return setErrorMsg("You don't have enough balance!");
-      else if (indicator === 0 && data.trade_type === "sell") {
+      else if (indicator === 0 && tradeType === "sell") {
         return setErrorMsg("You don't have enough coins for this sale!");
       }
       // else if(currCoins)*/
@@ -84,10 +89,10 @@ const TradeBar = (props) => {
         `${API_URL}/users/updateBalanceAndCoins`,
         {
           email: currentUser.email,
-          amount: parseFloat(data.numOfCoins * coinPrice).toFixed(2),
+          amount: parseFloat(numOfCoins * coinPrice).toFixed(2),
           coin: coin,
           num: num1,
-          buyOrSell: data.trade_type,
+          buyOrSell: tradeType,
         },
         {
           headers: {
@@ -102,7 +107,17 @@ const TradeBar = (props) => {
       setCurrBalance(getUser.data.balance);
       setLoading(false);
     },
-    [coin, currBalance, currCoins, currentUser, reset, coinPrice, setLoading]
+    [
+      coin,
+      currBalance,
+      currCoins,
+      currentUser,
+      reset,
+      coinPrice,
+      setLoading,
+      numOfCoins,
+      tradeType,
+    ]
   );
 
   useEffect(() => {
@@ -221,26 +236,68 @@ const TradeBar = (props) => {
         ) : (
           <>
             <StyledTypography sx={{ textAlign: "center", marginTop: 10 }}>
-              Welcome to trading in {capitalize(coin)}
+              Trading: {capitalize(coin)}
             </StyledTypography>
             <StyledTypography>
-              Your Current balance = {parseFloat(currBalance).toFixed(2)}
+              Current Balance: ${convertPrice(currBalance)}
             </StyledTypography>
-            <StyledTypography> Price = ${coinPrice}</StyledTypography>
-            <form className="form" onSubmit={handleSubmit(onSubmit)}>
-              <br />
-              <label className="input_label">
-                Num of coins to trade :
-                <input {...register("numOfCoins", { required: true })} />
-              </label>
-              <br />
-              <select className="input" {...register("trade_type")}>
-                <option value="buy">Buy</option>
-                <option value="sell">Sell</option>
-              </select>
-              <br />
-              <br />
-              <input type="submit" />
+            <StyledTypography>
+              {capitalize(coin)} Price: ${convertPrice(coinPrice)}
+            </StyledTypography>
+            <form onSubmit={handleSubmit(onSubmit)}>
+              <div style={{ alignItems: "center", display: "flex" }}>
+                <FormLabel
+                  className="input_label"
+                  htmlFor="numCoins"
+                  style={{ marginRight: "4px" }}
+                >
+                  Amount of {capitalize(coin)}
+                </FormLabel>
+                <Input
+                  size="small"
+                  type="number"
+                  inputProps={{ step: "0.00001", min: "0" }}
+                  style={{ backgroundColor: "white" }}
+                  onChange={(e) => {
+                    setNumOfCoins(e.target.value);
+                  }}
+                  required
+                  id="numCoins"
+                />
+              </div>
+              {numOfCoins > 0 && (
+                <div style={{ marginTop: "10px", marginBottom: "10px" }}>
+                  <Typography color="text.secondary">
+                    {`Estimated Cost: $${convertPrice(numOfCoins * coinPrice)}`}
+                  </Typography>
+                </div>
+              )}
+              <ToggleButtonGroup
+                size="large"
+                value={tradeType}
+                fullWidth
+                variant="contained"
+                exclusive
+                onChange={(_, newType) => {
+                  if (newType) {
+                    setTradeType(newType);
+                  }
+                }}
+                className="flex-center"
+                sx={{ backgroundColor: "background.color", marginTop: "20px" }}
+              >
+                <ToggleButton style={{ color: "green" }} value="buy">
+                  Buy
+                </ToggleButton>
+                <ToggleButton style={{ color: "red" }} value="sell">
+                  Sell
+                </ToggleButton>
+              </ToggleButtonGroup>
+              <div className="flex-center" style={{ marginTop: "20px" }}>
+                <Button variant="contained" type="submit" size="large">
+                  Submit
+                </Button>
+              </div>
             </form>
             {errorMsg}
             <p className="mesg">{errorMsg}</p>
