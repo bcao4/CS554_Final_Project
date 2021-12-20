@@ -36,12 +36,10 @@ const StyledToggleButton = (props) => {
 
 const TradeBar = (props) => {
   const { coin, coinPrice, setLoading } = props;
-  //console.log(props);
   const { handleSubmit, reset } = useForm();
 
   const [tradeBarOpen, setTradeBarOpen] = useState(false);
   const [currBalance, setCurrBalance] = useState(0);
-  const [currCoins, setCurrCoins] = useState(0);
   const [errorMsg, setErrorMsg] = useState("");
   const [tradeType, setTradeType] = useState("buy");
   const [numOfCoins, setNumOfCoins] = useState(0);
@@ -62,8 +60,6 @@ const TradeBar = (props) => {
 
   const onSubmit = useCallback(
     async (data) => {
-      console.log(currCoins);
-      console.log(currBalance);
       setErrorMsg("");
       reset();
 
@@ -78,21 +74,10 @@ const TradeBar = (props) => {
       let token = await currentUser.getIdToken();
       let amount1 = parseFloat(numOfCoins * coinPrice).toFixed(2);
       let num1 = parseFloat(numOfCoins);
-      console.log(typeof numOfCoins);
-      let indicator = 0;
-
-      for (let i of currCoins) {
-        console.log(Object.keys(i)[0]);
-        console.log(coin);
-        console.log(Object.values(i)[0]);
-        if (coin === Object.keys(i)[0] && Object.values(i)[0] >= numOfCoins) {
-          indicator = indicator + 1;
-        }
-      }
 
       if (tradeType === "buy" && parseFloat(amount1) > parseFloat(currBalance))
         return setErrorMsg("You don't have enough balance!");
-      else if (indicator === 0 && tradeType === "sell") {
+      else if (tradeType === "sell" && amountOwned < numOfCoins) {
         return setErrorMsg("You don't have enough coins for this sale!");
       }
       // else if(currCoins)*/
@@ -115,25 +100,32 @@ const TradeBar = (props) => {
           },
         }
       );
+      await new Promise((r) => setTimeout(r, 1000));
       const getUser = await axios.get(`${API_URL}/users/${currentUser.email}`);
       setCurrBalance(getUser.data.balance);
+      let amount;
       for (let i of getUser.data.coins) {
         if (coin === Object.keys(i)[0]) {
-          setAmountOwned(Object.values(i)[0]);
+          amount = Object.values(i)[0];
+          break;
         }
+      }
+      setAmountOwned(amount);
+      if (amount <= 0) {
+        setTradeType("buy");
       }
       setLoading(false);
     },
     [
       coin,
       currBalance,
-      currCoins,
       currentUser,
       reset,
       coinPrice,
       setLoading,
       numOfCoins,
       tradeType,
+      amountOwned,
     ]
   );
 
@@ -158,31 +150,6 @@ const TradeBar = (props) => {
       //unsubscribeOrRemoveEventHandler()
     };
   }, [currentUser, coin]);
-
-  useEffect(() => {
-    (async () => {
-      try {
-        const getUser = await axios.get(
-          `${API_URL}/users/${currentUser.email}`
-        );
-
-        //console.log(getUser);
-
-        /*for(let i of getUser.data.coins)
-      {
-        console.log(Object.keys(i)[0]);
-        if(coin==Object.keys(i)[0])
-        indicator=indicator + 1;
-      }*/
-
-        setCurrCoins(getUser.data.coins);
-      } catch (e) {}
-    })();
-
-    return () => {
-      //unsubscribeOrRemoveEventHandler()
-    };
-  }, [currentUser, currBalance]);
 
   return (
     <>
@@ -319,14 +286,8 @@ const TradeBar = (props) => {
                 className="flex-center"
                 sx={{ backgroundColor: "background.color", marginTop: "20px" }}
               >
-                <StyledToggleButton  value="buy">
-                  Buy
-                </StyledToggleButton>
-                <StyledToggleButton
-                  
-                  value="sell"
-                  disabled={amountOwned <= 0}
-                >
+                <StyledToggleButton value="buy">Buy</StyledToggleButton>
+                <StyledToggleButton value="sell" disabled={amountOwned <= 0}>
                   Sell
                 </StyledToggleButton>
               </ToggleButtonGroup>
