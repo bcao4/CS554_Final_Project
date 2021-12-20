@@ -23,6 +23,17 @@ const StyledTypography = (props) => {
   return <Typography {...props} sx={{ color: "text.secondary" }} />;
 };
 
+const StyledToggleButton = (props) => {
+  return (
+    <ToggleButton
+      {...props}
+      sx={{
+        color: "button.color",
+      }}
+    />
+  );
+};
+
 const TradeBar = (props) => {
   const { coin, coinPrice, setLoading } = props;
   //console.log(props);
@@ -308,16 +319,16 @@ const TradeBar = (props) => {
                 className="flex-center"
                 sx={{ backgroundColor: "background.color", marginTop: "20px" }}
               >
-                <ToggleButton style={{ color: "green" }} value="buy">
+                <StyledToggleButton  value="buy">
                   Buy
-                </ToggleButton>
-                <ToggleButton
-                  style={{ color: "red" }}
+                </StyledToggleButton>
+                <StyledToggleButton
+                  
                   value="sell"
                   disabled={amountOwned <= 0}
                 >
                   Sell
-                </ToggleButton>
+                </StyledToggleButton>
               </ToggleButtonGroup>
               <div className="flex-center" style={{ marginTop: "20px" }}>
                 <Button variant="contained" type="submit" size="large">
