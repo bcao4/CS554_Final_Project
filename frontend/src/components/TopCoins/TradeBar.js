@@ -34,6 +34,7 @@ const TradeBar = (props) => {
   const [errorMsg, setErrorMsg] = useState("");
   const [tradeType, setTradeType] = useState("buy");
   const [numOfCoins, setNumOfCoins] = useState(0);
+  const [amountOwned, setAmountOwned] = useState(0);
 
   const { currentUser } = useContext(AuthContext);
 
@@ -129,6 +130,14 @@ const TradeBar = (props) => {
 
         //console.log(getUser);
 
+        for (let i of getUser.data.coins) {
+          console.log(Object.keys(i)[0]);
+          if (coin === Object.keys(i)[0]) {
+            //indicator=indicator + 1;
+            setAmountOwned(Object.values(i)[0]);
+          }
+        }
+
         setCurrBalance(getUser.data.balance);
       } catch (e) {}
     })();
@@ -136,7 +145,7 @@ const TradeBar = (props) => {
     return () => {
       //unsubscribeOrRemoveEventHandler()
     };
-  }, [currentUser, onSubmit]);
+  }, [currentUser, coin]);
 
   useEffect(() => {
     (async () => {
@@ -239,19 +248,28 @@ const TradeBar = (props) => {
               Trading: {capitalize(coin)}
             </StyledTypography>
             <StyledTypography>
+              {capitalize(coin)} owned: {amountOwned}
+            </StyledTypography>
+            <StyledTypography>
               Current Balance: ${convertPrice(currBalance)}
             </StyledTypography>
             <StyledTypography>
               {capitalize(coin)} Price: ${convertPrice(coinPrice)}
             </StyledTypography>
             <form onSubmit={handleSubmit(onSubmit)}>
-              <div style={{ alignItems: "center", display: "flex" }}>
+              <div
+                style={{
+                  alignItems: "center",
+                  display: "flex",
+                  marginTop: "16px",
+                }}
+              >
                 <FormLabel
                   className="input_label"
                   htmlFor="numCoins"
                   style={{ marginRight: "4px" }}
                 >
-                  Amount of {capitalize(coin)}
+                  Amount to trade
                 </FormLabel>
                 <Input
                   size="small"
@@ -267,9 +285,12 @@ const TradeBar = (props) => {
               </div>
               {numOfCoins > 0 && (
                 <div style={{ marginTop: "10px", marginBottom: "10px" }}>
-                  <Typography color="text.secondary">
-                    {`Estimated Cost: $${convertPrice(numOfCoins * coinPrice)}`}
-                  </Typography>
+                  <StyledTypography>
+                    {tradeType === "buy"
+                      ? "Estimated cost: $"
+                      : "Estimated gain: $"}
+                    {convertPrice(numOfCoins * coinPrice)}
+                  </StyledTypography>
                 </div>
               )}
               <ToggleButtonGroup
@@ -289,7 +310,11 @@ const TradeBar = (props) => {
                 <ToggleButton style={{ color: "green" }} value="buy">
                   Buy
                 </ToggleButton>
-                <ToggleButton style={{ color: "red" }} value="sell">
+                <ToggleButton
+                  style={{ color: "red" }}
+                  value="sell"
+                  disabled={amountOwned <= 0}
+                >
                   Sell
                 </ToggleButton>
               </ToggleButtonGroup>
