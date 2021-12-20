@@ -29,7 +29,7 @@ const Account = (props) => {
   const [currBalance, setCurrBalance] = useState(0);
   const [currCoins, setCurrCoins] = useState([]);
   const [accBalance, setAccBalance] = useState(0);
-  const [defVal, setdefVal] = useState(0);
+  const [defVal, setDefVal] = useState(0);
 // Buying and selling code end ##############################
 
   //img upload
@@ -163,8 +163,8 @@ const Account = (props) => {
         {
           defVal =defVal + fetchData(Object.keys(i)[0], Object.values(i)[0]);
         }
-      if(!accBalance)
-        setdefVal((parseFloat(defVal) + parseFloat(currBalance)).toFixed(2))
+      if(!accBalance && defVal>0)
+        setDefVal((parseFloat(defVal) + parseFloat(currBalance)).toFixed(2))
 
 }, [accBalance, currBalance, currCoins]);
 
@@ -227,7 +227,7 @@ const Account = (props) => {
           )): "None" }
           <br />
           <b>Total Account value: $ </b>
-          {parseInt(accBalance)?
+          {parseFloat(accBalance)>0?
           (parseFloat(accBalance) + parseFloat(currBalance)).toFixed(2):
           (parseInt(defVal)? defVal: "loading...")
           }
