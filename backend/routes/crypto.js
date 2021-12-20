@@ -5,6 +5,7 @@ const {
   getMarketNews,
   getCryptoNews,
   getCoinNews,
+  getGlobalDailyPercentChange,
 } = require("../data/api");
 const router = require("express").Router();
 
@@ -62,6 +63,15 @@ router.get("/coin-news", async (req, res) => {
   const { symbol } = req.query;
   try {
     const data = await getCoinNews(symbol);
+    return res.json(data);
+  } catch (e) {
+    return res.status(500);
+  }
+});
+
+router.get("/daily-change", async (req, res) => {
+  try {
+    const data = await getGlobalDailyPercentChange();
     return res.json(data);
   } catch (e) {
     return res.status(500);
