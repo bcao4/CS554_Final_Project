@@ -12,6 +12,7 @@ export const theme = createTheme({
       styleOverrides: {
         root: {
           "&.Mui-selected": { color: "black", backgroundColor: "white" },
+          "&.Mui-disabled": { color: "#f5f5f5" },
         },
       },
     },
