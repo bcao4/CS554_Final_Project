@@ -51,3 +51,8 @@ export const getCoinNews = async (symbol) => {
   });
   return data;
 };
+
+export const getDailyChange = async () => {
+  const { data } = await axios.get(`${API_URL}/daily-change`);
+  return data;
+};

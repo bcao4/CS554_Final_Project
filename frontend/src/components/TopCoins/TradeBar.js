@@ -182,13 +182,16 @@ const TradeBar = (props) => {
         anchor="right"
         open={tradeBarOpen}
       >
-        <IconButton
-          size="large"
-          onClick={() => setTradeBarOpen(false)}
-          sx={{ color: "button.color" }}
-        >
-          <CloseIcon />
-        </IconButton>
+        <div style={{ display: "flex", justifyContent: "flex-end" }}>
+          <IconButton
+            size="large"
+            onClick={() => setTradeBarOpen(false)}
+            sx={{ color: "button.color" }}
+          >
+            Close
+            <CloseIcon />
+          </IconButton>
+        </div>
         <Divider sx={{ backgroundColor: "white" }} />
         {!currentUser ? (
           <>
@@ -243,11 +246,7 @@ const TradeBar = (props) => {
                   marginTop: "16px",
                 }}
               >
-                <FormLabel
-                  className="input_label"
-                  htmlFor="numCoins"
-                  style={{ marginRight: "4px" }}
-                >
+                <FormLabel htmlFor="numCoins" style={{ marginRight: "4px" }}>
                   Amount to trade
                 </FormLabel>
                 <Input
@@ -258,7 +257,6 @@ const TradeBar = (props) => {
                   onChange={(e) => {
                     setNumOfCoins(e.target.value);
                   }}
-                  required
                   id="numCoins"
                 />
               </div>
@@ -276,7 +274,6 @@ const TradeBar = (props) => {
                 size="large"
                 value={tradeType}
                 fullWidth
-                variant="contained"
                 exclusive
                 onChange={(_, newType) => {
                   if (newType) {

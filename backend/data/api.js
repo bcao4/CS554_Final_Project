@@ -113,6 +113,11 @@ const getCoinNews = async (symbol) => {
   return data;
 };
 
+const getGlobalDailyPercentChange = async () => {
+  const { data } = await axios.get(`${COIN_GECKO_URL}/global`);
+  return data;
+};
+
 module.exports = {
   getPrice,
   getCoinInfo,
@@ -121,6 +126,7 @@ module.exports = {
   getMarketNews,
   getCryptoNews,
   getCoinNews,
+  getGlobalDailyPercentChange,
 };
 
 // https://www.coingecko.com/en/api/documentation?
