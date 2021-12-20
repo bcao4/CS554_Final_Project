@@ -13,4 +13,5 @@ Environment Setup Instructions:
     7. Run "npm start" once everything has finished installing 
 
 The live site deployed on Heroku can be accessed here: https://cryptotracker-exchange.herokuapp.com/
+
 To view the collection in MongoDB Compass, use the connection string: mongodb+srv://cs554:5DkEmCFRAwyAhYO6@cluster0.8hjpy.mongodb.net/test
