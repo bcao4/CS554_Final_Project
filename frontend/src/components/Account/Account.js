@@ -31,7 +31,7 @@ const Account = (props) => {
   // Buying and selling code start ############################
   const [currBalance, setCurrBalance] = useState(0);
   const [currCoins, setCurrCoins] = useState([]);
-  const [accBalance, setAccBalance] = useState(0);
+  const [accBalance, setAccBalance] = useState(null);
   const [defVal, setDefVal] = useState(0);
   // Buying and selling code end ##############################
 
@@ -170,10 +170,9 @@ const Account = (props) => {
     };
     let defVal = 0;
     for (let i of currCoins) {
-      defVal =
-        defVal + (fetchData(Object.keys(i)[0], Object.values(i)[0]));
+      defVal = defVal + fetchData(Object.keys(i)[0], Object.values(i)[0]);
     }
-    if (!accBalance && defVal>0)
+    if (!accBalance && defVal > 0)
       setDefVal((parseFloat(defVal) + parseFloat(currBalance)).toFixed(2));
   }, [accBalance, currBalance, currCoins]);
 
@@ -238,11 +237,14 @@ const Account = (props) => {
                   ))
                 : "None"}
             </List>
-            <b>Total Account value: $ </b>
-            {parseFloat(accBalance)>0
-              ? (parseFloat(accBalance) + parseFloat(currBalance)).toFixed(2)
-              : parseFloat(defVal)? defVal: "loading..."
-            }
+            <b>Total Account Value: $</b>
+            {currCoins.length === 0
+              ? convertPrice(currBalance)
+              : parseFloat(accBalance) > 0
+              ? convertPrice(parseFloat(accBalance) + parseFloat(currBalance))
+              : parseFloat(defVal)
+              ? convertPrice(defVal)
+              : "loading..."}
           </div>
           {/*// Buying and selling code end ############################*/}
           {/* Image Upload Button */}
