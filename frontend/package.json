@@ -3,13 +3,24 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@testing-library/jest-dom": "^5.14.1",
-    "@testing-library/react": "^11.2.7",
-    "@testing-library/user-event": "^12.8.3",
+    "@emotion/react": "^11.7.0",
+    "@emotion/styled": "^11.6.0",
+    "@mui/icons-material": "^5.2.1",
+    "@mui/material": "^5.2.2",
+    "axios": "^0.24.0",
+    "chart.js": "^3.0.0",
+    "firebase": "^7.23.0",
+    "firebase-admin": "^10.0.0",
+    "millify": "^4.0.0",
+    "moment": "^2.29.1",
     "react": "^17.0.2",
+    "react-chartjs-2": "^3.3.0",
     "react-dom": "^17.0.2",
-    "react-scripts": "4.0.3",
-    "web-vitals": "^1.1.2"
+    "react-hook-form": "^7.21.2",
+    "react-icons": "^4.3.1",
+    "react-router-dom": "^6.0.2",
+    "socket.io-client": "^4.4.0",
+    "react-scripts": "4.0.3"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -23,6 +34,7 @@
       "react-app/jest"
     ]
   },
+  "type": "module",
   "browserslist": {
     "production": [
       ">0.2%",
